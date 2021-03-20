@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SalesProject.Domain.Entities.Base
 {
     public abstract class BaseEntity
     {
-        public bool Valid { get; private set; }
-        public IEnumerable<string> Notifications { get; private set; }
         protected BaseEntity()
         {
+            this.Id = Guid.NewGuid();
             this.Valid = true;
             this.Notifications = new List<string>();
         }
+
+        public bool Valid { get; private set; }
+        public IEnumerable<string> Notifications { get; private set; }
+        public Guid Id { get; private set; }
 
         public abstract void DoBusinesRulesValidations();
 

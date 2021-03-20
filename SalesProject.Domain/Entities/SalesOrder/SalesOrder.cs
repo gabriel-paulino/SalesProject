@@ -1,6 +1,6 @@
 ﻿using SalesProject.Domain.Entities.Base;
 
-namespace SalesProject.Domain.Entities.SalesOrder
+namespace SalesProject.Domain.Entities
 {
     public class SalesOrder : BaseEntity
     {

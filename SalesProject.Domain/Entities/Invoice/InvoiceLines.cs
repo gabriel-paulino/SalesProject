@@ -1,6 +1,6 @@
 ﻿using SalesProject.Domain.Entities.Base;
 
-namespace SalesProject.Domain.Entities.Invoice
+namespace SalesProject.Domain.Entities
 {
     public class InvoiceLines : BaseEntity
     {
