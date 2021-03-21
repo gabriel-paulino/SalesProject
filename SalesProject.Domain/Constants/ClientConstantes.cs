@@ -3,14 +3,14 @@
     public static class ClientConstantes
     {
         public const string
-            TableClient = "Client",
+            TableClient = "Cliente",
             FieldId = "Id",
             FieldCnpj = "Cnpj",
-            FieldCompanyName = "CompanyName",
-            FieldOpening = "Opening",
-            FieldTelNumber = "TelNumber",
-            FieldClientSince = "ClientSince",
-            FieldMunicipalRegistration = "MunicipalRegistration",
-            FieldStateRegistration = "StateRegistration";
+            FieldCompanyName = "Empresa",
+            FieldOpening = "DataAbertura",
+            FieldTelNumber = "Telefone",
+            FieldClientSince = "DataCadastro",
+            FieldMunicipalRegistration = "IncricaoMunicipal",
+            FieldStateRegistration = "IncricaoEstadual";
     }
 }

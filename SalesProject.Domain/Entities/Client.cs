@@ -16,27 +16,25 @@ namespace SalesProject.Domain.Entities
             string cnpj, 
             string companyName, 
             DateTime opening, 
-            string telNumber, 
+            string phone, 
             string municipalRegistration, 
             string stateRegistration)
         {      
             this.Cnpj = cnpj;
             this.CompanyName = companyName;
             this.Opening = opening;
-            this.TelNumber = telNumber;
+            this.Phone = phone;
             this.ClientSince = DateTime.Today;
             this.MunicipalRegistration = municipalRegistration;
             this.StateRegistration = stateRegistration;
             _adresses = new List<Address>();
             _contacts = new List<Contact>();
-
-            DoBusinesRulesValidations();
         }
        
         public string Cnpj { get; private set; }
         public string CompanyName { get; private set; }
-        public DateTime Opening { get; private set; }
-        public string TelNumber { get; private set; }
+        public DateTime? Opening { get; private set; }
+        public string Phone { get; private set; }
         public DateTime ClientSince { get; private set; }
         public string MunicipalRegistration { get; private set; }
         public string StateRegistration { get; private set; }
