@@ -1,5 +1,6 @@
 ﻿using SalesProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using SalesProject.Mapping;
 
 namespace SalesProject.Context
 {
@@ -7,6 +8,11 @@ namespace SalesProject.Context
     {
         public SalesProjectDataContext(DbContextOptions<SalesProjectDataContext> options)
             : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new ClientMap());
+        }
 
         public DbSet<Address> Adresses { get; set; }
         public DbSet<Client> Clients { get; set; }
