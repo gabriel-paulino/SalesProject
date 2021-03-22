@@ -9,37 +9,45 @@ namespace SalesProject.Mapping
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         { 
-            builder.ToTable(ClientConstantes.TableClient);
+            builder.Property(c => c.Id).
+                ValueGeneratedOnAdd().
+                HasColumnType("uniqueidentifier");
 
-            builder.HasKey(c => c.Id);
-
-            builder.Property(c => c.Cnpj).HasMaxLength(18).IsRequired();
+            builder.Property(c => c.Cnpj).
+                HasMaxLength(18).
+                HasColumnType("varchar(18)").
+                IsRequired();
 
             builder.Property(c => c.CompanyName).
-                HasColumnName(ClientConstantes.FieldCompanyName).
+                HasColumnName(ClientConstants.FieldCompanyName).
                 HasMaxLength(100).
                 HasColumnType("varchar(100)").
                 IsRequired();
 
             builder.Property(c => c.StateRegistration).
-                HasColumnName(ClientConstantes.FieldStateRegistration).
+                HasColumnName(ClientConstants.FieldStateRegistration).
+                HasMaxLength(30).
                 HasColumnType("varchar(30)").
                 IsRequired();
 
             builder.Property(c => c.Opening).
-                HasColumnName(ClientConstantes.FieldOpening);
+                HasColumnName(ClientConstants.FieldOpening);
 
             builder.Property(c => c.Phone).
-                HasColumnName(ClientConstantes.FieldTelNumber).
+                HasColumnName(ClientConstants.FieldTelNumber).
+                HasMaxLength(20).
                 HasColumnType("varchar(20)");
 
             builder.Property(c => c.ClientSince).
-                HasColumnName(ClientConstantes.FieldClientSince);
+                HasColumnName(ClientConstants.FieldClientSince);
 
             builder.Property(c => c.MunicipalRegistration).
-                HasColumnName(ClientConstantes.FieldMunicipalRegistration).
+                HasColumnName(ClientConstants.FieldMunicipalRegistration).
+                HasMaxLength(30).
                 HasColumnType("varchar(30)");
 
+            builder.HasKey(c => c.Id);
+            builder.ToTable(ClientConstants.TableClient);
         }
     }
 }

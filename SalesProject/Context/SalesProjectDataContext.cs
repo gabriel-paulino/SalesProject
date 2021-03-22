@@ -12,11 +12,12 @@ namespace SalesProject.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ClientMap());
+            builder.ApplyConfiguration(new AddressMap());
+            builder.ApplyConfiguration(new ContactMap());
         }
 
-        public DbSet<Address> Adresses { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Collaborator> Collaborators { get; set; }
+        public DbSet<Address> Adresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
