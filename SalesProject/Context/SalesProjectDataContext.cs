@@ -14,6 +14,7 @@ namespace SalesProject.Context
             builder.ApplyConfiguration(new ClientMap());
             builder.ApplyConfiguration(new AddressMap());
             builder.ApplyConfiguration(new ContactMap());
+            builder.ApplyConfiguration(new ProductMap());
         }
 
         public DbSet<Client> Clients { get; set; }
