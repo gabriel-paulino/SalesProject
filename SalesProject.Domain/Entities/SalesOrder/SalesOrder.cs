@@ -7,7 +7,7 @@ namespace SalesProject.Domain.Entities
 {
     public class SalesOrder : BaseEntity
     {
-        private IList<SalesOrderLines> _orderItems;
+        private IList<SalesOrderLines> _orderLines;
 
         public SalesOrder(
             int idClient, 
@@ -30,7 +30,7 @@ namespace SalesProject.Domain.Entities
             TotalDiscount = totalDiscount;
             TotalPriceProducts = totalPriceProducts;
             Observation = observation;
-            _orderItems = new List<SalesOrderLines>();
+            _orderLines = new List<SalesOrderLines>();
         }
 
         public int IdClient { get; private set; }
@@ -42,11 +42,11 @@ namespace SalesProject.Domain.Entities
         public double TotalDiscount { get; private set; }
         public double TotalPriceProducts { get; private set; }
         public string Observation { get; private set; }
-        public IReadOnlyCollection<SalesOrderLines> OrderItems { get { return _orderItems.ToArray(); } }
+        public IReadOnlyCollection<SalesOrderLines> OrderLines { get { return _orderLines.ToArray(); } }
 
-        public void AddOrderItem(SalesOrderLines orderItem)
+        public void AddOrderItem(SalesOrderLines orderLine)
         {
-            _orderItems.Add(orderItem);
+            _orderLines.Add(orderLine);
         }
 
         public override void DoBusinesRulesValidations()
