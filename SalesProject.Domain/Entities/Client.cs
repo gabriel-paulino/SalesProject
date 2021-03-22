@@ -10,8 +10,6 @@ namespace SalesProject.Domain.Entities
         private IList<Address> _adresses;
         private IList<Contact> _contacts;
 
-        public Client() { }
-
         public Client(
             string cnpj, 
             string companyName, 

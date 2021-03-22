@@ -8,13 +8,14 @@ namespace SalesProject.Domain.Entities.Base
     {
         protected BaseEntity()
         {
+            this.Id = new Guid();
             this.Valid = true;
             this.Notifications = new List<string>();
         }
 
         public bool Valid { get; private set; }
         public IEnumerable<string> Notifications { get; private set; }
-        public int Id { get; set; }
+        public Guid Id { get; private set; }
 
         public abstract void DoBusinesRulesValidations();
 

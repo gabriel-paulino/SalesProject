@@ -4,8 +4,6 @@ namespace SalesProject.Domain.Entities
 {
     public class Address : BaseEntity
     {
-        public Address() { }
-
         public Address(
             string zipCode, 
             string street, 

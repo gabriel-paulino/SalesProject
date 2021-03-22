@@ -4,8 +4,6 @@ namespace SalesProject.Domain.Entities
 {
     public class Contact : BaseEntity
     {
-        public Contact() { }
-
         public Contact(
             string firstName, 
             string lastName, 
