@@ -52,6 +52,9 @@ namespace SalesProject.Mapping
                 HasColumnType("varchar(20)").
                 IsRequired();
 
+            builder.Ignore(c => c.Notifications);
+            builder.Ignore(c => c.Valid);
+
             builder.HasKey(c => c.Id);
             builder.ToTable(AddressConstants.TableAddress);
         }

@@ -46,6 +46,9 @@ namespace SalesProject.Mapping
                 HasMaxLength(30).
                 HasColumnType("varchar(30)");
 
+            builder.Ignore(c => c.Notifications);
+            builder.Ignore(c => c.Valid);
+
             builder.HasKey(c => c.Id);
             builder.ToTable(ClientConstants.TableClient);
         }

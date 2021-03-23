@@ -29,6 +29,9 @@ namespace SalesProject.Mapping
                 HasMaxLength(300).
                 HasColumnType("varchar(300)");
 
+            builder.Ignore(c => c.Notifications);
+            builder.Ignore(c => c.Valid);
+
             builder.HasKey(c => c.Id);
             builder.ToTable(ProductConstants.TableProduct);
         }
