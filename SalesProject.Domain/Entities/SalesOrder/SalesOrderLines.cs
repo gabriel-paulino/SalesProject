@@ -1,11 +1,13 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using System;
 
 namespace SalesProject.Domain.Entities
 {
     public class SalesOrderLines : BaseEntity
     {
+        public SalesOrderLines() { }
+
         public SalesOrderLines(
-            int idProduct, 
             Product product, 
             double quantity, 
             double price, 
@@ -13,7 +15,6 @@ namespace SalesProject.Domain.Entities
             double? additionalCosts, 
             double tax)
         {
-            IdProduct = idProduct;
             Product = product;
             Quantity = quantity;
             Price = price;
@@ -22,7 +23,6 @@ namespace SalesProject.Domain.Entities
             Tax = tax;
         }
 
-        public int IdProduct { get; private set; }
         public Product Product { get; private set; }
         public double Quantity { get; private set; }
         public double Price { get; private set; }

@@ -1,16 +1,18 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using System;
 
 namespace SalesProject.Domain.Entities
 {
     public class Contact : BaseEntity
     {
+        public Contact() { }
+
         public Contact(
             string firstName, 
             string lastName, 
             string email, 
             string whatsApp, 
-            string phone, 
-            int idClient)
+            string phone)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -18,7 +20,6 @@ namespace SalesProject.Domain.Entities
             Email = email;
             WhatsApp = whatsApp;
             Phone = phone;
-            IdClient = idClient;
         }
 
         public string FirstName { get; private set; }
@@ -27,7 +28,7 @@ namespace SalesProject.Domain.Entities
         public string Email { get; private set; }
         public string WhatsApp { get; private set; }
         public string Phone { get; private set; }
-        public int IdClient { get; private set; }
+        public Guid ClientId { get; private set; }
 
         public override void DoBusinesRulesValidations()
         {

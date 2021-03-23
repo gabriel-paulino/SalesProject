@@ -1,4 +1,5 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using System;
 
 namespace SalesProject.Domain.Entities
 {
@@ -11,8 +12,7 @@ namespace SalesProject.Domain.Entities
             int number, 
             string city, 
             string state, 
-            string country, 
-            int idClient)
+            string country)
         {
             ZipCode = zipCode;
             Street = street;
@@ -21,7 +21,6 @@ namespace SalesProject.Domain.Entities
             City = city;
             State = state;
             Country = country;
-            IdClient = idClient;
         }
 
         public string ZipCode { get; private set; }
@@ -31,7 +30,7 @@ namespace SalesProject.Domain.Entities
         public string City { get; private set; }
         public string State { get; private set; }
         public string Country { get; private set; }
-        public int IdClient { get; private set; }
+        public Guid ClientId { get; private set; }
 
         public override void DoBusinesRulesValidations()
         {

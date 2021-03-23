@@ -7,10 +7,11 @@ namespace SalesProject.Domain.Entities
 {
     public class SalesOrder : BaseEntity
     {
+        public SalesOrder() { }
+
         private IList<SalesOrderLines> _orderLines;
 
         public SalesOrder(
-            int idClient, 
             Client client, 
             DateTime 
             postingDate, 
@@ -21,7 +22,6 @@ namespace SalesProject.Domain.Entities
             double totalPriceProducts, 
             string observation)
         {
-            IdClient = idClient;
             Client = client;
             PostingDate = postingDate;
             Freight = freight;
@@ -32,8 +32,7 @@ namespace SalesProject.Domain.Entities
             Observation = observation;
             _orderLines = new List<SalesOrderLines>();
         }
-
-        public int IdClient { get; private set; }
+       
         public Client Client { get; private set; }
         public DateTime PostingDate { get; private set; }
         public double Freight { get; private set; }
@@ -43,8 +42,9 @@ namespace SalesProject.Domain.Entities
         public double TotalPriceProducts { get; private set; }
         public string Observation { get; private set; }
         public IReadOnlyCollection<SalesOrderLines> OrderLines { get { return _orderLines.ToArray(); } }
+        public Guid ClientId { get; private set; }
 
-        public void AddOrderItem(SalesOrderLines orderLine)
+        public void AddOrderLine(SalesOrderLines orderLine)
         {
             _orderLines.Add(orderLine);
         }
