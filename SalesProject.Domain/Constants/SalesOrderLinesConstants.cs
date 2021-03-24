@@ -3,6 +3,11 @@
     public class SalesOrderLinesConstants
     {
         public const string
-            TableSalesOrderLines = "ItemPedidoVenda";
+            TableSalesOrderLines = "ItemPedidoVenda",
+            FieldQuantity = "Quantidade",
+            FieldPrice = "Preco",
+            FieldDiscont = "Desconto",
+            FieldAdditionalCosts = "CustosAdicionais",
+            FieldTax = "Impostos";
     }
 }

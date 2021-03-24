@@ -23,6 +23,7 @@ namespace SalesProject.Domain.Entities
             Tax = tax;
         }
 
+        public Guid SalesOrderId { get; private set; }
         public Product Product { get; private set; }
         public double Quantity { get; private set; }
         public double Price { get; private set; }

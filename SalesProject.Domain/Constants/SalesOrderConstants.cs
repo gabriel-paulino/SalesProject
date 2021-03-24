@@ -3,6 +3,13 @@
     public class SalesOrderConstants
     {
         public const string
-            TableSalesOrder = "PedidoVenda";
+            TableSalesOrder = "PedidoVenda",
+            FieldPostingDate = "DataLancamento",
+            FieldFreight = "Frete",
+            FieldDeliveryDate = "DataEntrega",
+            FieldTotalTax = "TotalImposto",
+            FieldTotalDiscount = "TotalDesconto",
+            FieldTotalPriceProducts = "TotalProdutos",
+            FieldObservation = "Observacao";
     }
 }
