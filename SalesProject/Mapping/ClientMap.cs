@@ -49,6 +49,9 @@ namespace SalesProject.Mapping
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
+            builder.HasMany(c => c.Adresses).WithOne();
+            builder.HasMany(c => c.Contacts).WithOne();
+
             builder.HasKey(c => c.Id);
             builder.ToTable(ClientConstants.TableClient);
         }

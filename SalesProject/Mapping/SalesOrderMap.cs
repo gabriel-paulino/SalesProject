@@ -13,11 +13,41 @@ namespace SalesProject.Mapping
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
+            builder.Property(c => c.PostingDate).
+               HasColumnName(SalesOrderConstants.FieldPostingDate).
+               IsRequired();
+
+            builder.Property(c => c.Freight).
+                HasColumnName(SalesOrderConstants.FieldFreight);
+
+            builder.Property(c => c.DeliveryDate).
+                HasColumnName(SalesOrderConstants.FieldDeliveryDate).
+                IsRequired();
+
+            builder.Property(c => c.TotalTax).
+                HasColumnName(SalesOrderConstants.FieldTotalTax).
+                IsRequired();
+
+            builder.Property(c => c.TotalDiscount).
+                HasColumnName(SalesOrderConstants.FieldTotalDiscount);
+
+            builder.Property(c => c.TotalPriceProducts).
+                HasColumnName(SalesOrderConstants.FieldTotalPriceProducts).
+                IsRequired();
+
+            builder.Property(c => c.Observation).
+                HasColumnName(SalesOrderConstants.FieldObservation).
+                HasMaxLength(300).
+                HasColumnType("varchar(300)");
+
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
             builder.HasKey(c => c.Id);
-            builder.ToTable(SalesOrderConstants.TableSalesOrder);
+
+            builder.HasMany(c => c.OrderLines).WithOne();
+
+            builder.ToTable(SalesOrderConstants.TableSalesOrder);            
         }
     }
 }
