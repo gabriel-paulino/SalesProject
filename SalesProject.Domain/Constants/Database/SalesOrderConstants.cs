@@ -1,15 +1,16 @@
-﻿namespace SalesProject.Domain.Constants
+﻿namespace SalesProject.Domain.Constants.Database
 {
-    public class SalesOrderConstants
+    public struct SalesOrderConstants
     {
         public const string
             TableSalesOrder = "PedidoVenda",
             FieldPostingDate = "DataLancamento",
-            FieldFreight = "Frete",
             FieldDeliveryDate = "DataEntrega",
+            FieldFreight = "Frete",
             FieldTotalTax = "TotalImposto",
             FieldTotalDiscount = "TotalDesconto",
             FieldTotalPriceProducts = "TotalProdutos",
+            FieldTotalOrder = "TotalPedido",
             FieldObservation = "Observacao";
     }
 }

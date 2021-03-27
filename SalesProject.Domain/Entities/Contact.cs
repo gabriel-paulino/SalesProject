@@ -20,6 +20,8 @@ namespace SalesProject.Domain.Entities
             Email = email;
             WhatsApp = whatsApp;
             Phone = phone;
+
+            DoValidations();
         }
 
         public string FirstName { get; private set; }
@@ -30,9 +32,19 @@ namespace SalesProject.Domain.Entities
         public string Phone { get; private set; }
         public Guid ClientId { get; private set; }
 
-        public override void DoBusinesRulesValidations()
+        public override void DoValidations()
         {
-            throw new System.NotImplementedException();
+            ValidateFillingMandatoryFields();
+        }
+
+        private void ValidateFillingMandatoryFields()
+        {
+            if (string.IsNullOrEmpty(FirstName))
+                AddNotification("O preenchimento do campo 'Nome' é obrigatório.");
+            if (string.IsNullOrEmpty(Email))
+                AddNotification("O preenchimento do campo 'E-mail' é obrigatório.");
+            if (string.IsNullOrEmpty(Phone))
+                AddNotification("O preenchimento do campo 'Telefone' é obrigatório.");
         }
     }
 }

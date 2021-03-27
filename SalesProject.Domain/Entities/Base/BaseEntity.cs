@@ -14,15 +14,15 @@ namespace SalesProject.Domain.Entities.Base
         }
 
         public bool Valid { get; private set; }
-        public IEnumerable<string> Notifications { get; private set; }
+        public List<string> Notifications { get; private set; }
         public Guid Id { get; private set; }
 
-        public abstract void DoBusinesRulesValidations();
+        public abstract void DoValidations();
 
         public void AddNotification(string errorMessage)
         {
             Valid = false;
-            Notifications.ToList().Add(errorMessage);
+            Notifications.Add(errorMessage);
         }
 
         public string GetNotification() 

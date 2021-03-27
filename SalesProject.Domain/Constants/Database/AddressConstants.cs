@@ -1,6 +1,6 @@
-﻿namespace SalesProject.Domain.Constants
+﻿namespace SalesProject.Domain.Constants.Database
 {
-    public class AddressConstants
+    public struct AddressConstants
     {
         public const string
             TableAddress = "Endereco",
@@ -9,7 +9,6 @@
             FieldNeighborhood = "Bairro",
             FieldNumber = "Numero",
             FieldCity = "Cidade",
-            FieldState = "Uf",
-            FieldCountry = "Pais";
+            FieldState = "Uf";
     }
 }

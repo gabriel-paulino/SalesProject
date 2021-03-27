@@ -8,26 +8,51 @@ namespace SalesProject.Domain.Entities
         public Product() { }
 
         public Product(
-            string name, 
-            double scheduledQuantity, 
-            string details, 
+            string name,
+            string ncmCode,
+            decimal combinedPrice,
+            decimal additionalCosts,
+            double combinedQuantity,
+            string details,
             Client client)
         {
-            Name = name;
-            ScheduledQuantity = scheduledQuantity;
-            Details = details;
-            Client = client;
+            this.Name = name;
+            this.NcmCode = ncmCode;
+            this.CombinedPrice = combinedPrice;
+            this.AdditionalCosts = additionalCosts;
+            this.CombinedQuantity = combinedQuantity;
+            this.Details = details;
+            this.Client = client;
+
+            DoValidations();
         }
 
         public string Name { get; private set; }
-        public double ScheduledQuantity { get; private set; }
+        public string NcmCode { get; private set; }
+        public decimal CombinedPrice { get; private set; }
+        public decimal AdditionalCosts { get; private set; }
+        public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
         public Guid ClientId { get; private set; }
         public Client Client { get; private set; }
 
-        public override void DoBusinesRulesValidations()
+        public override void DoValidations()
         {
-            throw new System.NotImplementedException();
+            ValidateFillingMandatoryFields();
+        }
+
+        private void ValidateFillingMandatoryFields()
+        {
+            if (string.IsNullOrEmpty(Name))
+                AddNotification("O preenchimento do campo 'Nome do produto' é obrigatório.");
+            if (CombinedPrice <= 0)
+                AddNotification("Valor do campo 'Preço combinado' está inválido.");
+            if (CombinedQuantity <= 0)
+                AddNotification("A 'Previsão mínima mensal' informada é inválida.");
+            if (CombinedQuantity < 0)
+                AddNotification("O 'Custo adicional' informado é inválido.");
+            if(Client == null)
+                AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
     }
 }
