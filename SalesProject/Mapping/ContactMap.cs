@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SalesProject.Domain.Constants;
+using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
@@ -24,11 +24,6 @@ namespace SalesProject.Mapping
                 HasMaxLength(20).
                 HasColumnType("varchar(20)");
 
-            builder.Property(c => c.FullName).
-                HasColumnName(ContactConstants.FieldFullName).
-                HasMaxLength(40).
-                HasColumnType("varchar(40)");
-
             builder.Property(c => c.Email).
                 HasColumnName(ContactConstants.FieldEmail).
                 HasMaxLength(50).
@@ -46,6 +41,7 @@ namespace SalesProject.Mapping
                 HasColumnType("varchar(20)").
                 IsRequired();
 
+            builder.Ignore(c => c.FullName);
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 

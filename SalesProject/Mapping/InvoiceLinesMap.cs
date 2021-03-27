@@ -5,72 +5,72 @@ using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
 {
-    public class SalesOrderLinesMap : IEntityTypeConfiguration<SalesOrderLines>
+    public class InvoiceLinesMap : IEntityTypeConfiguration<InvoiceLines>
     {
-        public void Configure(EntityTypeBuilder<SalesOrderLines> builder)
+        public void Configure(EntityTypeBuilder<InvoiceLines> builder)
         {
             builder.Property(c => c.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
             builder.Property(c => c.Quantity).
-               HasColumnName(SalesOrderLinesConstants.FieldQuantity).
+               HasColumnName(InvoiceLinesConstants.FieldQuantity).
                IsRequired();
 
             builder.Property(c => c.UnitaryPrice).
-                HasColumnName(SalesOrderLinesConstants.FieldUnitaryPrice).
+                HasColumnName(InvoiceLinesConstants.FieldUnitaryPrice).
                 HasColumnType("money").
                 IsRequired();
 
             builder.Property(c => c.TotalPrice).
-                HasColumnName(SalesOrderLinesConstants.FieldTotalPrice).
+                HasColumnName(InvoiceLinesConstants.FieldTotalPrice).
                 HasColumnType("money").
                 IsRequired();
 
             builder.Property(c => c.PercentageUnitaryDiscont).
-                HasColumnName(SalesOrderLinesConstants.FieldPercentageUnitaryDiscont);
+                HasColumnName(InvoiceLinesConstants.FieldPercentageUnitaryDiscont);
 
             builder.Property(c => c.ValueUnitaryDiscont).
-                HasColumnName(SalesOrderLinesConstants.FieldValueUnitaryDiscont).
+                HasColumnName(InvoiceLinesConstants.FieldValueUnitaryDiscont).
                 HasColumnType("money");
 
             builder.Property(c => c.AdditionalCosts).
-                HasColumnName(SalesOrderLinesConstants.FieldAdditionalCosts).
+                HasColumnName(InvoiceLinesConstants.FieldAdditionalCosts).
                 HasColumnType("money");
 
             builder.Property(c => c.Cst).
-                HasColumnName(SalesOrderLinesConstants.FieldCst).
+                HasColumnName(InvoiceLinesConstants.FieldCst).
                 HasMaxLength(20).
                 HasColumnType("varchar(20)").
                 IsRequired();
 
             builder.Property(c => c.Cfop).
-                HasColumnName(SalesOrderLinesConstants.FieldCfop).
+                HasColumnName(InvoiceLinesConstants.FieldCfop).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)").
                 IsRequired();
 
             builder.Property(c => c.BaseCalcIcms).
-                HasColumnName(SalesOrderLinesConstants.FieldBaseCalcIcms).
+                HasColumnName(InvoiceLinesConstants.FieldBaseCalcIcms).
                 HasColumnType("money").
                 IsRequired();
 
             builder.Property(c => c.IcmsValue).
-                HasColumnName(SalesOrderLinesConstants.FieldIcmsValue).
+                HasColumnName(InvoiceLinesConstants.FieldIcmsValue).
                 HasColumnType("money").
                 IsRequired();
 
             builder.Property(c => c.IpiValue).
-                HasColumnName(SalesOrderLinesConstants.FieldIpiValue).
+                HasColumnName(InvoiceLinesConstants.FieldIpiValue).
                 HasColumnType("money").
                 IsRequired();
 
             builder.Property(c => c.IcmsAliquot).
-                HasColumnName(SalesOrderLinesConstants.FieldIcmsAliquot).
+                HasColumnName(InvoiceLinesConstants.FieldIcmsAliquot).
                 IsRequired();
 
             builder.Property(c => c.IpiAliquot).
-                HasColumnName(SalesOrderLinesConstants.FieldIpiAliquot).
+                HasColumnName(InvoiceLinesConstants.FieldIpiAliquot).
                 IsRequired();
 
             builder.Ignore(c => c.Notifications);
@@ -78,7 +78,7 @@ namespace SalesProject.Mapping
             builder.Ignore(c => c.TaxLine);
 
             builder.HasKey(c => c.Id);
-            builder.ToTable(SalesOrderLinesConstants.TableSalesOrderLines);
+            builder.ToTable(InvoiceLinesConstants.TableInvoiceLines);
         }
     }
 }

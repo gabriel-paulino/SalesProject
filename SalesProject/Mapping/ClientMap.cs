@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SalesProject.Domain.Constants;
+using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
@@ -31,7 +31,8 @@ namespace SalesProject.Mapping
                 IsRequired();
 
             builder.Property(c => c.Opening).
-                HasColumnName(ClientConstants.FieldOpening);
+                HasColumnName(ClientConstants.FieldOpening).
+                HasColumnType("date");
 
             builder.Property(c => c.Phone).
                 HasColumnName(ClientConstants.FieldTelNumber).
@@ -39,7 +40,8 @@ namespace SalesProject.Mapping
                 HasColumnType("varchar(20)");
 
             builder.Property(c => c.ClientSince).
-                HasColumnName(ClientConstants.FieldClientSince);
+                HasColumnName(ClientConstants.FieldClientSince).
+                HasColumnType("date");
 
             builder.Property(c => c.MunicipalRegistration).
                 HasColumnName(ClientConstants.FieldMunicipalRegistration).

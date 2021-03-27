@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SalesProject.Domain.Constants;
+using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
@@ -44,12 +44,6 @@ namespace SalesProject.Mapping
                 HasColumnName(AddressConstants.FieldState).
                 HasMaxLength(2).
                 HasColumnType("varchar(2)").
-                IsRequired();
-
-            builder.Property(c => c.Country).
-                HasColumnName(AddressConstants.FieldCountry).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)").
                 IsRequired();
 
             builder.Ignore(c => c.Notifications);

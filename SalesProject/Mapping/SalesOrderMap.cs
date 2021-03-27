@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SalesProject.Domain.Constants;
+using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
@@ -15,25 +15,33 @@ namespace SalesProject.Mapping
 
             builder.Property(c => c.PostingDate).
                HasColumnName(SalesOrderConstants.FieldPostingDate).
+               HasColumnType("date").
                IsRequired();
-
-            builder.Property(c => c.Freight).
-                HasColumnName(SalesOrderConstants.FieldFreight);
 
             builder.Property(c => c.DeliveryDate).
                 HasColumnName(SalesOrderConstants.FieldDeliveryDate).
+                HasColumnType("date").
                 IsRequired();
+
+            builder.Property(c => c.Freight).
+                HasColumnName(SalesOrderConstants.FieldFreight).
+                HasColumnType("money");
 
             builder.Property(c => c.TotalTax).
                 HasColumnName(SalesOrderConstants.FieldTotalTax).
-                IsRequired();
+                HasColumnType("money");
 
             builder.Property(c => c.TotalDiscount).
-                HasColumnName(SalesOrderConstants.FieldTotalDiscount);
+                HasColumnName(SalesOrderConstants.FieldTotalDiscount).
+                HasColumnType("money");
 
             builder.Property(c => c.TotalPriceProducts).
                 HasColumnName(SalesOrderConstants.FieldTotalPriceProducts).
-                IsRequired();
+                HasColumnType("money");
+
+            builder.Property(c => c.TotalOrder).
+                HasColumnName(SalesOrderConstants.FieldTotalOrder).
+                HasColumnType("money");
 
             builder.Property(c => c.Observation).
                 HasColumnName(SalesOrderConstants.FieldObservation).
@@ -47,7 +55,7 @@ namespace SalesProject.Mapping
 
             builder.HasMany(c => c.OrderLines).WithOne();
 
-            builder.ToTable(SalesOrderConstants.TableSalesOrder);            
+            builder.ToTable(SalesOrderConstants.TableSalesOrder);
         }
     }
 }

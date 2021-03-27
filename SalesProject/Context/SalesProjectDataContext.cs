@@ -17,6 +17,8 @@ namespace SalesProject.Context
             builder.ApplyConfiguration(new ProductMap());
             builder.ApplyConfiguration(new SalesOrderMap());
             builder.ApplyConfiguration(new SalesOrderLinesMap());
+            builder.ApplyConfiguration(new InvoiceMap());
+            builder.ApplyConfiguration(new InvoiceLinesMap());
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -24,6 +26,6 @@ namespace SalesProject.Context
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
-        //public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
     }
 }
