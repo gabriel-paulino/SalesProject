@@ -1,4 +1,4 @@
-﻿namespace SalesProject.Domain.Entities
+﻿namespace SalesProject.Domain.Validation
 {
     public static class Validation
     {

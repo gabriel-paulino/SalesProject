@@ -29,7 +29,7 @@ namespace SalesProject.Domain.Entities
         public int Number { get; private set; }
         public string City { get; private set; }
         public string State { get; private set; }
-        public Guid ClientId { get; private set; }
+        public Guid CustomerId { get; private set; }
 
         public override void DoValidations()
         {
@@ -55,7 +55,7 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateZipCode()
         {
-            if(!Validation.ZipCodeIsValid(ZipCode))
+            if(!Validation.Validation.ZipCodeIsValid(ZipCode))
                 AddNotification("O 'Cep' informado é inválido.");
         }
     }

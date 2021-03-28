@@ -45,7 +45,7 @@ namespace SalesProject.Mapping
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
-            builder.HasOne(c => c.Client).WithMany(); //Um Produto tem um cliente, esse cliente tem muitos produtos (é isso ?)
+            builder.HasOne(c => c.Customer).WithMany(); //Um Produto tem um cliente, esse cliente tem muitos produtos (é isso ?)
 
             builder.HasKey(c => c.Id);
             builder.ToTable(ProductConstants.TableProduct);

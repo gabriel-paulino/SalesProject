@@ -18,7 +18,7 @@ namespace SalesProject.Domain.Entities
             DateTime leaveDate,
             string leaveHour,
             string additionalInformation,
-            Client client,
+            Customer customer,
             Shipping shipping)
         {
             Number = number;
@@ -46,7 +46,7 @@ namespace SalesProject.Domain.Entities
             CarrierState = shipping.CarrierAddress.State;
 
             AdditionalInformation = additionalInformation;
-            Client = client;
+            Customer = customer;
             Shipping = shipping;
             _invoiceLines = new List<InvoiceLines>();
 
@@ -56,9 +56,9 @@ namespace SalesProject.Domain.Entities
 
         private IList<InvoiceLines> _invoiceLines;
 
-        public Client Client { get; private set; }
-        public Guid ClientId { get; private set; }
-        public Guid SalesOrderId { get; private set; }
+        public Customer Customer { get; private set; }
+        public Guid CustomerId { get; private set; }
+        public Guid OrderId { get; private set; }
         public int Number { get; private set; }
         public int Series { get; private set; }
         public string OriginOperation { get; private set; }

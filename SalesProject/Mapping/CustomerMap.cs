@@ -5,9 +5,9 @@ using SalesProject.Domain.Entities;
 
 namespace SalesProject.Mapping
 {
-    public class ClientMap : IEntityTypeConfiguration<Client>
+    public class CustomerMap : IEntityTypeConfiguration<Customer>
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        public void Configure(EntityTypeBuilder<Customer> builder)
         { 
             builder.Property(c => c.Id).
                 ValueGeneratedOnAdd().
@@ -19,32 +19,32 @@ namespace SalesProject.Mapping
                 IsRequired();
 
             builder.Property(c => c.CompanyName).
-                HasColumnName(ClientConstants.FieldCompanyName).
+                HasColumnName(CustomerConstants.FieldCompanyName).
                 HasMaxLength(100).
                 HasColumnType("varchar(100)").
                 IsRequired();
 
             builder.Property(c => c.StateRegistration).
-                HasColumnName(ClientConstants.FieldStateRegistration).
+                HasColumnName(CustomerConstants.FieldStateRegistration).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)").
                 IsRequired();
 
             builder.Property(c => c.Opening).
-                HasColumnName(ClientConstants.FieldOpening).
+                HasColumnName(CustomerConstants.FieldOpening).
                 HasColumnType("date");
 
             builder.Property(c => c.Phone).
-                HasColumnName(ClientConstants.FieldTelNumber).
+                HasColumnName(CustomerConstants.FieldTelNumber).
                 HasMaxLength(20).
                 HasColumnType("varchar(20)");
 
             builder.Property(c => c.ClientSince).
-                HasColumnName(ClientConstants.FieldClientSince).
+                HasColumnName(CustomerConstants.FieldClientSince).
                 HasColumnType("date");
 
             builder.Property(c => c.MunicipalRegistration).
-                HasColumnName(ClientConstants.FieldMunicipalRegistration).
+                HasColumnName(CustomerConstants.FieldMunicipalRegistration).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)");
 
@@ -55,7 +55,7 @@ namespace SalesProject.Mapping
             builder.HasMany(c => c.Contacts).WithOne();
 
             builder.HasKey(c => c.Id);
-            builder.ToTable(ClientConstants.TableClient);
+            builder.ToTable(CustomerConstants.TableClient);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SalesProject.Domain.Constants.Database
 {
-    public struct SalesOrderLinesConstants
+    public struct OrderLinesConstants
     {
         public const string
             TableSalesOrderLines = "ItemPedidoVenda",

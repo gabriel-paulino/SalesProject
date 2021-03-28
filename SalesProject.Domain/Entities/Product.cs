@@ -14,7 +14,7 @@ namespace SalesProject.Domain.Entities
             decimal additionalCosts,
             double combinedQuantity,
             string details,
-            Client client)
+            Customer customer)
         {
             this.Name = name;
             this.NcmCode = ncmCode;
@@ -22,7 +22,7 @@ namespace SalesProject.Domain.Entities
             this.AdditionalCosts = additionalCosts;
             this.CombinedQuantity = combinedQuantity;
             this.Details = details;
-            this.Client = client;
+            this.Customer = customer;
 
             DoValidations();
         }
@@ -33,8 +33,8 @@ namespace SalesProject.Domain.Entities
         public decimal AdditionalCosts { get; private set; }
         public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
-        public Guid ClientId { get; private set; }
-        public Client Client { get; private set; }
+        public Guid CustomerId { get; private set; }
+        public Customer Customer { get; private set; }
 
         public override void DoValidations()
         {
@@ -51,7 +51,7 @@ namespace SalesProject.Domain.Entities
                 AddNotification("A 'Previsão mínima mensal' informada é inválida.");
             if (CombinedQuantity < 0)
                 AddNotification("O 'Custo adicional' informado é inválido.");
-            if(Client == null)
+            if(Customer == null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
     }

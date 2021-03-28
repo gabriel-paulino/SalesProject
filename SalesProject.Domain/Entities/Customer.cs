@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace SalesProject.Domain.Entities
 {
-    public class Client : BaseEntity
+    public class Customer : BaseEntity
     {
-        public Client() { }
+        public Customer() { }
 
-        public Client(
+        public Customer(
             string cnpj,
             string companyName,
             DateTime? opening,
@@ -72,7 +72,7 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateCnpj()
         {
-            if (!Validation.CnpjIsValid(Cnpj))
+            if (!Validation.Validation.CnpjIsValid(Cnpj))
                 AddNotification("O 'Cnpj' informado é inválido.");
         }
     }

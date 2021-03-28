@@ -3,11 +3,11 @@ using System;
 
 namespace SalesProject.Domain.Entities
 {
-    public class SalesOrderLines : BaseEntity
+    public class OrderLines : BaseEntity
     {
-        public SalesOrderLines() { }
+        public OrderLines() { }
 
-        public SalesOrderLines(
+        public OrderLines(
             double quantity,
             decimal unitaryPrice,
             double percentageUnitaryDiscont,
@@ -37,7 +37,7 @@ namespace SalesProject.Domain.Entities
             CalculateTotalLinePrice();
         }
 
-        public SalesOrderLines(
+        public OrderLines(
             Product product,
             TaxLine taxLine)
         {
@@ -61,7 +61,7 @@ namespace SalesProject.Domain.Entities
             CalculateTotalLinePrice();
         }
 
-        public Guid SalesOrderId { get; private set; }
+        public Guid OrderId { get; private set; }
         public double Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalPrice { get; private set; }

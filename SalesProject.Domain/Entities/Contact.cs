@@ -30,7 +30,7 @@ namespace SalesProject.Domain.Entities
         public string Email { get; private set; }
         public string WhatsApp { get; private set; }
         public string Phone { get; private set; }
-        public Guid ClientId { get; private set; }
+        public Guid CustomerId { get; private set; }
 
         public override void DoValidations()
         {

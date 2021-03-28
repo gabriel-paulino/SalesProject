@@ -11,21 +11,21 @@ namespace SalesProject.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new ClientMap());
+            builder.ApplyConfiguration(new CustomerMap());
             builder.ApplyConfiguration(new AddressMap());
             builder.ApplyConfiguration(new ContactMap());
             builder.ApplyConfiguration(new ProductMap());
-            builder.ApplyConfiguration(new SalesOrderMap());
-            builder.ApplyConfiguration(new SalesOrderLinesMap());
+            builder.ApplyConfiguration(new OrderMap());
+            builder.ApplyConfiguration(new OrderLinesMap());
             builder.ApplyConfiguration(new InvoiceMap());
             builder.ApplyConfiguration(new InvoiceLinesMap());
         }
 
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Customer> Clients { get; set; }
         public DbSet<Address> Adresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<SalesOrder> SalesOrders { get; set; }
+        public DbSet<Order> SalesOrders { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
     }
 }

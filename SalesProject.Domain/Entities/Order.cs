@@ -5,26 +5,26 @@ using System.Linq;
 
 namespace SalesProject.Domain.Entities
 {
-    public class SalesOrder : BaseEntity
+    public class Order : BaseEntity
     {
-        public SalesOrder() { }
+        public Order() { }
 
-        public SalesOrder(
+        public Order(
             DateTime postingDate,
             DateTime deliveryDate,
             string observation,
-            Client client)
+            Customer customer)
         {
-            Client = client;
+            Customer = customer;
             PostingDate = postingDate;
             DeliveryDate = deliveryDate;
             Observation = observation;
-            _orderLines = new List<SalesOrderLines>();
+            _orderLines = new List<OrderLines>();
 
             DoValidations();
         }
 
-        private IList<SalesOrderLines> _orderLines;
+        private IList<OrderLines> _orderLines;
 
         public DateTime PostingDate { get; private set; }
         public DateTime DeliveryDate { get; private set; }
@@ -34,11 +34,11 @@ namespace SalesProject.Domain.Entities
         public decimal TotalPriceProducts { get; private set; }
         public decimal TotalOrder { get; private set; }
         public string Observation { get; private set; }
-        public IReadOnlyCollection<SalesOrderLines> OrderLines { get => _orderLines.ToArray(); }
-        public Client Client { get; private set; }
-        public Guid ClientId { get; private set; }
+        public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }
+        public Customer Customer { get; private set; }
+        public Guid CustomerId { get; private set; }
 
-        public void AddOrderLine(SalesOrderLines orderLine)
+        public void AddOrderLine(OrderLines orderLine)
         {
             _orderLines.Add(orderLine);
             UpdateOrderValues();
@@ -55,7 +55,7 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Data de lançamento' é obrigatório.");
             if (DeliveryDate == null || DeliveryDate == DateTime.MinValue)
                 AddNotification("O preenchimento do campo 'Data de entrega' é obrigatório.");
-            if (Client == null)
+            if (Customer == null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
 

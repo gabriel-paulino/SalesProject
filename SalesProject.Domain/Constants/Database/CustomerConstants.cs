@@ -1,6 +1,6 @@
 ﻿namespace SalesProject.Domain.Constants.Database
 {
-    public struct ClientConstants
+    public struct CustomerConstants
     {
         public const string
             TableClient = "Cliente",
