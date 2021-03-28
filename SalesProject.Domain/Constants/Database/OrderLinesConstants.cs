@@ -3,7 +3,7 @@
     public struct OrderLinesConstants
     {
         public const string
-            TableSalesOrderLines = "ItemPedidoVenda",
+            TableOrderLines = "ItemPedidoVenda",
             FieldQuantity = "Quantidade",
             FieldUnitaryPrice = "PrecoUnitario",
             FieldTotalPrice = "PrecoTotal",
@@ -16,6 +16,6 @@
             FieldIcmsValue = "ValorIcms",
             FieldIpiValue = "ValorIpi",
             FieldIcmsAliquot = "AliquotaIcms",
-            FieldIpiAliquot = "AliqutaIpi";
+            FieldIpiAliquot = "AliquotaIpi";
     }
 }

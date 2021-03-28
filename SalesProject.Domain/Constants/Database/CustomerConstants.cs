@@ -10,7 +10,7 @@
             FieldOpening = "DataAbertura",
             FieldTelNumber = "Telefone",
             FieldClientSince = "DataCadastro",
-            FieldMunicipalRegistration = "IncricaoMunicipal",
-            FieldStateRegistration = "IncricaoEstadual";
+            FieldMunicipalRegistration = "InscricaoMunicipal",
+            FieldStateRegistration = "InscricaoEstadual";
     }
 }

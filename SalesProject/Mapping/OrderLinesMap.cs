@@ -78,7 +78,7 @@ namespace SalesProject.Mapping
             builder.Ignore(c => c.TaxLine);
 
             builder.HasKey(c => c.Id);
-            builder.ToTable(OrderLinesConstants.TableSalesOrderLines);
+            builder.ToTable(OrderLinesConstants.TableOrderLines);
         }
     }
 }

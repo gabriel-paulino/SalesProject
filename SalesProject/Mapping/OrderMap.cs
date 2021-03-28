@@ -55,7 +55,7 @@ namespace SalesProject.Mapping
 
             builder.HasMany(c => c.OrderLines).WithOne();
 
-            builder.ToTable(OrderConstants.TableSalesOrder);
+            builder.ToTable(OrderConstants.TableOrder);
         }
     }
 }
