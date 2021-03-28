@@ -83,7 +83,7 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             if (Quantity <= 0)
-                AddNotification("O 'Quantidade' informada é inválida.");
+                AddNotification("A 'Quantidade' informada é inválida.");
             if (PercentageUnitaryDiscont > 1 && PercentageUnitaryDiscont < 0)
                 AddNotification("O 'Desconto' informado é inválido.");
         }
