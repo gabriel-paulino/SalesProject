@@ -9,6 +9,7 @@
             FieldNeighborhood = "Bairro",
             FieldNumber = "Numero",
             FieldCity = "Cidade",
-            FieldState = "Uf";
+            FieldState = "Uf",
+            FieldCustomerId = "ClienteId";
     }
 }

@@ -16,6 +16,8 @@
             FieldIcmsValue = "ValorIcms",
             FieldIpiValue = "ValorIpi",
             FieldIcmsAliquot = "AliquotaIcms",
-            FieldIpiAliquot = "AliqutaIpi";
+            FieldIpiAliquot = "AliqutaIpi",
+            FieldInvoiceId = "NotaFiscalId",
+            FieldProductId = "ProdutoId";
     }
 }

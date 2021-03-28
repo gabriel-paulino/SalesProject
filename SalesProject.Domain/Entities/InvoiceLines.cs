@@ -40,9 +40,8 @@ namespace SalesProject.Domain.Entities
             CalculateTotalLinePrice();
         }
 
-
-
         public Guid InvoiceId { get; private set; }
+        public Guid? ProductId { get; private set; }
         public double Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalPrice { get; private set; }

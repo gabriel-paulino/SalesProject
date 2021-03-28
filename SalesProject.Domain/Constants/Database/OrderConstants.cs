@@ -11,6 +11,7 @@
             FieldTotalDiscount = "TotalDesconto",
             FieldTotalPriceProducts = "TotalProdutos",
             FieldTotalOrder = "TotalPedido",
-            FieldObservation = "Observacao";
+            FieldObservation = "Observacao",
+            FieldCustomerId = "ClienteId";
     }
 }

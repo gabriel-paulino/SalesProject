@@ -57,8 +57,9 @@ namespace SalesProject.Domain.Entities
         private IList<InvoiceLines> _invoiceLines;
 
         public Customer Customer { get; private set; }
-        public Guid CustomerId { get; private set; }
-        public Guid OrderId { get; private set; }
+        public Guid? CustomerId { get; private set; }
+        public Order Order { get; private set; }
+        public Guid? OrderId { get; private set; }
         public int Number { get; private set; }
         public int Series { get; private set; }
         public string OriginOperation { get; private set; }

@@ -37,6 +37,8 @@
             FieldIpiValue = "ValorIpi",
             FieldTotalInvoice = "ValorTotaNotaFiscal",
             FieldAdditionalInformation = "DadosAdicionais",
-            FieldReservedFisco = "ReservadoFisco";
+            FieldReservedFisco = "ReservadoFisco",
+            FieldCustomerId = "ClienteId",
+            FieldOrderId = "PedidoVendaId";
     }
 }

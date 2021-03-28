@@ -36,7 +36,7 @@ namespace SalesProject.Domain.Entities
         public string Observation { get; private set; }
         public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }
         public Customer Customer { get; private set; }
-        public Guid CustomerId { get; private set; }
+        public Guid? CustomerId { get; private set; }
 
         public void AddOrderLine(OrderLines orderLine)
         {

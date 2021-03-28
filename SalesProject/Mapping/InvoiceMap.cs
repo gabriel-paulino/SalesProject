@@ -23,6 +23,8 @@ namespace SalesProject.Mapping
 
             builder.Property(c => c.OriginOperation).
                 HasColumnName(InvoiceConstants.FieldOriginOperation).
+                HasMaxLength(20).
+                HasColumnType("varchar(20)").
                 IsRequired();
 
             builder.Property(c => c.ReleaseDate).
@@ -44,6 +46,12 @@ namespace SalesProject.Mapping
                 HasColumnName(InvoiceConstants.FieldCarrierName).
                 HasMaxLength(100).
                 HasColumnType("varchar(100)").
+                IsRequired();
+
+            builder.Property(c => c.PaidBy).
+                HasColumnName(InvoiceConstants.FieldPaidBy).
+                HasMaxLength(20).
+                HasColumnType("varchar(20)").
                 IsRequired();
 
             builder.Property(c => c.AnttCode).
@@ -170,12 +178,22 @@ namespace SalesProject.Mapping
                 HasMaxLength(1024).
                 HasColumnType("varchar(1024)");
 
+            builder.Property(c => c.CustomerId).
+                HasColumnName(InvoiceConstants.FieldCustomerId).
+                IsRequired(false);
+
+            builder.Property(c => c.OrderId).
+                HasColumnName(InvoiceConstants.FieldOrderId).
+                IsRequired(false);
+
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
             builder.Ignore(c => c.Company);
             builder.Ignore(c => c.Shipping);
 
             builder.HasMany(c => c.InvoiceLines).WithOne();
+            builder.HasOne(c => c.Order).WithOne().OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(InvoiceConstants.TableInvoice);

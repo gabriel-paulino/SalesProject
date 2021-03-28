@@ -8,6 +8,7 @@
             FieldLastName = "Sobrenome",
             FieldEmail = "Email",
             FieldWhatsApp = "WhatsApp",
-            FieldPhone = "Telefone";
+            FieldPhone = "Telefone",
+            FieldCustomerId = "ClienteId";
     }
 }

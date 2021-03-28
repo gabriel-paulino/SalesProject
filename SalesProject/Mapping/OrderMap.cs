@@ -48,12 +48,17 @@ namespace SalesProject.Mapping
                 HasMaxLength(300).
                 HasColumnType("varchar(300)");
 
+            builder.Property(c => c.CustomerId).
+                HasColumnName(OrderConstants.FieldCustomerId).
+                IsRequired(false);
+
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
             builder.HasKey(c => c.Id);
 
             builder.HasMany(c => c.OrderLines).WithOne();
+            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.ToTable(OrderConstants.TableOrder);
         }

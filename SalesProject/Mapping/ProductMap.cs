@@ -42,10 +42,14 @@ namespace SalesProject.Mapping
                 HasMaxLength(500).
                 HasColumnType("varchar(500)");
 
+            builder.Property(c => c.CustomerId).
+                HasColumnName(ProductConstants.FieldCustomerId).
+                IsRequired(false);
+
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
-            builder.HasOne(c => c.Customer).WithMany(); //Um Produto tem um cliente, esse cliente tem muitos produtos (é isso ?)
+            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(ProductConstants.TableProduct);

@@ -41,6 +41,9 @@ namespace SalesProject.Mapping
                 HasColumnType("varchar(20)").
                 IsRequired();
 
+            builder.Property(c => c.CustomerId).
+                HasColumnName(ContactConstants.FieldCustomerId);
+
             builder.Ignore(c => c.FullName);
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);

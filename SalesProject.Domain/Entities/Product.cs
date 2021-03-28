@@ -33,7 +33,7 @@ namespace SalesProject.Domain.Entities
         public decimal AdditionalCosts { get; private set; }
         public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
-        public Guid CustomerId { get; private set; }
+        public Guid? CustomerId { get; private set; }
         public Customer Customer { get; private set; }
 
         public override void DoValidations()

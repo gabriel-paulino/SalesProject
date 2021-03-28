@@ -9,6 +9,7 @@
             FieldCombinedPrice = "PrecoCombinado",
             FieldAdditionalCosts = "CustosAdicionais",
             FieldCombinedQuantity = "PrevisaoMensal",
-            FieldDetails = "Detalhes";
+            FieldDetails = "Detalhes",
+            FieldCustomerId = "ClienteId";
     }
 }

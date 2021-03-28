@@ -62,6 +62,7 @@ namespace SalesProject.Domain.Entities
         }
 
         public Guid OrderId { get; private set; }
+        public Guid? ProductId { get; private set; }
         public double Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalPrice { get; private set; }
