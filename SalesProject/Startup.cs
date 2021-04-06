@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SalesProject.Context;
+using SalesProject.Infra.Interface;
+using SalesProject.Infra.Repository;
 
 namespace SalesProject
 {
@@ -24,6 +26,9 @@ namespace SalesProject
 
             services.AddDbContext<SalesProjectDataContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
+
+            //Todo: Rever maneira de injetar as dependencias
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
