@@ -18,7 +18,6 @@ namespace SalesProject.Domain.Entities
             DateTime leaveDate,
             string leaveHour,
             string additionalInformation,
-            Customer customer,
             Shipping shipping)
         {
             Number = number;
@@ -46,7 +45,6 @@ namespace SalesProject.Domain.Entities
             CarrierState = shipping.CarrierAddress.State;
 
             AdditionalInformation = additionalInformation;
-            Customer = customer;
             Shipping = shipping;
             _invoiceLines = new List<InvoiceLines>();
 
@@ -56,8 +54,6 @@ namespace SalesProject.Domain.Entities
 
         private IList<InvoiceLines> _invoiceLines;
 
-        public Customer Customer { get; private set; }
-        public Guid? CustomerId { get; private set; }
         public Order Order { get; private set; }
         public Guid? OrderId { get; private set; }
         public int Number { get; private set; }
@@ -108,7 +104,6 @@ namespace SalesProject.Domain.Entities
 
         public override void DoValidations()
         {
-            //Todo
         }
 
         private void SetCompanyInformations()

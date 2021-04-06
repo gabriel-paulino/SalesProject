@@ -38,7 +38,6 @@
             FieldTotalInvoice = "ValorTotaNotaFiscal",
             FieldAdditionalInformation = "DadosAdicionais",
             FieldReservedFisco = "ReservadoFisco",
-            FieldCustomerId = "ClienteId",
             FieldOrderId = "PedidoVendaId";
     }
 }

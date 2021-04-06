@@ -28,10 +28,6 @@ namespace SalesProject.Domain.Entities
 
         public DateTime PostingDate { get; private set; }
         public DateTime DeliveryDate { get; private set; }
-        public decimal Freight { get; private set; }
-        public decimal TotalTax { get; private set; }
-        public decimal TotalDiscount { get; private set; }
-        public decimal TotalPriceProducts { get; private set; }
         public decimal TotalOrder { get; private set; }
         public string Observation { get; private set; }
         public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }
@@ -61,7 +57,7 @@ namespace SalesProject.Domain.Entities
 
         private void UpdateOrderValues()
         {
-            //Atualizar Frete, Imposto, Produtos, Desconto e Valor total basedo nas linhas
+            //Atualizar Total
             //Em debug verificar se será necessario resetar os totais antes do foreach
         }
     }
