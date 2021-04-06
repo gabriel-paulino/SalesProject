@@ -178,10 +178,6 @@ namespace SalesProject.Mapping
                 HasMaxLength(1024).
                 HasColumnType("varchar(1024)");
 
-            builder.Property(c => c.CustomerId).
-                HasColumnName(InvoiceConstants.FieldCustomerId).
-                IsRequired(false);
-
             builder.Property(c => c.OrderId).
                 HasColumnName(InvoiceConstants.FieldOrderId).
                 IsRequired(false);
@@ -193,7 +189,6 @@ namespace SalesProject.Mapping
 
             builder.HasMany(c => c.InvoiceLines).WithOne();
             builder.HasOne(c => c.Order).WithOne().OnDelete(DeleteBehavior.SetNull);
-            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(InvoiceConstants.TableInvoice);

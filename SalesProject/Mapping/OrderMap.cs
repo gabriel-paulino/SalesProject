@@ -23,22 +23,6 @@ namespace SalesProject.Mapping
                 HasColumnType("date").
                 IsRequired();
 
-            builder.Property(c => c.Freight).
-                HasColumnName(OrderConstants.FieldFreight).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalTax).
-                HasColumnName(OrderConstants.FieldTotalTax).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalDiscount).
-                HasColumnName(OrderConstants.FieldTotalDiscount).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalPriceProducts).
-                HasColumnName(OrderConstants.FieldTotalPriceProducts).
-                HasColumnType("money");
-
             builder.Property(c => c.TotalOrder).
                 HasColumnName(OrderConstants.FieldTotalOrder).
                 HasColumnType("money");

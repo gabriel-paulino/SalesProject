@@ -27,51 +27,9 @@ namespace SalesProject.Mapping
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.PercentageUnitaryDiscont).
-                HasColumnName(OrderLinesConstants.FieldPercentageUnitaryDiscont);
-
-            builder.Property(c => c.ValueUnitaryDiscont).
-                HasColumnName(OrderLinesConstants.FieldValueUnitaryDiscont).
-                HasColumnType("money");
-
             builder.Property(c => c.AdditionalCosts).
                 HasColumnName(OrderLinesConstants.FieldAdditionalCosts).
                 HasColumnType("money");
-
-            builder.Property(c => c.Cst).
-                HasColumnName(OrderLinesConstants.FieldCst).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)").
-                IsRequired();
-
-            builder.Property(c => c.Cfop).
-                HasColumnName(OrderLinesConstants.FieldCfop).
-                HasMaxLength(30).
-                HasColumnType("varchar(30)").
-                IsRequired();
-
-            builder.Property(c => c.BaseCalcIcms).
-                HasColumnName(OrderLinesConstants.FieldBaseCalcIcms).
-                HasColumnType("money").
-                IsRequired();
-
-            builder.Property(c => c.IcmsValue).
-                HasColumnName(OrderLinesConstants.FieldIcmsValue).
-                HasColumnType("money").
-                IsRequired();
-
-            builder.Property(c => c.IpiValue).
-                HasColumnName(OrderLinesConstants.FieldIpiValue).
-                HasColumnType("money").
-                IsRequired();
-
-            builder.Property(c => c.IcmsAliquot).
-                HasColumnName(OrderLinesConstants.FieldIcmsAliquot).
-                IsRequired();
-
-            builder.Property(c => c.IpiAliquot).
-                HasColumnName(OrderLinesConstants.FieldIpiAliquot).
-                IsRequired();
 
             builder.Property(c => c.OrderId).
                 HasColumnName(OrderLinesConstants.FieldOrderId);
@@ -82,7 +40,6 @@ namespace SalesProject.Mapping
 
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
-            builder.Ignore(c => c.TaxLine);
 
             builder.HasOne(c => c.Product).WithMany().OnDelete(DeleteBehavior.SetNull);
 

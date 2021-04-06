@@ -76,15 +76,9 @@ namespace SalesProject.Mapping
             builder.Property(c => c.InvoiceId).
                 HasColumnName(InvoiceLinesConstants.FieldInvoiceId);
 
-            builder.Property(c => c.ProductId).
-                HasColumnName(InvoiceLinesConstants.FieldProductId).
-                IsRequired(false);
-
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
             builder.Ignore(c => c.TaxLine);
-
-            builder.HasOne(c => c.Product).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(InvoiceLinesConstants.TableInvoiceLines);
