@@ -1,13 +1,13 @@
-﻿using SalesProject.Context;
-using SalesProject.Infra.Interface;
+﻿using SalesProject.Infra.Context;
+using SalesProject.Domain.Interface;
 
 namespace SalesProject.Infra.Repository
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWorkRepository : IUnitOfWorkRepository
     {
         private readonly SalesProjectDataContext _salesProjectDataContext;
 
-        public UnitOfWork(SalesProjectDataContext salesProjectDataContext)
+        public UnitOfWorkRepository(SalesProjectDataContext salesProjectDataContext)
         {
             _salesProjectDataContext = salesProjectDataContext;
         }
