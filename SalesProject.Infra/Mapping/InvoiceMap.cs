@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
 
-namespace SalesProject.Mapping
+namespace SalesProject.Infra.Mapping
 {
     public class InvoiceMap : IEntityTypeConfiguration<Invoice>
     {

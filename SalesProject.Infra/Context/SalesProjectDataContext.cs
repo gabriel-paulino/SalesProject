@@ -1,8 +1,8 @@
 ﻿using SalesProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using SalesProject.Mapping;
+using SalesProject.Infra.Mapping;
 
-namespace SalesProject.Context
+namespace SalesProject.Infra.Context
 {
     public class SalesProjectDataContext : DbContext
     {
