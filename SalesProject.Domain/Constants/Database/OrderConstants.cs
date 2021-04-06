@@ -6,6 +6,7 @@
             TableOrder = "PedidoVenda",
             FieldPostingDate = "DataLancamento",
             FieldDeliveryDate = "DataEntrega",
+            FieldStatus = "Status",
             FieldTotalOrder = "TotalPedido",
             FieldObservation = "Observacao",
             FieldCustomerId = "ClienteId";

@@ -28,6 +28,7 @@ namespace SalesProject.Domain.Entities
 
         public DateTime PostingDate { get; private set; }
         public DateTime DeliveryDate { get; private set; }
+        public string Status { get; private set; }
         public decimal TotalOrder { get; private set; }
         public string Observation { get; private set; }
         public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }
