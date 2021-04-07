@@ -5,33 +5,35 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SalesProject.Domain.Interfaces;
+using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
+using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
 
 namespace SalesProject
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        public Startup(IConfiguration configuration) =>
+            Configuration = configuration;
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<SalesProjectDataContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
+            services.AddDbContext<DataContext>(
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
-            //Todo: Rever maneira de injetar as dependencias
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
