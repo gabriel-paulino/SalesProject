@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
+using System;
 
 namespace SalesProject.Infra.Mapping
 {
@@ -18,6 +20,18 @@ namespace SalesProject.Infra.Mapping
                 HasMaxLength(18).
                 HasColumnType("varchar(18)").
                 IsRequired();
+
+            builder.Property(c => c.Type).
+                HasColumnName(AddressConstants.FieldType).
+                HasConversion<int>();
+
+            //builder.Property(c => c.Type).
+            //    HasColumnName(AddressConstants.FieldType).
+            //    HasMaxLength(10).
+            //    HasColumnType("varchar(10)").
+            //    HasConversion(
+            //        c => c.ToString(),
+            //        c => (AddressType)Enum.Parse(typeof(AddressType), c));
 
             builder.Property(c => c.Street).
                 HasColumnName(AddressConstants.FieldStreet).

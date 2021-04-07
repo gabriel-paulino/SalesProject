@@ -4,9 +4,9 @@ using SalesProject.Infra.Mapping;
 
 namespace SalesProject.Infra.Context
 {
-    public class SalesProjectDataContext : DbContext
+    public class DataContext : DbContext
     {
-        public SalesProjectDataContext(DbContextOptions<SalesProjectDataContext> options)
+        public DataContext(DbContextOptions<DataContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

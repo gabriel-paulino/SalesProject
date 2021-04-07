@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
+using System;
 
 namespace SalesProject.Infra.Mapping
 {
@@ -25,9 +27,15 @@ namespace SalesProject.Infra.Mapping
 
             builder.Property(c => c.Status).
                 HasColumnName(OrderConstants.FieldStatus).
-                HasMaxLength(30).
-                HasColumnType("varchar(30)").
-                IsRequired();
+                HasConversion<int>();
+
+            //builder.Property(c => c.Status).
+            //    HasColumnName(OrderConstants.FieldStatus).
+            //    HasMaxLength(18).
+            //    HasColumnType("varchar(18)").
+            //    HasConversion(
+            //        c => c.ToString(),
+            //        c => (OrderStatus)Enum.Parse(typeof(OrderStatus), c));
 
             builder.Property(c => c.TotalOrder).
                 HasColumnName(OrderConstants.FieldTotalOrder).

@@ -1,23 +1,21 @@
-﻿using SalesProject.Infra.Context;
-using SalesProject.Domain.Interfaces;
+﻿using SalesProject.Domain.Interfaces;
+using SalesProject.Infra.Context;
 
 namespace SalesProject.Infra.UoW
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly SalesProjectDataContext _salesProjectDataContext;
+        private readonly DataContext _dataContext;
 
-        public UnitOfWork(SalesProjectDataContext salesProjectDataContext) =>
-            _salesProjectDataContext = salesProjectDataContext;
+        public UnitOfWork(DataContext dataContext) =>
+            _dataContext = dataContext;
 
-        public void Commit()
-        {
-            _salesProjectDataContext.SaveChanges();
-        }
-
+        public void Commit() =>
+            _dataContext.SaveChanges();
+        
         public void Rollback() { }
 
         public void Dispose() =>
-            _salesProjectDataContext.Dispose();
+            _dataContext.Dispose();
     }
 }
