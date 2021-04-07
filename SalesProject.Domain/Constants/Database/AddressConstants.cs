@@ -5,6 +5,7 @@
         public const string
             TableAddress = "Endereco",
             FieldZipCode = "Cep",
+            FieldType = "Tipo",
             FieldStreet = "Logradouro",
             FieldNeighborhood = "Bairro",
             FieldNumber = "Numero",

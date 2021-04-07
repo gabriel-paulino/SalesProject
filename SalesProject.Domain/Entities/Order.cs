@@ -1,4 +1,5 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using SalesProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,11 @@ namespace SalesProject.Domain.Entities
             string observation,
             Customer customer)
         {
-            Customer = customer;
-            PostingDate = postingDate;
-            DeliveryDate = deliveryDate;
-            Observation = observation;
+            this.Customer = customer;
+            this.PostingDate = postingDate;
+            this.DeliveryDate = deliveryDate;
+            this.Status = OrderStatus.Open;
+            this.Observation = observation;
             _orderLines = new List<OrderLines>();
 
             DoValidations();
@@ -28,7 +30,7 @@ namespace SalesProject.Domain.Entities
 
         public DateTime PostingDate { get; private set; }
         public DateTime DeliveryDate { get; private set; }
-        public string Status { get; private set; }
+        public OrderStatus Status { get; private set; }
         public decimal TotalOrder { get; private set; }
         public string Observation { get; private set; }
         public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }

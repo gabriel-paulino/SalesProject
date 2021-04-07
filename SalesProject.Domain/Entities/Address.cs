@@ -1,4 +1,5 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using SalesProject.Domain.Enums;
 using System;
 
 namespace SalesProject.Domain.Entities
@@ -6,7 +7,8 @@ namespace SalesProject.Domain.Entities
     public class Address : BaseEntity
     {
         public Address(
-            string zipCode, 
+            string zipCode,
+            AddressType type,
             string street, 
             string neighborhood, 
             int number, 
@@ -14,6 +16,7 @@ namespace SalesProject.Domain.Entities
             string state)
         {
             this.ZipCode = zipCode;
+            this.Type = type;
             this.Street = street;
             this.Neighborhood = neighborhood;
             this.Number = number;
@@ -24,6 +27,7 @@ namespace SalesProject.Domain.Entities
         }
 
         public string ZipCode { get; private set; }
+        public AddressType Type { get; private set; }
         public string Street { get; private set; }
         public string Neighborhood { get; private set; }
         public int Number { get; private set; }

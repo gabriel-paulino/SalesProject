@@ -1,5 +1,6 @@
 ﻿using SalesProject.Domain.Constants;
 using SalesProject.Domain.Entities.Base;
+using SalesProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,6 +116,7 @@ namespace SalesProject.Domain.Entities
                             stateRegistration: CompanyConstants.StateRegistration,
                             new Address(
                                         zipCode: CompanyConstants.ZipCode,
+                                        type: AddressType.Other,
                                         street: CompanyConstants.Street,
                                         neighborhood: CompanyConstants.Neighborhood,
                                         number: CompanyConstants.Number,
