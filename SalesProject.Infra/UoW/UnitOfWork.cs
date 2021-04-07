@@ -1,16 +1,14 @@
 ﻿using SalesProject.Infra.Context;
-using SalesProject.Domain.Interface;
+using SalesProject.Domain.Interfaces;
 
-namespace SalesProject.Infra.Repository
+namespace SalesProject.Infra.UoW
 {
-    public class UnitOfWorkRepository : IUnitOfWorkRepository
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly SalesProjectDataContext _salesProjectDataContext;
 
-        public UnitOfWorkRepository(SalesProjectDataContext salesProjectDataContext)
-        {
+        public UnitOfWork(SalesProjectDataContext salesProjectDataContext) =>
             _salesProjectDataContext = salesProjectDataContext;
-        }
 
         public void Commit()
         {
@@ -19,5 +17,7 @@ namespace SalesProject.Infra.Repository
 
         public void Rollback() { }
 
+        public void Dispose() =>
+            _salesProjectDataContext.Dispose();
     }
 }
