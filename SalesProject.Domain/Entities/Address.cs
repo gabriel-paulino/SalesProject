@@ -1,5 +1,4 @@
 ﻿using SalesProject.Domain.Entities.Base;
-using SalesProject.Domain.Enums;
 using System;
 
 namespace SalesProject.Domain.Entities
@@ -8,12 +7,13 @@ namespace SalesProject.Domain.Entities
     {
         public Address(
             string zipCode,
-            AddressType type,
-            string street, 
-            string neighborhood, 
-            int number, 
-            string city, 
-            string state)
+            string type,
+            string street,
+            string neighborhood,
+            int number,
+            string city,
+            string state,
+            Guid customerId)
         {
             this.ZipCode = zipCode;
             this.Type = type;
@@ -22,12 +22,13 @@ namespace SalesProject.Domain.Entities
             this.Number = number;
             this.City = city;
             this.State = state;
+            this.CustomerId = customerId;
 
             DoValidations();
         }
 
         public string ZipCode { get; private set; }
-        public AddressType Type { get; private set; }
+        public string Type { get; private set; }
         public string Street { get; private set; }
         public string Neighborhood { get; private set; }
         public int Number { get; private set; }
@@ -59,7 +60,7 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateZipCode()
         {
-            if(!Validation.Validation.ZipCodeIsValid(ZipCode))
+            if (!Validation.Validation.ZipCodeIsValid(ZipCode))
                 AddNotification("O 'Cep' informado é inválido.");
         }
     }

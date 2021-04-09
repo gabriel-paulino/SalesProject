@@ -10,9 +10,9 @@ namespace SalesProject.Infra.UoW
         public UnitOfWork(DataContext dataContext) =>
             _dataContext = dataContext;
 
-        public void Commit() =>
-            _dataContext.SaveChanges();
-        
+        public bool Commit() =>
+            _dataContext.SaveChanges() > 0;
+
         public void Rollback() { }
 
         public void Dispose() =>

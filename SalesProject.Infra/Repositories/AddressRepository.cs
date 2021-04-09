@@ -1,4 +1,5 @@
-﻿using SalesProject.Domain.Interfaces.Repository;
+﻿using SalesProject.Domain.Entities;
+using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
 
@@ -14,6 +15,9 @@ namespace SalesProject.Infra.Repositories
 
         ~AddressRepository() =>
             Dispose();
+
+        public void Create(Address address) =>
+             _dataContext.Adresses.Add(address);
 
         public void Dispose()
         {

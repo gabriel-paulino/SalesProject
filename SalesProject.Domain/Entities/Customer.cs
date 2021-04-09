@@ -7,7 +7,12 @@ namespace SalesProject.Domain.Entities
 {
     public class Customer : BaseEntity
     {
-        public Customer() { }
+        public Customer()
+        {
+            _adresses = new List<Address>();
+            _contacts = new List<Contact>();
+            this.ClientSince = DateTime.Today;
+        }
 
         public Customer(
             string cnpj,
@@ -40,7 +45,6 @@ namespace SalesProject.Domain.Entities
         public string Phone { get; private set; }
         public DateTime ClientSince { get; private set; }
         public string MunicipalRegistration { get; private set; }
-
         public IReadOnlyCollection<Address> Adresses { get => _adresses.ToArray(); }
         public IReadOnlyCollection<Contact> Contacts { get => _contacts.ToArray(); }
 

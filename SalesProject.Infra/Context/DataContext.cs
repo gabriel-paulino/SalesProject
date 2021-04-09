@@ -21,7 +21,7 @@ namespace SalesProject.Infra.Context
             builder.ApplyConfiguration(new InvoiceLinesMap());
         }
 
-        public DbSet<Customer> Clients { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Adresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }

@@ -116,13 +116,13 @@ namespace SalesProject.Domain.Entities
                             stateRegistration: CompanyConstants.StateRegistration,
                             new Address(
                                         zipCode: CompanyConstants.ZipCode,
-                                        type: AddressType.Other,
+                                        type: string.Empty,
                                         street: CompanyConstants.Street,
                                         neighborhood: CompanyConstants.Neighborhood,
                                         number: CompanyConstants.Number,
                                         city: CompanyConstants.City,
-                                        state: CompanyConstants.State
-                                        )
+                                        state: CompanyConstants.State,
+                                        customerId: new Guid())
                             );
 
             if (!Company.Valid)
