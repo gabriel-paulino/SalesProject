@@ -1,4 +1,5 @@
 ﻿using SalesProject.Domain.Entities.Base;
+using SalesProject.Domain.Enums;
 using System;
 
 namespace SalesProject.Domain.Entities
@@ -7,7 +8,7 @@ namespace SalesProject.Domain.Entities
     {
         public Address(
             string zipCode,
-            string type,
+            AddressType? type,
             string street,
             string neighborhood,
             int number,
@@ -28,13 +29,35 @@ namespace SalesProject.Domain.Entities
         }
 
         public string ZipCode { get; private set; }
-        public string Type { get; private set; }
+        public AddressType? Type { get; private set; }
         public string Street { get; private set; }
         public string Neighborhood { get; private set; }
         public int Number { get; private set; }
         public string City { get; private set; }
         public string State { get; private set; }
         public Guid CustomerId { get; private set; }
+
+        public Address EditAddress(
+            string zipCode,
+            AddressType? type,
+            string street,
+            string neighborhood,
+            int number,
+            string city,
+            string state)
+        {
+            this.ZipCode = zipCode;
+            this.Type = type;
+            this.Street = street;
+            this.Neighborhood = neighborhood;
+            this.Number = number;
+            this.City = city;
+            this.State = state;
+
+            DoValidations();
+
+            return this;
+        }
 
         public override void DoValidations()
         {

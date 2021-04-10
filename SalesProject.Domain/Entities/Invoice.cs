@@ -116,7 +116,7 @@ namespace SalesProject.Domain.Entities
                             stateRegistration: CompanyConstants.StateRegistration,
                             new Address(
                                         zipCode: CompanyConstants.ZipCode,
-                                        type: string.Empty,
+                                        type: null,
                                         street: CompanyConstants.Street,
                                         neighborhood: CompanyConstants.Neighborhood,
                                         number: CompanyConstants.Number,

@@ -6,6 +6,7 @@
             TableContact = "Contato",
             FieldFirstName = "Nome",
             FieldLastName = "Sobrenome",
+            FieldFullName = "NomeSobrenome",
             FieldEmail = "Email",
             FieldWhatsApp = "WhatsApp",
             FieldPhone = "Telefone",
