@@ -29,14 +29,6 @@ namespace SalesProject.Infra.Mapping
                 HasColumnName(OrderConstants.FieldStatus).
                 HasConversion<int>();
 
-            //builder.Property(c => c.Status).
-            //    HasColumnName(OrderConstants.FieldStatus).
-            //    HasMaxLength(18).
-            //    HasColumnType("varchar(18)").
-            //    HasConversion(
-            //        c => c.ToString(),
-            //        c => (OrderStatus)Enum.Parse(typeof(OrderStatus), c));
-
             builder.Property(c => c.TotalOrder).
                 HasColumnName(OrderConstants.FieldTotalOrder).
                 HasColumnType("money");

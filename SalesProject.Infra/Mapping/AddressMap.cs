@@ -23,15 +23,8 @@ namespace SalesProject.Infra.Mapping
 
             builder.Property(c => c.Type).
                 HasColumnName(AddressConstants.FieldType).
-                HasConversion<int>();
-
-            //builder.Property(c => c.Type).
-            //    HasColumnName(AddressConstants.FieldType).
-            //    HasMaxLength(10).
-            //    HasColumnType("varchar(10)").
-            //    HasConversion(
-            //        c => c.ToString(),
-            //        c => (AddressType)Enum.Parse(typeof(AddressType), c));
+                HasConversion<int>().
+                IsRequired(false);
 
             builder.Property(c => c.Street).
                 HasColumnName(AddressConstants.FieldStreet).

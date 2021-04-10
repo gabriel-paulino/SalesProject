@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesProject.Domain.Entities;
-using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SalesProject.Infra.Repositories
 {
@@ -21,14 +19,11 @@ namespace SalesProject.Infra.Repositories
         ~CustomerRepository() =>
             Dispose();
 
-        public async Task Create(Customer customer) =>
-            await _dataContext.Customers.AddAsync(customer);
+        public void Create(Customer customer) =>
+             _dataContext.Customers.Add(customer);
 
-        public void Delete(Guid id)
-        {
-            var customer = _dataContext.Customers.Find(id);
+        public void Delete(Customer customer) =>
             _dataContext.Customers.Remove(customer);
-        }
 
         public Customer Get(Guid id) =>
             _dataContext.Customers.Find(id);
@@ -41,7 +36,7 @@ namespace SalesProject.Infra.Repositories
 
         public void Update(Customer customer) =>
             _dataContext.Entry<Customer>(customer).State = EntityState.Modified;
-        
+
         public void Dispose()
         {
             if (!_disposed)

@@ -24,6 +24,11 @@ namespace SalesProject.Infra.Mapping
                 HasMaxLength(20).
                 HasColumnType("varchar(20)");
 
+            builder.Property(c => c.FullName).
+                HasColumnName(ContactConstants.FieldFullName).
+                HasMaxLength(40).
+                HasColumnType("varchar(40)");
+
             builder.Property(c => c.Email).
                 HasColumnName(ContactConstants.FieldEmail).
                 HasMaxLength(50).
