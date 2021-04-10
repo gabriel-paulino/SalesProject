@@ -1,5 +1,5 @@
-﻿using SalesProject.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesProject.Domain.Entities;
 using SalesProject.Infra.Mapping;
 
 namespace SalesProject.Infra.Context

@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SalesProject.Domain.Constants.Database;
 using SalesProject.Domain.Entities;
-using SalesProject.Domain.Enums;
-using System;
 
 namespace SalesProject.Infra.Mapping
 {
