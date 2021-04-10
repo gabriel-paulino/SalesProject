@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,7 +12,7 @@ namespace SalesProject.ViewModels
 
         [Required(ErrorMessage = "O campo 'Tipo endereço' é obrigatório")]
         [Display(Name = "Tipo endereço")]
-        public string Type { get; set; }
+        public int Type { get; set; }
         public SelectList TypeOptions { get; set; }
 
         [Required(ErrorMessage = "O campo 'Logradouro' é obrigatório")]
@@ -42,5 +41,12 @@ namespace SalesProject.ViewModels
         public string CustomerId { get; set; }
         public SelectList CustomerOptions { get; set; }
 
+    }
+
+    public enum AddressType
+    {
+        Cobrança = 1,
+        Entrega = 2,
+        Outro = 3
     }
 }

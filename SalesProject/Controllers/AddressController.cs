@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Helper;
 using SalesProject.ViewModels;
 using System;
-using System.Collections.Generic;
 
 namespace SalesProject.Controllers
 {
@@ -37,8 +37,8 @@ namespace SalesProject.Controllers
             var model = new CreateAddressViewModel
             {
                 ZipCode = string.Empty,
-                Type = string.Empty,
-                TypeOptions = new SelectList(new List<string>() { "Cobrança", "Entrega", "Outro" }),
+                Type = 0,
+                TypeOptions = EnumeratorExtension.GetSelectListEnumAddressType(),
                 Street = string.Empty,
                 Number = 0,
                 Neighborhood = string.Empty,
@@ -50,12 +50,12 @@ namespace SalesProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostCreate(CreateAddressViewModel model)
+        public ActionResult Create(CreateAddressViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 var customers = _customerRepository.GetAll();
-                model.TypeOptions = new SelectList(new List<string>() { "Cobrança", "Entrega", "Outro" });
+                model.TypeOptions = EnumeratorExtension.GetSelectListEnumAddressType();
                 model.CustomerOptions = new SelectList(customers, "Id", "CompanyName");
                 return View(model);
             }
@@ -63,21 +63,21 @@ namespace SalesProject.Controllers
             var address =
                     new Address(
                         zipCode: model.ZipCode,
-                        type: model.Type,
+                        type: (Domain.Enums.AddressType)model.Type,
                         street: model.Street,
                         neighborhood: model.Neighborhood,
                         number: model.Number,
                         city: model.City,
                         state: model.State,
-                        customerId : Guid.Parse(model.CustomerId));
+                        customerId: Guid.Parse(model.CustomerId));
 
             if (address.Notifications.Count > 0)
             {
                 var customers = _customerRepository.GetAll();
-                model.TypeOptions = new SelectList(new List<string>() { "Cobrança", "Entrega", "Outro" });
+                model.TypeOptions = EnumeratorExtension.GetSelectListEnumAddressType();
                 model.CustomerOptions = new SelectList(customers, "Id", "CompanyName");
                 //Exibir erro
-                return View(model); 
+                return View(model);
             }
 
             _addressRepository.Create(address);

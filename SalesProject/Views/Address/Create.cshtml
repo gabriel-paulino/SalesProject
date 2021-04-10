@@ -5,7 +5,7 @@
 
 <h2>Novo Endereço</h2>
 
-<form>
+<form action="" method="post">
     <div class="form-group">
         @Html.LabelFor(model => model.ZipCode)
         @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
@@ -52,7 +52,8 @@
                               new { @class = "form-control" })
     </div>
 
-    <button type="submit" id="submit"  class="btn btn-outline-primary mb-3" onclick="@Url.Action("PostCreate")">Adicionar</button>
+
+    <button type="submit" id="submit"  class="btn btn-outline-primary mb-3">Adicionar</button>
 
 </form>
 
