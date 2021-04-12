@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalesProject.Api.ViewModels;
+using SalesProject.Api.ViewModels.Address;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
@@ -10,16 +10,13 @@ namespace SalesProject.Api.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IUnitOfWork _uow;
 
         public AddressController(
-            ICustomerRepository customerRepository,
             IAddressRepository addressRepository,
             IUnitOfWork uow)
         {
-            _customerRepository = customerRepository;
             _addressRepository = addressRepository;
             _uow = uow;
         }

@@ -3,13 +3,14 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace SalesProject.Api.ViewModels
+namespace SalesProject.Api.ViewModels.Address
 {
     public class CreateAddressViewModel
     {
         public CreateAddressViewModel()
         {
             this.TypeOptions = GetTypeOptions();
+            //Todo: Descobrir um meio para preencher o CustomerOptions
         }
 
         [Required(ErrorMessage = "O campo 'Cep' é obrigatório")]
