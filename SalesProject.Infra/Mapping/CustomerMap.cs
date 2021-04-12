@@ -8,7 +8,7 @@ namespace SalesProject.Infra.Mapping
     public class CustomerMap : IEntityTypeConfiguration<Customer>
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
-        { 
+        {
             builder.Property(c => c.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
@@ -51,8 +51,8 @@ namespace SalesProject.Infra.Mapping
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
-            //builder.HasMany(c => c.Adresses).WithOne();
-            //builder.HasMany(c => c.Contacts).WithOne();
+            builder.HasMany(c => c.Adresses).WithOne();
+            builder.HasMany(c => c.Contacts).WithOne();
 
             builder.HasKey(c => c.Id);
             builder.ToTable(CustomerConstants.TableClient);
