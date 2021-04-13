@@ -7,11 +7,8 @@ namespace SalesProject.Api.ViewModels.Address
 {
     public class CreateAddressViewModel
     {
-        public CreateAddressViewModel()
-        {
+        public CreateAddressViewModel() =>
             this.TypeOptions = GetTypeOptions();
-            //Todo: Descobrir um meio para preencher o CustomerOptions
-        }
 
         [Required(ErrorMessage = "O campo 'Cep' é obrigatório")]
         [Display(Name = "Cep")]
@@ -46,7 +43,6 @@ namespace SalesProject.Api.ViewModels.Address
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }
-        public SelectList CustomerOptions { get; set; }
 
         private SelectList GetTypeOptions() =>
                 new SelectList(Enum.GetValues(typeof(AddressType)).

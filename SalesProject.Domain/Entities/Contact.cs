@@ -34,7 +34,7 @@ namespace SalesProject.Domain.Entities
         public string Phone { get; private set; }
         public Guid CustomerId { get; private set; }
 
-        public Contact EditContact(
+        public Contact Edit(
             string firstName,
             string lastName,
             string email,

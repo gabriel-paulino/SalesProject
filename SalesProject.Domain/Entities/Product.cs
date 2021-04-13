@@ -14,7 +14,7 @@ namespace SalesProject.Domain.Entities
             decimal additionalCosts,
             double combinedQuantity,
             string details,
-            Customer customer)
+            Guid customerId)
         {
             this.Name = name;
             this.NcmCode = ncmCode;
@@ -22,7 +22,7 @@ namespace SalesProject.Domain.Entities
             this.AdditionalCosts = additionalCosts;
             this.CombinedQuantity = combinedQuantity;
             this.Details = details;
-            this.Customer = customer;
+            this.CustomerId = customerId;
 
             DoValidations();
         }
@@ -33,8 +33,28 @@ namespace SalesProject.Domain.Entities
         public decimal AdditionalCosts { get; private set; }
         public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
-        public Guid? CustomerId { get; private set; }
-        public Customer Customer { get; private set; }
+        public Guid CustomerId { get; private set; }
+
+
+        public Product Edit (
+            string name,
+            string ncmCode,
+            decimal combinedPrice,
+            decimal additionalCosts,
+            double combinedQuantity,
+            string details)
+        {
+            this.Name = name;
+            this.NcmCode = ncmCode;
+            this.CombinedPrice = combinedPrice;
+            this.AdditionalCosts = additionalCosts;
+            this.CombinedQuantity = combinedQuantity;
+            this.Details = details;
+
+            DoValidations();
+
+            return this;
+        }
 
         public override void DoValidations()
         {
@@ -51,8 +71,6 @@ namespace SalesProject.Domain.Entities
                 AddNotification("A 'Previsão mínima mensal' informada é inválida.");
             if (CombinedQuantity < 0)
                 AddNotification("O 'Custo adicional' informado é inválido.");
-            if(Customer == null)
-                AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
     }
 }

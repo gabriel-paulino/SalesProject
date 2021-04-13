@@ -106,7 +106,7 @@ namespace SalesProject.Api.Controllers
                 return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
 
             var newContact = oldContact.
-                        EditContact(
+                        Edit(
                         firstName: model.FirstName,
                         lastName: model.LastName,
                         email: model.Email,

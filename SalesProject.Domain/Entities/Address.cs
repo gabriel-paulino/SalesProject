@@ -37,7 +37,7 @@ namespace SalesProject.Domain.Entities
         public string State { get; private set; }
         public Guid CustomerId { get; private set; }
 
-        public Address EditAddress(
+        public Address Edit(
             string zipCode,
             AddressType? type,
             string street,

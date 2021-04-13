@@ -107,7 +107,7 @@ namespace SalesProject.Api.Controllers
                 return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
 
             var newAddress = oldAddress.
-                        EditAddress(
+                        Edit(
                         zipCode: model.ZipCode,
                         type: (Domain.Enums.AddressType)model.Type,
                         street: model.Street,
