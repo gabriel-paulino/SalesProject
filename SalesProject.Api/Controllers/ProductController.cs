@@ -5,7 +5,6 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
-using System.Linq;
 
 namespace SalesProject.Api.Controllers
 {
@@ -13,13 +12,16 @@ namespace SalesProject.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
 
         public ProductController(
             IProductRepository productRepository,
+            ICustomerRepository customerRepository,
             IUnitOfWork uow)
         {
             _productRepository = productRepository;
+            _customerRepository = customerRepository;
             _uow = uow;
         }
 
@@ -67,7 +69,8 @@ namespace SalesProject.Api.Controllers
                         additionalCosts: model.AdditionalCosts,
                         combinedQuantity: model.CombinedQuantity,
                         details: model.Details,
-                        customerId: Guid.Parse(model.CustomerId));
+                        customerId: Guid.Parse(model.CustomerId),
+                        customer: _customerRepository.Get(Guid.Parse(model.CustomerId)));
 
             if (!product.Valid)
                 return ValidationProblem(detail: $"{product.GetNotification()}");

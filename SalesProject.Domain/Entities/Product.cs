@@ -14,7 +14,8 @@ namespace SalesProject.Domain.Entities
             decimal additionalCosts,
             double combinedQuantity,
             string details,
-            Guid customerId)
+            Guid? customerId,
+            Customer customer)
         {
             this.Name = name;
             this.NcmCode = ncmCode;
@@ -23,6 +24,7 @@ namespace SalesProject.Domain.Entities
             this.CombinedQuantity = combinedQuantity;
             this.Details = details;
             this.CustomerId = customerId;
+            this.Customer = customer;
 
             DoValidations();
         }
@@ -33,7 +35,8 @@ namespace SalesProject.Domain.Entities
         public decimal AdditionalCosts { get; private set; }
         public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
-        public Guid CustomerId { get; private set; }
+        public Guid? CustomerId { get; private set; }
+        public Customer Customer { get; private set; }
 
 
         public Product Edit (
