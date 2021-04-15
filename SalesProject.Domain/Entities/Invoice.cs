@@ -19,6 +19,7 @@ namespace SalesProject.Domain.Entities
             DateTime leaveDate,
             string leaveHour,
             string additionalInformation,
+            Company company,
             Shipping shipping)
         {
             Number = number;
@@ -46,11 +47,11 @@ namespace SalesProject.Domain.Entities
             CarrierState = shipping.CarrierAddress.State;
 
             AdditionalInformation = additionalInformation;
+            Company = company;
             Shipping = shipping;
             _invoiceLines = new List<InvoiceLines>();
 
             DoValidations();
-            SetCompanyInformations();
         }
 
         private IList<InvoiceLines> _invoiceLines;
@@ -105,28 +106,6 @@ namespace SalesProject.Domain.Entities
 
         public override void DoValidations()
         {
-        }
-
-        private void SetCompanyInformations()
-        {
-            Company =
-                new Company(
-                            cnpj: CompanyConstants.Cnpj,
-                            name: CompanyConstants.Name,
-                            stateRegistration: CompanyConstants.StateRegistration,
-                            new Address(
-                                        zipCode: CompanyConstants.ZipCode,
-                                        type: null,
-                                        street: CompanyConstants.Street,
-                                        neighborhood: CompanyConstants.Neighborhood,
-                                        number: CompanyConstants.Number,
-                                        city: CompanyConstants.City,
-                                        state: CompanyConstants.State,
-                                        customerId: new Guid())
-                            );
-
-            if (!Company.Valid)
-                AddNotification($@"Erro ao criar nota fiscal. O campo {Company.GetNotification()}");
         }
 
         private void UpdateInvoiceValues()
