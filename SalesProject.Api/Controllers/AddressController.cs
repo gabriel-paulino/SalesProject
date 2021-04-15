@@ -59,6 +59,7 @@ namespace SalesProject.Api.Controllers
 
             var address =
                     new Address(
+                        description: model.Description,
                         zipCode: model.ZipCode,
                         type: (Domain.Enums.AddressType)model.Type,
                         street: model.Street,
@@ -108,6 +109,7 @@ namespace SalesProject.Api.Controllers
 
             var newAddress = oldAddress.
                         Edit(
+                        description: model.Description,
                         zipCode: model.ZipCode,
                         type: (Domain.Enums.AddressType)model.Type,
                         street: model.Street,

@@ -7,6 +7,7 @@ namespace SalesProject.Domain.Entities
     public class Address : BaseEntity
     {
         public Address(
+            string description,
             string zipCode,
             AddressType? type,
             string street,
@@ -16,6 +17,7 @@ namespace SalesProject.Domain.Entities
             string state,
             Guid customerId)
         {
+            this.Description = description;
             this.ZipCode = zipCode;
             this.Type = type;
             this.Street = street;
@@ -28,6 +30,7 @@ namespace SalesProject.Domain.Entities
             DoValidations();
         }
 
+        public string Description { get; private set; }
         public string ZipCode { get; private set; }
         public AddressType? Type { get; private set; }
         public string Street { get; private set; }
@@ -38,6 +41,7 @@ namespace SalesProject.Domain.Entities
         public Guid CustomerId { get; private set; }
 
         public Address Edit(
+            string description,
             string zipCode,
             AddressType? type,
             string street,
@@ -46,6 +50,7 @@ namespace SalesProject.Domain.Entities
             string city,
             string state)
         {
+            this.Description = description;
             this.ZipCode = zipCode;
             this.Type = type;
             this.Street = street;
@@ -67,6 +72,8 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateFillingMandatoryFields()
         {
+            if (string.IsNullOrEmpty(Description))
+                AddNotification("O preenchimento do campo 'Descrição' é obrigatório.");
             if (string.IsNullOrEmpty(ZipCode))
                 AddNotification("O preenchimento do campo 'Cep' é obrigatório.");
             if (string.IsNullOrEmpty(Street))

@@ -13,6 +13,12 @@ namespace SalesProject.Infra.Mapping
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
+            builder.Property(c => c.Description).
+                HasColumnName(AddressConstants.FieldDescription).
+                HasMaxLength(100).
+                HasColumnType("varchar(100)").
+                IsRequired();
+
             builder.Property(c => c.ZipCode).
                 HasColumnName(AddressConstants.FieldZipCode).
                 HasMaxLength(18).

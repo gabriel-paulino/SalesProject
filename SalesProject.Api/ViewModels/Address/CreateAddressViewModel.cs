@@ -10,6 +10,10 @@ namespace SalesProject.Api.ViewModels.Address
         public CreateAddressViewModel() =>
             this.TypeOptions = GetTypeOptions();
 
+        [Required(ErrorMessage = "O campo 'Descrição' é obrigatório")]
+        [Display(Name = "Descrição")]
+        public string Description { get; set; }
+
         [Required(ErrorMessage = "O campo 'Cep' é obrigatório")]
         [Display(Name = "Cep")]
         public string ZipCode { get; set; }
