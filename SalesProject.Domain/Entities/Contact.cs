@@ -17,7 +17,7 @@ namespace SalesProject.Domain.Entities
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = RemoveWhiteSpaces($"{firstName}{lastName}");
+            this.FullName = $"{firstName} {lastName}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;
@@ -43,7 +43,7 @@ namespace SalesProject.Domain.Entities
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = RemoveWhiteSpaces($"{firstName}{lastName}");
+            this.FullName = $"{firstName} {lastName}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;
@@ -52,8 +52,6 @@ namespace SalesProject.Domain.Entities
 
             return this;
         }
-
-        private string RemoveWhiteSpaces(string fullName) => fullName.Replace(" ", string.Empty);
 
         public override void DoValidations()
         {
