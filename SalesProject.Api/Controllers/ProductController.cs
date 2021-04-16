@@ -56,7 +56,7 @@ namespace SalesProject.Api.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult CreateContact(CreateProductViewModel model)
+        public IActionResult CreateProduct(CreateProductViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -85,7 +85,7 @@ namespace SalesProject.Api.Controllers
 
         [HttpDelete]
         [Route("api/[controller]/{id:guid}")]
-        public IActionResult DeleteContact(Guid id)
+        public IActionResult DeleteProduct(Guid id)
         {
             var product = _productRepository.Get(id);
 
@@ -100,7 +100,7 @@ namespace SalesProject.Api.Controllers
 
         [HttpPatch]
         [Route("api/[controller]/{id:guid}")]
-        public IActionResult EditContact(Guid id, EditProductViewModel model)
+        public IActionResult EditProduct(Guid id, EditProductViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
