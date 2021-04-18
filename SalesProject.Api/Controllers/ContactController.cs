@@ -23,11 +23,6 @@ namespace SalesProject.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]")]
-        public IActionResult GetContactes() =>
-            Ok(_contactRepository.GetAll());
-
-        [HttpGet]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetContact(Guid id)
         {

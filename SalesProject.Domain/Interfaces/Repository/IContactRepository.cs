@@ -6,9 +6,9 @@ namespace SalesProject.Domain.Interfaces.Repository
 {
     public interface IContactRepository : IDisposable
     {
-        List<Contact> GetAll();
         Contact Get(Guid id);
         List<Contact> GetByName(string name);
+        List<Contact> GetByCustomerId(Guid customerId);
         void Create(Contact contact);
         void Update(Contact contact);
         void Delete(Contact contact);

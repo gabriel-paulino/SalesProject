@@ -28,11 +28,11 @@ namespace SalesProject.Infra.Repositories
         public Contact Get(Guid id) =>
             _dataContext.Contacts.Find(id);
 
-        public List<Contact> GetAll() =>
-            _dataContext.Contacts.ToList();
-
         public List<Contact> GetByName(string name) =>
             _dataContext.Contacts.Where(x => x.FullName.Contains(name)).ToList();
+
+        public List<Contact> GetByCustomerId(Guid customerId) =>
+            _dataContext.Contacts.Where(x => x.CustomerId.Equals(customerId)).ToList();
 
         public void Update(Contact contact) =>
             _dataContext.Entry<Contact>(contact).State = EntityState.Modified;
