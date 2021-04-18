@@ -49,8 +49,6 @@ namespace SalesProject.Infra.Mapping
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
-            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
-
             builder.HasKey(c => c.Id);
             builder.ToTable(ProductConstants.TableProduct);
         }

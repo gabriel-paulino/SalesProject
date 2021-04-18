@@ -12,6 +12,7 @@ namespace SalesProject.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
 
         public ProductController(
@@ -20,13 +21,9 @@ namespace SalesProject.Api.Controllers
             IUnitOfWork uow)
         {
             _productRepository = productRepository;
+            _customerRepository = customerRepository;
             _uow = uow;
         }
-
-        [HttpGet]
-        [Route("api/[controller]")]
-        public IActionResult GetProducts() =>
-            Ok(_productRepository.GetAll());
 
         [HttpGet]
         [Route("api/[controller]/{id:guid}")]
@@ -42,7 +39,7 @@ namespace SalesProject.Api.Controllers
 
         [HttpGet]
         [Route("api/[controller]/name/{name}")]
-        public IActionResult GetProductByName(string name)
+        public IActionResult GetProductsByName(string name)
         {
             var products = _productRepository.GetByName(name);
 
@@ -50,6 +47,24 @@ namespace SalesProject.Api.Controllers
                 return Ok(products);
 
             return NotFound($"Ops. Nenhum produto com nome:'{name}' foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/customer/{customerId:guid}")]
+        public IActionResult GetProductsByCustomerId(Guid customerId)
+        {
+            var customer = _customerRepository.Get(customerId);
+
+            if (customer != null)
+            {
+                var products = _productRepository.GetByCustomerId(customerId);
+
+                if (products.Count > 0)
+                    return Ok(products);
+
+                return NotFound($"Ops. Nenhum produto do cliente:'{customer.CompanyName}' foi encontrado.");
+            }
+            return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
         }
 
         [HttpPost]

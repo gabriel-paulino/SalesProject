@@ -47,12 +47,26 @@ namespace SalesProject.Infra.Mapping
                 HasColumnName(CustomerConstants.FieldMunicipalRegistration).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)");
+            
+            builder.Ignore(c => c.Adresses);
+            builder.Ignore(c => c.Contacts);
+            builder.Ignore(c => c.Products);
 
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
-            builder.HasMany(c => c.Adresses).WithOne();
-            builder.HasMany(c => c.Contacts).WithOne();
+            builder.HasMany(c => c.Adresses).
+                WithOne().
+                OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.Contacts).
+                WithOne().
+                OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.Products).
+                WithOne().
+                OnDelete(DeleteBehavior.SetNull).
+                HasForeignKey(fk => fk.CustomerId);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(CustomerConstants.TableClient);

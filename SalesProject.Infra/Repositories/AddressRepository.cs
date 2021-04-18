@@ -45,6 +45,6 @@ namespace SalesProject.Infra.Repositories
             if (!_disposed)
                 _dataContext.Dispose();
             GC.SuppressFinalize(this);
-        }  
+        }
     }
 }

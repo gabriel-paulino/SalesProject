@@ -8,7 +8,7 @@ namespace SalesProject.Domain.Interfaces.Repository
     {
         Address Get(Guid id);
         List<Address> GetByDescription(string description);
-        List<Address> GetByCity(string name);
+        List<Address> GetByCity(string city);
         List<Address> GetByCustomerId(Guid customerId);
         void Create(Address address);
         void Update(Address address);

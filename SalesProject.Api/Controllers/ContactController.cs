@@ -12,13 +12,16 @@ namespace SalesProject.Api.Controllers
     public class ContactController : ControllerBase
     {
         private readonly IContactRepository _contactRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
 
         public ContactController(
             IContactRepository contactRepository,
+            ICustomerRepository customerRepository,
             IUnitOfWork uow)
         {
             _contactRepository = contactRepository;
+            _customerRepository = customerRepository;
             _uow = uow;
         }
 
@@ -36,7 +39,7 @@ namespace SalesProject.Api.Controllers
 
         [HttpGet]
         [Route("api/[controller]/name/{name}")]
-        public IActionResult GetContactByName(string name)
+        public IActionResult GetContactsByName(string name)
         {
             var contacts = _contactRepository.GetByName(name);
 
@@ -44,6 +47,24 @@ namespace SalesProject.Api.Controllers
                 return Ok(contacts);
 
             return NotFound($"Ops. Nenhum contato com nome:'{name}' foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/customer/{customerId:guid}")]
+        public IActionResult GetContactsByCustomerId(Guid customerId)
+        {
+            var customer = _customerRepository.Get(customerId);
+
+            if (customer != null)
+            {
+                var contacts = _contactRepository.GetByCustomerId(customerId);
+
+                if (contacts.Count > 0)
+                    return Ok(contacts);
+
+                return NotFound($"Ops. Nenhum contato do cliente:'{customer.CompanyName}' foi encontrado.");
+            }
+            return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
         }
 
         [HttpPost]

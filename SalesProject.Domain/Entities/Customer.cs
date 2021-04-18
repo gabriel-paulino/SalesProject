@@ -9,9 +9,10 @@ namespace SalesProject.Domain.Entities
     {
         public Customer()
         {
+            this.ClientSince = DateTime.Today.Date;
             _adresses = new List<Address>();
             _contacts = new List<Contact>();
-            this.ClientSince = DateTime.Today;
+            _products = new List<Product>();
         }
 
         public Customer(
@@ -27,16 +28,18 @@ namespace SalesProject.Domain.Entities
             this.StateRegistration = stateRegistration;
             this.Opening = opening;
             this.Phone = phone;
-            this.ClientSince = DateTime.Today;
+            this.ClientSince = DateTime.Today.Date;
             this.MunicipalRegistration = municipalRegistration;
             _adresses = new List<Address>();
             _contacts = new List<Contact>();
+            _products = new List<Product>();
 
             DoValidations();
         }
 
         private IList<Address> _adresses;
         private IList<Contact> _contacts;
+        private IList<Product> _products;
 
         public string Cnpj { get; private set; }
         public string CompanyName { get; private set; }
@@ -47,15 +50,20 @@ namespace SalesProject.Domain.Entities
         public string MunicipalRegistration { get; private set; }
         public IReadOnlyCollection<Address> Adresses { get => _adresses.ToArray(); }
         public IReadOnlyCollection<Contact> Contacts { get => _contacts.ToArray(); }
+        public IReadOnlyCollection<Product> Products { get => _products.ToArray(); }
 
-        public void AddAddress(Address address)
+        public Customer Edit(
+            string phone,
+            string municipalRegistration,
+            string stateRegistration)
         {
-            _adresses.Add(address);
-        }
+            this.StateRegistration = stateRegistration;
+            this.Phone = phone;
+            this.MunicipalRegistration = municipalRegistration;
 
-        public void AddContact(Contact contact)
-        {
-            _contacts.Add(contact);
+            DoValidations();
+
+            return this;
         }
 
         public override void DoValidations()

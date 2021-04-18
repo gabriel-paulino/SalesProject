@@ -34,7 +34,6 @@ namespace SalesProject.Domain.Entities
         public double CombinedQuantity { get; private set; }
         public string Details { get; private set; }
         public Guid? CustomerId { get; private set; }
-        public Customer Customer { get; private set; }
 
         public Product Edit (
             string name,
