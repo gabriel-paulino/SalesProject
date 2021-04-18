@@ -22,11 +22,6 @@ namespace SalesProject.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]")]
-        public IActionResult GetAddresses() =>
-            Ok(_addressRepository.GetAll());
-
-        [HttpGet]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetAddress(Guid id)
         {
@@ -36,6 +31,18 @@ namespace SalesProject.Api.Controllers
                 return Ok(address);
 
             return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/description/{description}")]
+        public IActionResult GetAddressByDescription(string description)
+        {
+            var addreses = _addressRepository.GetByDescription(description);
+
+            if (addreses.Count > 0)
+                return Ok(addreses);
+
+            return NotFound($"Ops. Nenhum endereço com descrição:'{description}' foi encontrado.");
         }
 
         [HttpGet]
