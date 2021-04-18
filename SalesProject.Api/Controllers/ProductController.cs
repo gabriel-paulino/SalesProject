@@ -12,7 +12,6 @@ namespace SalesProject.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
 
         public ProductController(
@@ -21,7 +20,6 @@ namespace SalesProject.Api.Controllers
             IUnitOfWork uow)
         {
             _productRepository = productRepository;
-            _customerRepository = customerRepository;
             _uow = uow;
         }
 
@@ -65,12 +63,11 @@ namespace SalesProject.Api.Controllers
                     new Product(
                         name: model.Name,
                         ncmCode: model.NcmCode,
-                        combinedPrice: model.CombinedPrice,
-                        additionalCosts: model.AdditionalCosts,
-                        combinedQuantity: model.CombinedQuantity,
+                        combinedPrice: TryParseToDecimal(model.CombinedPrice),
+                        additionalCosts: TryParseToDecimal(model.AdditionalCosts),
+                        combinedQuantity: TryParseToDouble(model.CombinedQuantity),
                         details: model.Details,
-                        customerId: Guid.Parse(model.CustomerId),
-                        customer: _customerRepository.Get(Guid.Parse(model.CustomerId)));
+                        customerId: Guid.Parse(model.CustomerId));
 
             if (!product.Valid)
                 return ValidationProblem(detail: $"{product.GetNotification()}");
@@ -114,9 +111,9 @@ namespace SalesProject.Api.Controllers
                         Edit(
                         name: model.Name,
                         ncmCode: model.NcmCode,
-                        combinedPrice: model.CombinedPrice,
-                        additionalCosts: model.AdditionalCosts,
-                        combinedQuantity: model.CombinedQuantity,
+                        combinedPrice: TryParseToDecimal(model.CombinedPrice),
+                        additionalCosts: TryParseToDecimal(model.AdditionalCosts),
+                        combinedQuantity: TryParseToDouble(model.CombinedQuantity),
                         details: model.Details);
 
             if (!newProduct.Valid)
@@ -127,5 +124,11 @@ namespace SalesProject.Api.Controllers
 
             return Ok(newProduct);
         }
+
+        private decimal TryParseToDecimal(string value) =>
+            decimal.TryParse(value, out decimal convertedValue) ? convertedValue : 0;
+
+        private double TryParseToDouble(string value) =>
+            double.TryParse(value, out double convertedValue) ? convertedValue : 0;
     }
 }

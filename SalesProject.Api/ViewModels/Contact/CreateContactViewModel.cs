@@ -6,7 +6,6 @@ namespace SalesProject.Api.ViewModels.Contact
     public class CreateContactViewModel
     {
         public CreateContactViewModel() { }
-        //Todo: Descobrir um meio para preencher o CustomerOptions
 
         [Required(ErrorMessage = "O campo 'Nome' é obrigatório")]
         [Display(Name = "Nome")]
@@ -29,6 +28,5 @@ namespace SalesProject.Api.ViewModels.Contact
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }
-        public SelectList CustomerOptions { get; set; }
     }
 }

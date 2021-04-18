@@ -13,14 +13,14 @@ namespace SalesProject.Api.ViewModels.Product
 
         [Required(ErrorMessage = "O campo 'Preço combinado' é obrigatório")]
         [Display(Name = "Preço combinado")]
-        public decimal CombinedPrice { get; set; }
+        public string CombinedPrice { get; set; }
 
         [Display(Name = "Custos adicionais")]
-        public decimal AdditionalCosts { get; set; }
+        public string AdditionalCosts { get; set; }
 
         [Required(ErrorMessage = "O campo 'Quantidade combinada' é obrigatório")]
         [Display(Name = "Quantidade combinada")]
-        public double CombinedQuantity { get; set; }
+        public string CombinedQuantity { get; set; }
 
         [Display(Name = "Detalhes")]
         public string Details { get; set; }
