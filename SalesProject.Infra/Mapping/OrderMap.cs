@@ -45,8 +45,13 @@ namespace SalesProject.Infra.Mapping
 
             builder.HasKey(c => c.Id);
 
-            builder.HasMany(c => c.OrderLines).WithOne().HasForeignKey(fk => fk.OrderId);
-            builder.HasOne(c => c.Customer).WithMany().OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(c => c.OrderLines).
+                WithOne().
+                HasForeignKey(fk => fk.OrderId);
+
+            builder.HasOne(c => c.Customer).
+                WithMany().
+                OnDelete(DeleteBehavior.SetNull);
 
             builder.ToTable(OrderConstants.TableOrder);
         }

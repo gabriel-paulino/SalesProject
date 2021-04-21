@@ -34,11 +34,8 @@ namespace SalesProject.Api.Controllers
             var order = _orderRepository.Get(id);
 
             if (order != null)
-            {
-                _customerRepository.Get((Guid)order.CustomerId);
-                _orderRepository.GetLines(id);
                 return Ok(order);
-            }
+            
             return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
         }
 
