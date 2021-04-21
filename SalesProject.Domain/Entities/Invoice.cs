@@ -1,6 +1,4 @@
-﻿using SalesProject.Domain.Constants;
-using SalesProject.Domain.Entities.Base;
-using SalesProject.Domain.Enums;
+﻿using SalesProject.Domain.Entities.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

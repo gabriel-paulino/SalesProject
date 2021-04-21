@@ -25,7 +25,7 @@ namespace SalesProject.Infra.Context
         public DbSet<Address> Addreses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Order> SalesOrders { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
     }
 }

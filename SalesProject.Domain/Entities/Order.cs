@@ -8,7 +8,11 @@ namespace SalesProject.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        public Order() { }
+        public Order()
+        {
+            this.Status = OrderStatus.Open;
+            _orderLines = new List<OrderLines>();
+        }
 
         public Order(
             DateTime postingDate,
@@ -40,7 +44,7 @@ namespace SalesProject.Domain.Entities
         public void AddOrderLine(OrderLines orderLine)
         {
             _orderLines.Add(orderLine);
-            UpdateOrderValues();
+            UpdateTotalOrder();
         }
 
         public override void DoValidations()
@@ -50,18 +54,16 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateFillingMandatoryFields()
         {
-            if (PostingDate == null || PostingDate == DateTime.MinValue)
+            if (PostingDate == null)
                 AddNotification("O preenchimento do campo 'Data de lançamento' é obrigatório.");
-            if (DeliveryDate == null || DeliveryDate == DateTime.MinValue)
+            if (DeliveryDate == null)
                 AddNotification("O preenchimento do campo 'Data de entrega' é obrigatório.");
             if (Customer == null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
 
-        private void UpdateOrderValues()
-        {
-            //Atualizar Total
-            //Em debug verificar se será necessario resetar os totais antes do foreach
-        }
+        private void UpdateTotalOrder() =>
+            this.TotalOrder = OrderLines.Sum(l => l.TotalPrice);
+
     }
 }
