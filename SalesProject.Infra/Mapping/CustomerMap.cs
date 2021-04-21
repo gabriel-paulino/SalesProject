@@ -57,11 +57,13 @@ namespace SalesProject.Infra.Mapping
 
             builder.HasMany(c => c.Adresses).
                 WithOne().
-                OnDelete(DeleteBehavior.Cascade);
+                OnDelete(DeleteBehavior.Cascade).
+                HasForeignKey(fk => fk.CustomerId);
 
             builder.HasMany(c => c.Contacts).
                 WithOne().
-                OnDelete(DeleteBehavior.Cascade);
+                OnDelete(DeleteBehavior.Cascade).
+                HasForeignKey(fk => fk.CustomerId);
 
             builder.HasMany(c => c.Products).
                 WithOne().

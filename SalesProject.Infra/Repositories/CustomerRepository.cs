@@ -10,37 +10,45 @@ namespace SalesProject.Infra.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _context;
         private bool _disposed = false;
 
-        public CustomerRepository(DataContext dataContext) =>
-            _dataContext = dataContext;
+        public CustomerRepository(DataContext context) =>
+            _context = context;
 
         ~CustomerRepository() =>
             Dispose();
 
         public void Create(Customer customer) =>
-             _dataContext.Customers.Add(customer);
+             _context.Customers.Add(customer);
 
         public void Delete(Customer customer) =>
-            _dataContext.Customers.Remove(customer);
+            _context.Customers.Remove(customer);
 
         public Customer Get(Guid id) =>
-            _dataContext.Customers.Find(id);
+            _context.Customers.Find(id);
 
+        public Customer GetFullCustomer(Guid id) =>
+            _context.Customers
+                .AsNoTracking()
+                .Include(c => c.Adresses)
+                .Include(c => c.Contacts)
+                .Include(c => c.Products)
+                .FirstOrDefault(c => c.Id == id);
+        
         public List<Customer> GetAll() =>
-            _dataContext.Customers.ToList();
+            _context.Customers.ToList();
 
         public List<Customer> GetByName(string name) =>
-            _dataContext.Customers.Where(x => x.CompanyName.Contains(name)).ToList();
+            _context.Customers.Where(x => x.CompanyName.Contains(name)).ToList();
 
         public void Update(Customer customer) =>
-            _dataContext.Entry<Customer>(customer).State = EntityState.Modified;
+            _context.Entry<Customer>(customer).State = EntityState.Modified;
 
         public void Dispose()
         {
             if (!_disposed)
-                _dataContext.Dispose();
+                _context.Dispose();
             GC.SuppressFinalize(this);
         }
     }

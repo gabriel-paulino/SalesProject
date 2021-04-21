@@ -51,16 +51,11 @@ namespace SalesProject.Api.Controllers
         [Route("api/full/[controller]/{id:guid}")]
         public IActionResult GetFullCustomer(Guid id)
         {
-            var customer = _customerRepository.Get(id);
+            var customer = _customerRepository.GetFullCustomer(id);
 
             if (customer != null)
-            {
-                _addressRepository.GetByCustomerId(customer.Id);
-                _contactRepository.GetByCustomerId(customer.Id);
-                _productRepository.GetByCustomerId(customer.Id);
-
                 return Ok(customer);
-            }
+            
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
