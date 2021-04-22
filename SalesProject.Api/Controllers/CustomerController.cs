@@ -11,22 +11,13 @@ namespace SalesProject.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
-        private readonly IAddressRepository _addressRepository;
-        private readonly IContactRepository _contactRepository;
-        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _uow;
 
         public CustomerController(
             ICustomerRepository customerRepository,
-            IAddressRepository addressRepository,
-            IContactRepository contactRepository,
-            IProductRepository productRepository,
             IUnitOfWork uow)
         {
             _customerRepository = customerRepository;
-            _addressRepository = addressRepository;
-            _contactRepository = contactRepository;
-            _productRepository = productRepository;
             _uow = uow;
         }
 
@@ -55,7 +46,7 @@ namespace SalesProject.Api.Controllers
 
             if (customer != null)
                 return Ok(customer);
-            
+
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
