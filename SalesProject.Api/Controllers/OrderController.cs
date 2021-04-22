@@ -58,9 +58,9 @@ namespace SalesProject.Api.Controllers
             {
                 var orderLine =
                     new OrderLines(
-                                   quantity: TryParseToDouble(line.Quantity),
-                                   unitaryPrice: TryParseToDecimal(line.UnitaryPrice),
-                                   additionalCosts: TryParseToDecimal(line.AdditionalCosts),
+                                   quantity: line.Quantity,
+                                   unitaryPrice: line.UnitaryPrice,
+                                   additionalCosts: line.AdditionalCosts,
                                    product: _productRepository.Get(Guid.Parse(line.ProductId))
                                    );
 
@@ -77,11 +77,5 @@ namespace SalesProject.Api.Controllers
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{order.Id}",
             order);
         }
-
-        private decimal TryParseToDecimal(string value) =>
-            decimal.TryParse(value, out decimal convertedValue) ? convertedValue : 0;
-
-        private double TryParseToDouble(string value) =>
-            double.TryParse(value, out double convertedValue) ? convertedValue : 0;
     }
 }

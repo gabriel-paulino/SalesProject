@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SalesProject.Api.ViewModels.Order
@@ -22,21 +21,20 @@ namespace SalesProject.Api.ViewModels.Order
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }
-
     }
 
     public class Lines
     {
         [Required(ErrorMessage = "O campo 'Quantidade' é obrigatório")]
         [Display(Name = "Quantidade")]
-        public string Quantity { get; set; }
+        public double Quantity { get; set; }
 
         [Required(ErrorMessage = "O campo 'Preço unitário' é obrigatório")]
         [Display(Name = "Preço unitário")]
-        public string UnitaryPrice { get; set; }
+        public decimal UnitaryPrice { get; set; }
 
         [Display(Name = "Custos adicionais")]
-        public string AdditionalCosts { get; set; }
+        public decimal AdditionalCosts { get; set; }
 
         [Required(ErrorMessage = "O campo 'Produdo' é obrigatório")]
         [Display(Name = "Produto")]
