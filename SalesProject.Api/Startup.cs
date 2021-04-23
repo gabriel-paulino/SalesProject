@@ -21,6 +21,15 @@ namespace SalesProject.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.AddControllers();
 
             services.AddDbContext<DataContext>(
@@ -45,6 +54,8 @@ namespace SalesProject.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
