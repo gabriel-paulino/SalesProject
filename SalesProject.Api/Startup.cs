@@ -21,13 +21,13 @@ namespace SalesProject.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(opt =>
+            services.AddCors(options =>
             {
-                opt.AddPolicy("CorsPolicy", builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                options.AddPolicy(
+                  "CorsPolicy", builder => builder
+                  .WithOrigins("http://localhost:4200")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader());
             });
 
             services.AddControllers();
