@@ -32,8 +32,8 @@ namespace SalesProject.Api
 
             services.AddControllers();
 
-            services.AddDbContext<DataContext>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
+            services.AddDbContext<DataContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
