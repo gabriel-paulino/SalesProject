@@ -1,5 +1,4 @@
-﻿using SalesProject.Domain.Constants;
-using SalesProject.Domain.Entities.Base;
+﻿using SalesProject.Domain.Entities.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace SalesProject.Domain.Entities
             DateTime leaveDate,
             string leaveHour,
             string additionalInformation,
-            Customer customer,
+            Company company,
             Shipping shipping)
         {
             Number = number;
@@ -46,18 +45,15 @@ namespace SalesProject.Domain.Entities
             CarrierState = shipping.CarrierAddress.State;
 
             AdditionalInformation = additionalInformation;
-            Customer = customer;
+            Company = company;
             Shipping = shipping;
             _invoiceLines = new List<InvoiceLines>();
 
             DoValidations();
-            SetCompanyInformations();
         }
 
         private IList<InvoiceLines> _invoiceLines;
 
-        public Customer Customer { get; private set; }
-        public Guid? CustomerId { get; private set; }
         public Order Order { get; private set; }
         public Guid? OrderId { get; private set; }
         public int Number { get; private set; }
@@ -108,28 +104,6 @@ namespace SalesProject.Domain.Entities
 
         public override void DoValidations()
         {
-            //Todo
-        }
-
-        private void SetCompanyInformations()
-        {
-            Company =
-                new Company(
-                            cnpj: CompanyConstants.Cnpj,
-                            name: CompanyConstants.Name,
-                            stateRegistration: CompanyConstants.StateRegistration,
-                            new Address(
-                                        zipCode: CompanyConstants.ZipCode,
-                                        street: CompanyConstants.Street,
-                                        neighborhood: CompanyConstants.Neighborhood,
-                                        number: CompanyConstants.Number,
-                                        city: CompanyConstants.City,
-                                        state: CompanyConstants.State
-                                        )
-                            );
-
-            if (!Company.Valid)
-                AddNotification($@"Erro ao criar nota fiscal. O campo {Company.GetNotification()}");
         }
 
         private void UpdateInvoiceValues()

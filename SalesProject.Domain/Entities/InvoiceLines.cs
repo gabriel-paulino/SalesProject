@@ -13,7 +13,6 @@ namespace SalesProject.Domain.Entities
             decimal totalPrice, 
             double percentageUnitaryDiscont,
             decimal additionalCosts, 
-            Product product, 
             TaxLine taxLine)
         {
             
@@ -33,7 +32,6 @@ namespace SalesProject.Domain.Entities
             this.IcmsAliquot = taxLine.IcmsAliquot;
             this.IpiAliquot = taxLine.IpiAliquot;
 
-            this.Product = product;
             this.TaxLine = taxLine;
 
             DoValidations();
@@ -41,7 +39,6 @@ namespace SalesProject.Domain.Entities
         }
 
         public Guid InvoiceId { get; private set; }
-        public Guid? ProductId { get; private set; }
         public double Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalPrice { get; private set; }
@@ -57,7 +54,6 @@ namespace SalesProject.Domain.Entities
         public double IcmsAliquot { get; private set; }
         public double IpiAliquot { get; private set; }
 
-        public Product Product { get; private set; }
         public TaxLine TaxLine { get; private set; }
 
         public override void DoValidations()

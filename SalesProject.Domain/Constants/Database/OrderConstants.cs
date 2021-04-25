@@ -6,10 +6,7 @@
             TableOrder = "PedidoVenda",
             FieldPostingDate = "DataLancamento",
             FieldDeliveryDate = "DataEntrega",
-            FieldFreight = "Frete",
-            FieldTotalTax = "TotalImposto",
-            FieldTotalDiscount = "TotalDesconto",
-            FieldTotalPriceProducts = "TotalProdutos",
+            FieldStatus = "Status",
             FieldTotalOrder = "TotalPedido",
             FieldObservation = "Observacao",
             FieldCustomerId = "ClienteId";

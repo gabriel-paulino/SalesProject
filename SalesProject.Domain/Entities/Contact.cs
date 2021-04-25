@@ -8,18 +8,20 @@ namespace SalesProject.Domain.Entities
         public Contact() { }
 
         public Contact(
-            string firstName, 
-            string lastName, 
-            string email, 
-            string whatsApp, 
-            string phone)
+            string firstName,
+            string lastName,
+            string email,
+            string whatsApp,
+            string phone,
+            Guid customerId)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            FullName = $"{firstName} {lastName}";
-            Email = email;
-            WhatsApp = whatsApp;
-            Phone = phone;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.FullName = $"{firstName} {lastName}";
+            this.Email = email;
+            this.WhatsApp = whatsApp;
+            this.Phone = phone;
+            this.CustomerId = customerId;
 
             DoValidations();
         }
@@ -31,6 +33,25 @@ namespace SalesProject.Domain.Entities
         public string WhatsApp { get; private set; }
         public string Phone { get; private set; }
         public Guid CustomerId { get; private set; }
+
+        public Contact Edit(
+            string firstName,
+            string lastName,
+            string email,
+            string whatsApp,
+            string phone)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.FullName = $"{firstName} {lastName}";
+            this.Email = email;
+            this.WhatsApp = whatsApp;
+            this.Phone = phone;
+
+            DoValidations();
+
+            return this;
+        }
 
         public override void DoValidations()
         {

@@ -4,7 +4,9 @@
     {
         public const string
             TableAddress = "Endereco",
+            FieldDescription = "Descricao",
             FieldZipCode = "Cep",
+            FieldType = "Tipo",
             FieldStreet = "Logradouro",
             FieldNeighborhood = "Bairro",
             FieldNumber = "Numero",
