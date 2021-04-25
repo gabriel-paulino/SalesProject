@@ -50,6 +50,18 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
+        [HttpGet]
+        [Route("api/[controller]/name/{name}")]
+        public IActionResult GetCustomersByName(string name)
+        {
+            var customers = _customerRepository.GetByName(name);
+
+            if (customers.Count > 0)
+                return Ok(customers);
+
+            return NotFound($"Ops. Nenhum cliente com nome:'{name}' foi encontrado.");
+        }
+
         [HttpPost]
         [Route("api/[controller]")]
         public IActionResult CreateCustomer(CreateCustomerViewModel model)
