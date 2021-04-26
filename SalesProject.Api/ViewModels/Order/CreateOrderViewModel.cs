@@ -16,6 +16,7 @@ namespace SalesProject.Api.ViewModels.Order
         [Display(Name = "Observação")]
         public string Observation { get; set; }
 
+        [Required]
         public List<Lines> OrderLines { get; set; }
 
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]

@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SalesProject.Api.ViewModels.Address
 {
     public class EditAddressViewModel
     {
-        public EditAddressViewModel() =>
-            this.TypeOptions = GetTypeOptions();
-
         [Required(ErrorMessage = "O campo 'Descrição' é obrigatório")]
         [Display(Name = "Descrição")]
         public string Description { get; set; }
@@ -21,7 +15,6 @@ namespace SalesProject.Api.ViewModels.Address
         [Required(ErrorMessage = "O campo 'Tipo endereço' é obrigatório")]
         [Display(Name = "Tipo endereço")]
         public int Type { get; set; }
-        public SelectList TypeOptions { get; set; }
 
         [Required(ErrorMessage = "O campo 'Logradouro' é obrigatório")]
         [Display(Name = "Logradouro")]
@@ -43,17 +36,5 @@ namespace SalesProject.Api.ViewModels.Address
         [Display(Name = "Uf")]
         [StringLength(maximumLength: 2, MinimumLength = 2)]
         public string State { get; set; }
-
-        private SelectList GetTypeOptions() =>
-                new SelectList(Enum.GetValues(typeof(AddressType)).
-                                 Cast<AddressType>().
-                                 Select(t => new SelectListItem
-                                 {
-                                     Text = t.ToString(),
-                                     Value = ((int)t).ToString()
-                                 }
-                                 ).ToList(),
-                                 "Value", "Text"
-                                 );
     }
 }

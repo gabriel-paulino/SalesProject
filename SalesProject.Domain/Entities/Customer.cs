@@ -84,7 +84,7 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateCnpj()
         {
-            if (!Validation.Validation.CnpjIsValid(Cnpj))
+            if (!Validation.Validation.IsValidCnpj(Cnpj))
                 AddNotification("O 'Cnpj' informado é inválido.");
         }
     }

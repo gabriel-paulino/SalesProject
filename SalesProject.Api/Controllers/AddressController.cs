@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Address;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
@@ -89,7 +90,7 @@ namespace SalesProject.Api.Controllers
                     new Address(
                         description: model.Description,
                         zipCode: model.ZipCode,
-                        type: (Domain.Enums.AddressType)model.Type,
+                        type: (AddressType)model.Type,
                         street: model.Street,
                         neighborhood: model.Neighborhood,
                         number: model.Number,
@@ -139,7 +140,7 @@ namespace SalesProject.Api.Controllers
                         Edit(
                         description: model.Description,
                         zipCode: model.ZipCode,
-                        type: (Domain.Enums.AddressType)model.Type,
+                        type: (AddressType)model.Type,
                         street: model.Street,
                         neighborhood: model.Neighborhood,
                         number: model.Number,

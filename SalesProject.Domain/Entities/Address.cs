@@ -67,6 +67,7 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateAddressType();
             ValidateZipCode();
         }
 
@@ -88,10 +89,18 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O 'Número' informado é inválido.");
         }
 
+        private void ValidateAddressType()
+        {
+            if (Type != AddressType.Billing &&
+                Type != AddressType.Delivery &&
+                Type != AddressType.Other)
+                AddNotification("O 'Tipo de endereço' informado é inválido.");
+        }
+
         private void ValidateZipCode()
         {
-            if (!Validation.Validation.ZipCodeIsValid(ZipCode))
+            if (!Validation.Validation.IsValidZipCode(ZipCode))
                 AddNotification("O 'Cep' informado é inválido.");
-        }
+        }  
     }
 }
