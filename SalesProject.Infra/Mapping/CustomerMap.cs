@@ -51,6 +51,7 @@ namespace SalesProject.Infra.Mapping
             builder.Ignore(c => c.Adresses);
             builder.Ignore(c => c.Contacts);
             builder.Ignore(c => c.Products);
+            builder.Ignore(c => c.User);
 
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
@@ -69,6 +70,10 @@ namespace SalesProject.Infra.Mapping
                 WithOne().
                 OnDelete(DeleteBehavior.SetNull).
                 HasForeignKey(fk => fk.CustomerId);
+
+            builder.HasOne(c => c.User).
+                WithOne().
+                OnDelete(DeleteBehavior.Cascade);
 
             builder.HasKey(c => c.Id);
             builder.ToTable(CustomerConstants.TableClient);

@@ -51,6 +51,7 @@ namespace SalesProject.Domain.Entities
         public IReadOnlyCollection<Address> Adresses { get => _adresses.ToArray(); }
         public IReadOnlyCollection<Contact> Contacts { get => _contacts.ToArray(); }
         public IReadOnlyCollection<Product> Products { get => _products.ToArray(); }
+        public User User { get; private set; }
 
         public Customer Edit(
             string phone,
