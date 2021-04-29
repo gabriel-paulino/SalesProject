@@ -7,12 +7,17 @@ using System.Text;
 
 namespace SalesProject.Api.Services
 {
-    public static class TokenService
+    public class TokenService
     {
-        public static string GenerateToken(User user)
+        private readonly string _jwtKey;
+
+        public TokenService(string jwtKey) =>
+            _jwtKey = jwtKey;
+
+        public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("MySecretHashThatINeedToCreateToThisFieldInThisCurrentArchive...NoMoreIdeas");
+            var key = Encoding.ASCII.GetBytes(_jwtKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

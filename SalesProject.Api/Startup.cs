@@ -36,7 +36,7 @@ namespace SalesProject.Api
 
             services.AddControllers();
 
-            var key = Encoding.ASCII.GetBytes("MySecretHashThatINeedToCreateToThisFieldInThisCurrentArchive...NoMoreIdeas");
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtKey"]);
 
             services.AddAuthentication(x =>
             {

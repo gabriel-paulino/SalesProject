@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SalesProject.Api.Services;
 using SalesProject.Api.ViewModels.Account;
 using SalesProject.Domain.Entities;
@@ -15,12 +16,15 @@ namespace SalesProject.Api.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _uow;
+        private readonly TokenService _tokenService;
 
         public AccountController(
+            IConfiguration configuration,
             IUserRepository userRepository,
             IUnitOfWork uow)
         {
             _userRepository = userRepository;
+            _tokenService = new TokenService(configuration["JwtKey"]);
             _uow = uow;
         }
 
@@ -36,7 +40,7 @@ namespace SalesProject.Api.Controllers
             if (!user.Valid)
                 return ValidationProblem(detail: $"{user.GetNotification()}");
 
-            var token = TokenService.GenerateToken(user);
+            var token = _tokenService.GenerateToken(user);
             user.HidePasswordHash();
 
             return new
@@ -70,7 +74,7 @@ namespace SalesProject.Api.Controllers
             var user = _userRepository.CreateUser(userTemp, model.Password);
             _uow.Commit();
 
-            var token = TokenService.GenerateToken(user);
+            var token = _tokenService.GenerateToken(user);
             user.HidePasswordHash();
 
             return new
