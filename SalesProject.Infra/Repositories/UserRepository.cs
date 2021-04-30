@@ -48,6 +48,11 @@ namespace SalesProject.Infra.Repositories
             return _context.Users.Add(user).Entity;
         }
 
+        public bool HasCustomerLink(Guid? customerId) =>
+           _context.Users
+            .Where(u => u.CustomerId == customerId)
+            .FirstOrDefault() != null;
+
         public void Dispose()
         {
             if (!_disposed)

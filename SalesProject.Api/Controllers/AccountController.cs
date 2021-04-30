@@ -71,6 +71,10 @@ namespace SalesProject.Api.Controllers
             if (!userTemp.Valid)
                 return ValidationProblem(detail: $"{userTemp.GetNotification()}");
 
+            if(userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
+                return ValidationProblem(
+                    detail: $"Ops. O Cliente com Id: {userTemp.CustomerId} já possuí um usuário no sistema");
+
             var user = _userRepository.CreateUser(userTemp, model.Password);
             _uow.Commit();
 

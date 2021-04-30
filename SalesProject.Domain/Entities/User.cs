@@ -40,6 +40,8 @@ namespace SalesProject.Domain.Entities
         public RoleType Role { get; private set; }
         public Guid? CustomerId { get; private set; }
 
+        public bool IsCustomer() => this.Role == RoleType.Customer;
+
         public void EncryptPassword(string passwordHash) =>
             this.PasswordHash = passwordHash;
 
