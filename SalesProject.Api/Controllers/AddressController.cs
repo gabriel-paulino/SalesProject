@@ -4,6 +4,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Services;
 using System;
 
 namespace SalesProject.Api.Controllers
@@ -12,15 +13,18 @@ namespace SalesProject.Api.Controllers
     public class AddressController : ControllerBase
     {
         private readonly IAddressRepository _addressRepository;
+        private readonly IAddressApiService _addressApiService;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
 
         public AddressController(
             IAddressRepository addressRepository,
+            IAddressApiService addressApiService,
             ICustomerRepository customerRepository,
             IUnitOfWork uow)
         {
             _addressRepository = addressRepository;
+            _addressApiService = addressApiService;
             _customerRepository = customerRepository;
             _uow = uow;
         }
@@ -59,6 +63,21 @@ namespace SalesProject.Api.Controllers
                 return Ok(addreses);
 
             return NotFound($"Ops. Nenhum endereço da cidade:'{city}' foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/zipcode/{zipCode}")]
+        public IActionResult CompleteAddressApi(string zipCode)
+        {
+            var addressApi = _addressApiService.CompleteAddressApi(zipCode);
+
+            if (addressApi.Status == 400)
+                return BadRequest($"Ops. O cep:'{zipCode}' é inválido.");
+
+            if (addressApi.Status == 404)
+                return NotFound($"Ops. Nenhum endereço para o cep:'{zipCode}' foi encontrado.");
+
+            return Ok(addressApi);
         }
 
         [HttpGet]

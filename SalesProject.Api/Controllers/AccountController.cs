@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using SalesProject.Api.Services;
 using SalesProject.Api.ViewModels.Account;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Services;
 using System;
 
 namespace SalesProject.Api.Controllers
@@ -16,15 +15,15 @@ namespace SalesProject.Api.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _uow;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
         public AccountController(
-            IConfiguration configuration,
             IUserRepository userRepository,
+            ITokenService tokenService,
             IUnitOfWork uow)
         {
             _userRepository = userRepository;
-            _tokenService = new TokenService(configuration["JwtKey"]);
+            _tokenService = tokenService;
             _uow = uow;
         }
 
@@ -71,7 +70,7 @@ namespace SalesProject.Api.Controllers
             if (!userTemp.Valid)
                 return ValidationProblem(detail: $"{userTemp.GetNotification()}");
 
-            if(userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
+            if (userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
                 return ValidationProblem(
                     detail: $"Ops. O Cliente com Id: {userTemp.CustomerId} já possuí um usuário no sistema");
 

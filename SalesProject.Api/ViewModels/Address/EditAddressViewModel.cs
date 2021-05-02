@@ -14,6 +14,7 @@ namespace SalesProject.Api.ViewModels.Address
 
         [Required(ErrorMessage = "O campo 'Tipo endereço' é obrigatório")]
         [Display(Name = "Tipo endereço")]
+        [Range(1,3)]
         public int Type { get; set; }
 
         [Required(ErrorMessage = "O campo 'Logradouro' é obrigatório")]

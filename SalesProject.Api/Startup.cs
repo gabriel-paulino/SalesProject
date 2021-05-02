@@ -7,8 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SalesProject.Api.Services;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Services;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
@@ -59,7 +61,9 @@ namespace SalesProject.Api
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
+            services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));            
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddTransient<IAddressApiService, AddressApiService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();

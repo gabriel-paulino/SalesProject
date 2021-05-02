@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Services;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace SalesProject.Api.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly string _jwtKey;
 

@@ -30,6 +30,20 @@ namespace SalesProject.Domain.Entities
             DoValidations();
         }
 
+        public Address(
+            string zipCode,
+            string street,
+            string neighborhood,
+            string city,
+            string state)
+        {
+            this.ZipCode = zipCode;
+            this.Street = street;
+            this.Neighborhood = neighborhood;
+            this.City = city;
+            this.State = state;
+        }
+
         public string Description { get; private set; }
         public string ZipCode { get; private set; }
         public AddressType? Type { get; private set; }

@@ -54,7 +54,7 @@ namespace SalesProject.Api.Controllers
                         customer: _customerRepository.Get(Guid.Parse(model.CustomerId))
                         );
 
-            foreach (var line in model.OrderLines)
+            foreach (var line in model.OrderItens)
             {
                 var orderLine =
                     new OrderLines(

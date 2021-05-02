@@ -74,8 +74,7 @@ namespace SalesProject.Domain.Entities
             if (Role != RoleType.Customer &&
                 Role != RoleType.Seller &&
                 Role != RoleType.It &&
-                Role != RoleType.Administrator &&
-                Role != RoleType.Other)
+                Role != RoleType.Administrator)
                 AddNotification("A 'Função' informada é inválida.");
         }
     }

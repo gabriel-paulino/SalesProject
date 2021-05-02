@@ -17,14 +17,14 @@ namespace SalesProject.Api.ViewModels.Order
         public string Observation { get; set; }
 
         [Required]
-        public List<Lines> OrderLines { get; set; }
+        public List<OrderItem> OrderItens { get; set; }
 
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }
     }
 
-    public class Lines
+    public class OrderItem
     {
         [Required(ErrorMessage = "O campo 'Quantidade' é obrigatório")]
         [Display(Name = "Quantidade")]

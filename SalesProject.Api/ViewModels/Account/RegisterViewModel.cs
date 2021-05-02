@@ -22,6 +22,7 @@ namespace SalesProject.Api.ViewModels.Account
 
         [Required(ErrorMessage = "O campo 'Função' é obrigatório")]
         [Display(Name = "Função")]
+        [Range(1,4)]
         public int Role { get; set; }
 
         [Display(Name = "Cliente")]
