@@ -69,15 +69,15 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/zipcode/{zipCode}")]
         public IActionResult CompleteAddressApi(string zipCode)
         {
-            var addressApi = _addressApiService.CompleteAddressApi(zipCode);
+            var addressResponse = _addressApiService.CompleteAddressApi(zipCode);
 
-            if (addressApi.Status == 400)
+            if (addressResponse.Status == 400)
                 return BadRequest($"Ops. O cep:'{zipCode}' é inválido.");
 
-            if (addressApi.Status == 404)
+            if (addressResponse.Status == 404)
                 return NotFound($"Ops. Nenhum endereço para o cep:'{zipCode}' foi encontrado.");
 
-            return Ok(addressApi);
+            return Ok(addressResponse);
         }
 
         [HttpGet]

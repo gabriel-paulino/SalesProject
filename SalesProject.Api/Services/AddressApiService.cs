@@ -10,7 +10,8 @@ namespace SalesProject.Api.Services
     {
         public AddressApi CompleteAddressApi(string zipCode)
         {
-            zipCode = zipCode.Replace("-", string.Empty);
+            zipCode = zipCode
+                .Replace("-", string.Empty);
 
             if (zipCode.Length == 7)
                 zipCode = $"0{zipCode}";
@@ -29,16 +30,16 @@ namespace SalesProject.Api.Services
                 json = reader.ReadToEnd();
             }
 
-            var addressJson = JsonConvert.DeserializeObject<AddressApi>(json);
+            var addressResponse = JsonConvert.DeserializeObject<AddressApi>(json);
 
             return new
                 AddressApi(
-                    status: addressJson.Status,
-                    code: addressJson.Code,                  
-                    city: addressJson.City,
-                    state: addressJson.State,
-                    district: addressJson.District,
-                    address: addressJson.Address
+                    status: addressResponse.Status,
+                    code: addressResponse.Code,                  
+                    city: addressResponse.City,
+                    state: addressResponse.State,
+                    district: addressResponse.District,
+                    address: addressResponse.Address
                     );
         }
     }
