@@ -3,6 +3,7 @@ using SalesProject.Api.ViewModels.Customer;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Services;
 using System;
 
 namespace SalesProject.Api.Controllers
@@ -11,13 +12,16 @@ namespace SalesProject.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly ICnpjApiService _cnpjApiService;
         private readonly IUnitOfWork _uow;
 
         public CustomerController(
             ICustomerRepository customerRepository,
+            ICnpjApiService cnpjApiService,
             IUnitOfWork uow)
         {
             _customerRepository = customerRepository;
+            _cnpjApiService = cnpjApiService;
             _uow = uow;
         }
 
@@ -60,6 +64,23 @@ namespace SalesProject.Api.Controllers
                 return Ok(customers);
 
             return NotFound($"Ops. Nenhum cliente com nome:'{name}' foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/cnpj/{customerCnpj}")]
+        public IActionResult CompleteCustomerApi(string customerCnpj)
+        {
+            var customerResponse = _cnpjApiService.CompleteCustomerApi(customerCnpj);
+
+            if (customerResponse.Status == "ERROR" &&
+                customerResponse.Message == "CNPJ inválido")
+                return BadRequest($"Ops. O cnpj:'{customerCnpj}' é inválido.");
+
+            if (customerResponse.Status == "ERROR" &&
+                customerResponse.Message == "CNPJ rejeitado pela Receita Federal")
+                return NotFound($"Ops. Nenhuma empresa com cnpj:'{customerCnpj}' foi encontrada.");
+
+            return Ok(customerResponse);
         }
 
         [HttpPost]
