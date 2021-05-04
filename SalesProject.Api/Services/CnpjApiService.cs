@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SalesProject.Domain.Entities;
+using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Services;
 using System.IO;
 using System.Net;
@@ -10,9 +10,6 @@ namespace SalesProject.Api.Services
     {
         public CnpjApi CompleteCustomerApi(string cnpj)
         {
-           //06.990.590 / 0001 - 23
-           //06990590000123
-
             cnpj = cnpj
                 .Replace(".", string.Empty)
                 .Replace("%2F", string.Empty)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Order;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
@@ -35,8 +36,36 @@ namespace SalesProject.Api.Controllers
 
             if (order != null)
                 return Ok(order);
-            
+
             return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/filter")]
+        public IActionResult GetOrderUsingFilter([FromQuery] OrderFilterViewModel model)
+        {
+            var filter = model.Status != null
+                ? new OrderFilter(
+                    customerId: model.CustomerId,
+                    status: (OrderStatus)model.Status,
+                    startDate: model.StartDate,
+                    endDate: model.EndDate
+                    )
+                : new OrderFilter(
+                    customerId: model.CustomerId,
+                    startDate: model.StartDate,
+                    endDate: model.EndDate
+                    );
+
+            if (!filter.Valid)
+                return ValidationProblem(detail: $"{filter.GetNotification()}");
+
+            var orders = _orderRepository.GetOrdersUsingFilter(filter);
+
+            if (orders.Count != 0)
+                return Ok(orders);
+
+            return NotFound($"Ops. Nenhum pedido foi encontrado, usando esse filtro.");
         }
 
         [HttpPost]

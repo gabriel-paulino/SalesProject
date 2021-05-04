@@ -3,6 +3,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SalesProject.Infra.Repositories
@@ -23,11 +24,44 @@ namespace SalesProject.Infra.Repositories
 
         public Order Get(Guid id) =>
             _context.Orders
-                .AsNoTracking()
                 .Include(o => o.Customer)
                 .Include(o => o.OrderLines)
                 .ThenInclude(ol => ol.Product)
                 .FirstOrDefault(o => o.Id == id);
+
+        public List<Order> GetOrdersUsingFilter(OrderFilter filter)
+        {
+            if(filter.IsFilledCustomerId() && filter.IsFilledOrderStatus())
+                return _context.Orders
+                    .Include(ol => ol.OrderLines)
+                    .Where(o => o.CustomerId == filter.CustomerId &&
+                           o.Status == filter.Status &&
+                           o.PostingDate >= (filter.StartDate ?? DateTime.MinValue) &&
+                           o.PostingDate <= (filter.EndDate ?? DateTime.MaxValue) && true)
+                    .ToList();
+
+            else if (filter.IsFilledCustomerId() && !filter.IsFilledOrderStatus())
+                return _context.Orders
+                    .Include(ol => ol.OrderLines)
+                    .Where(o => o.CustomerId == filter.CustomerId &&
+                           o.PostingDate >= (filter.StartDate ?? DateTime.MinValue) &&
+                           o.PostingDate <= (filter.EndDate ?? DateTime.MaxValue) && true)
+                    .ToList();
+
+            else if (!filter.IsFilledCustomerId() && filter.IsFilledOrderStatus())
+                return _context.Orders
+                    .Include(ol => ol.OrderLines)
+                    .Where(o => o.Status == filter.Status &&
+                           o.PostingDate >= (filter.StartDate ?? DateTime.MinValue) &&
+                           o.PostingDate <= (filter.EndDate ?? DateTime.MaxValue) && true)
+                    .ToList();
+
+            return _context.Orders
+                    .Include(ol => ol.OrderLines)
+                    .Where(o => o.PostingDate >= (filter.StartDate ?? DateTime.MinValue) &&
+                           o.PostingDate <= (filter.EndDate ?? DateTime.MaxValue))
+                    .ToList();
+        }
 
         public void Dispose()
         {

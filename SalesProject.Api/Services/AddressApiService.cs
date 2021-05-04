@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SalesProject.Domain.Entities;
+using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Services;
 using System.IO;
 using System.Net;

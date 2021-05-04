@@ -40,6 +40,8 @@ namespace SalesProject.Infra.Mapping
                 HasColumnName(OrderConstants.FieldCustomerId).
                 IsRequired(false);
 
+            builder.HasIndex(c => new { c.Status, c.PostingDate });
+
             builder.Ignore(c => c.Notifications);
             builder.Ignore(c => c.Valid);
 
