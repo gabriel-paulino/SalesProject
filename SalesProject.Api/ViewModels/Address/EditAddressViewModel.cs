@@ -34,7 +34,7 @@ namespace SalesProject.Api.ViewModels.Address
         public string City { get; set; }
 
         [Required(ErrorMessage = "O campo 'Uf' é obrigatório")]
-        [Display(Name = "Uf")]
+        [Display(Name = "UF")]
         [StringLength(maximumLength: 2, MinimumLength = 2)]
         public string State { get; set; }
     }
