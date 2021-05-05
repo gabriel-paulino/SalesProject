@@ -98,7 +98,7 @@ namespace SalesProject.Domain.Entities
             if (string.IsNullOrEmpty(City))
                 AddNotification("O preenchimento do campo 'Cidade' é obrigatório.");
             if (string.IsNullOrEmpty(State))
-                AddNotification("O preenchimento do campo 'Uf' é obrigatório.");
+                AddNotification("O preenchimento do campo 'UF' é obrigatório.");
             if (Number <= 0)
                 AddNotification("O 'Número' informado é inválido.");
         }
