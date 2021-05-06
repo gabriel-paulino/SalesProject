@@ -53,7 +53,7 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/register")]
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
         {
-            if (model.Password != model.PasswordAgain)
+            if (model.Password != model.ConfirmPassword)
                 return ValidationProblem(detail: "Ops. As senhas não coincidem. Tente novamente.");
 
             var userTemp = (RoleType)model.Role == RoleType.Customer
@@ -72,7 +72,7 @@ namespace SalesProject.Api.Controllers
 
             if (userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
                 return ValidationProblem(
-                    detail: $"Ops. O Cliente com Id: {userTemp.CustomerId} já possuí um usuário no sistema");
+                    detail: $"Ops. O Cliente com Id: '{userTemp.CustomerId}' já possuí um usuário no sistema");
 
             var user = _userRepository.CreateUser(userTemp, model.Password);
             _uow.Commit();
@@ -85,6 +85,26 @@ namespace SalesProject.Api.Controllers
                 user = user,
                 token = token
             };
+        }
+
+        [HttpPatch]
+        [Route("api/[controller]/changePassword")]
+        [Authorize]
+        public ActionResult<dynamic> ChangePassword([FromBody] ChangePasswordViewModel model)
+        {
+            if (model.NewPassword != model.ConfirmPassword)
+                return ValidationProblem(detail: "Ops. As senhas não coincidem. Tente novamente.");
+
+            var username = User.Identity.Name;
+            var user = _userRepository.ChangePassword(username, model.CurrentPassword, model.NewPassword);
+
+            if(!user.Valid)
+                return ValidationProblem(detail: $"{user.GetNotification()}");
+
+            _uow.Commit();
+
+            user.HidePasswordHash();
+            return user;
         }
     }
 }

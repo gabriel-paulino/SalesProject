@@ -16,9 +16,9 @@ namespace SalesProject.Api.ViewModels.Account
         [Display(Name = "Senha")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "O campo 'Repita a senha' é obrigatório")]
-        [Display(Name = "Repita a senha")]
-        public string PasswordAgain { get; set; }
+        [Required(ErrorMessage = "O campo 'Confirme a senha' é obrigatório")]
+        [Display(Name = "Confirme a senha")]
+        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "O campo 'Função' é obrigatório")]
         [Display(Name = "Função")]

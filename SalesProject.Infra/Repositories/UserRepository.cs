@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
@@ -25,7 +26,7 @@ namespace SalesProject.Infra.Repositories
 
             if (userDB == null)
             {
-                user.AddNotification("Ops. Usuário não encontrado");
+                user.AddNotification($"Ops. Usuário '{user.Username}' não foi encontrado");
                 return user;
             }
 
@@ -34,18 +35,40 @@ namespace SalesProject.Infra.Repositories
             var result = hasher.VerifyHashedPassword(user, userDB.PasswordHash, visiblePassword);
 
             if (result == PasswordVerificationResult.Failed)
-                userDB.AddNotification("Ops. Falha ao realizar Login.");
+                userDB.AddNotification("Ops. Falha ao realizar Login. Senha incorreta.");
 
             return userDB;
         }
 
-        public User CreateUser(User user, string readablePassword)
+        public User CreateUser(User user, string visiblePassword)
         {
             var hasher = new PasswordHasher<User>();
 
-            user.EncryptPassword(hasher.HashPassword(user, readablePassword));
+            user.EncryptPassword(hasher.HashPassword(user, visiblePassword));
 
             return _context.Users.Add(user).Entity;
+        }
+
+        public User ChangePassword(string username, string currentPassword, string newPassword)
+        {
+            var user = _context.Users
+                    .FirstOrDefault(u => u.Username.Equals(username));
+
+            var hasher = new PasswordHasher<User>();
+
+            var result = hasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                user.AddNotification("Ops. Falha ao trocar senha. Senha atual incorreta.");
+                return user;
+            }
+
+            user.EncryptPassword(hasher.HashPassword(user, newPassword));
+
+           _context.Entry<User>(user).State = EntityState.Modified;
+
+            return user;
         }
 
         public bool HasCustomerLink(Guid? customerId) =>
