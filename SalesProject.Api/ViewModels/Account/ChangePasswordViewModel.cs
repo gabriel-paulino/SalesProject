@@ -5,7 +5,7 @@ namespace SalesProject.Api.ViewModels.Account
     public class ChangePasswordViewModel
     {
         [Required(ErrorMessage = "O campo 'Senha atual' é obrigatório")]
-        [Display(Name = "Senha antiga")]
+        [Display(Name = "Senha atual")]
         public string CurrentPassword { get; set; }
 
         [Required(ErrorMessage = "O campo 'Nova senha' é obrigatório")]
