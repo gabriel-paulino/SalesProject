@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Customer;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
@@ -103,6 +104,70 @@ namespace SalesProject.Api.Controllers
                 return ValidationProblem(detail: $"{customer.GetNotification()}");
 
             _customerRepository.Create(customer);
+            _uow.Commit();
+
+            return Created(
+            $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{customer.Id}",
+            customer);
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/complete")]
+        public IActionResult CreateCompleteCustomer(CreateCompleteCustomerViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var customer =
+                    new Customer(
+                        cnpj: model.Cnpj,
+                        companyName: model.CompanyName,
+                        opening: DateTime.Parse(model.Opening).Date,
+                        phone: model.Phone,
+                        municipalRegistration: model.MunicipalRegistration,
+                        stateRegistration: model.StateRegistration);
+
+            if (!customer.Valid)
+                return ValidationProblem(detail: $"{customer.GetNotification()}");
+
+            foreach (var line in model.Adresses)
+            {
+                var address =
+                    new Address(
+                        description: line.Description,
+                        zipCode: line.ZipCode,
+                        type: (AddressType)line.Type,
+                        street: line.Street,
+                        neighborhood: line.Neighborhood,
+                        number: line.Number,
+                        city: line.City,
+                        state: line.State,
+                        customerId: customer.Id);
+
+                if (!address.Valid)
+                    return ValidationProblem(detail: $"{address.GetNotification()}");
+
+                customer.AddAddress(address);
+            }
+
+            foreach (var line in model.Contacts)
+            {
+                var contact =
+                    new Contact(firstName: line.FirstName,
+                                lastName: line.LastName,
+                                email: line.Email,
+                                whatsApp: line.WhatsApp,
+                                phone: line.Phone,
+                                customerId: customer.Id);
+
+                if (!contact.Valid)
+                    return ValidationProblem(detail: $"{contact.GetNotification()}");
+
+                customer.AddContact(contact);
+            }
+
+            _customerRepository.Create(customer);
+
             _uow.Commit();
 
             return Created(

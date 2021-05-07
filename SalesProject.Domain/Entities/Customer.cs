@@ -67,6 +67,12 @@ namespace SalesProject.Domain.Entities
             return this;
         }
 
+        public void AddAddress(Address address) =>
+            _adresses.Add(address);
+
+        public void AddContact(Contact contact) =>
+            _contacts.Add(contact);
+
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
