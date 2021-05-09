@@ -126,7 +126,7 @@ namespace SalesProject.Api.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/complete")]
+        [Route("api/complete/[controller]")]
         public IActionResult CreateCompleteCustomer(CreateCompleteCustomerViewModel model)
         {
             if (!ModelState.IsValid)
@@ -232,7 +232,7 @@ namespace SalesProject.Api.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/complete/{id:guid}")]
+        [Route("api/complete/[controller]/{id:guid}")]
         public IActionResult EditCompleteCustomer(Guid id, EditCompleteCustomerViewModel model)
         {
             if (!ModelState.IsValid)
