@@ -35,7 +35,13 @@ namespace SalesProject.Infra.Repositories
                 .Include(c => c.Contacts)
                 .Include(c => c.Products)
                 .FirstOrDefault(c => c.Id == id);
-        
+
+        public Customer GetCompleteCustomer(Guid id) =>
+            _context.Customers
+                .Include(c => c.Adresses)
+                .Include(c => c.Contacts)
+                .FirstOrDefault(c => c.Id == id);
+
         public List<Customer> GetAll() =>
             _context.Customers.ToList();
 

@@ -6,6 +6,8 @@ using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SalesProject.Api.Controllers
 {
@@ -48,6 +50,18 @@ namespace SalesProject.Api.Controllers
         public IActionResult GetFullCustomer(Guid id)
         {
             var customer = _customerRepository.GetFullCustomer(id);
+
+            if (customer != null)
+                return Ok(customer);
+
+            return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
+        }
+
+        [HttpGet]
+        [Route("api/complete/[controller]/{id:guid}")]
+        public IActionResult GetCompleteCustomer(Guid id)
+        {
+            var customer = _customerRepository.GetCompleteCustomer(id);
 
             if (customer != null)
                 return Ok(customer);
@@ -210,6 +224,199 @@ namespace SalesProject.Api.Controllers
 
             if (!newCustomer.Valid)
                 return ValidationProblem(detail: $"{newCustomer.GetNotification()}");
+
+            _customerRepository.Update(newCustomer);
+            _uow.Commit();
+
+            return Ok(newCustomer);
+        }
+
+        [HttpPatch]
+        [Route("api/[controller]/complete/{id:guid}")]
+        public IActionResult EditCompleteCustomer(Guid id, EditCompleteCustomerViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var oldCustomer = _customerRepository.GetCompleteCustomer(id);
+
+            if (oldCustomer == null)
+                return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
+
+            var newCustomer = oldCustomer.
+                        Edit(
+                        phone: model.Phone,
+                        municipalRegistration: model.MunicipalRegistration,
+                        stateRegistration: model.StateRegistration);
+
+            if (!newCustomer.Valid)
+                return ValidationProblem(detail: $"{newCustomer.GetNotification()}");
+
+            #region Manage Adresses
+
+            List<Address> newAdresses = new List<Address>();
+            List<Address> removedAdresses = new List<Address>();
+
+            foreach (var address in oldCustomer.Adresses)
+            {
+                bool remove = false;
+
+                for (int i = 0; i < model.Adresses.Count; i++)
+                {
+                    Guid currentIdAddress = string.IsNullOrEmpty(model.Adresses[i].Id)
+                    ? new Guid()
+                    : Guid.Parse(model.Adresses[i].Id);
+
+                    if (address.Id == currentIdAddress)
+                        break;
+
+                    if (i == model.Adresses.Count - 1)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+                if (remove)
+                    removedAdresses.Add(address);
+            }
+
+            foreach (var addressModel in model.Adresses)
+            {
+                if (string.IsNullOrEmpty(addressModel.Id))
+                {
+                    var newAddress =
+                            new Address(
+                                description: addressModel.Description,
+                                zipCode: addressModel.ZipCode,
+                                type: (AddressType)addressModel.Type,
+                                street: addressModel.Street,
+                                neighborhood: addressModel.Neighborhood,
+                                number: addressModel.Number,
+                                city: addressModel.City,
+                                state: addressModel.State,
+                                customerId: oldCustomer.Id);
+
+                    if (!newAddress.Valid)
+                        return ValidationProblem(detail: $"{newAddress.GetNotification()}");
+
+                    newAdresses.Add(newAddress);
+                }
+            }
+
+            foreach (var addressModel in model.Adresses)
+            {
+                if (string.IsNullOrEmpty(addressModel.Id))
+                    continue;
+
+                var address =
+                    newCustomer
+                    .Adresses
+                    .Where(c => c.Id == Guid.Parse(addressModel.Id))
+                    .FirstOrDefault();
+
+                address.Edit(
+                            description: addressModel.Description,
+                            zipCode: addressModel.ZipCode,
+                            type: (AddressType)addressModel.Type,
+                            street: addressModel.Street,
+                            neighborhood: addressModel.Neighborhood,
+                            number: addressModel.Number,
+                            city: addressModel.City,
+                            state: addressModel.State);
+
+                if (!address.Valid)
+                    return ValidationProblem(detail: $"{address.GetNotification()}");
+            }
+
+            #endregion
+
+            #region Manage Contacts
+
+            List<Contact> newContacts = new List<Contact>();
+            List<Contact> removedContacts = new List<Contact>();
+
+            foreach (var contact in oldCustomer.Contacts)
+            {
+                bool remove = false;
+
+                for (int i = 0; i < model.Contacts.Count; i++)
+                {
+                    Guid currentIdContact = string.IsNullOrEmpty(model.Contacts[i].Id)
+                    ? new Guid()
+                    : Guid.Parse(model.Contacts[i].Id);
+
+                    if (contact.Id == currentIdContact)
+                        break;
+
+                    if (i == model.Contacts.Count - 1)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+                if (remove)
+                    removedContacts.Add(contact);
+            }
+
+            foreach (var contactModel in model.Contacts)
+            {
+                if (string.IsNullOrEmpty(contactModel.Id))
+                {
+                    var newContact =
+                        new Contact(
+                            firstName: contactModel.FirstName,
+                            lastName: contactModel.LastName,
+                            email: contactModel.Email,
+                            whatsApp: contactModel.WhatsApp,
+                            phone: contactModel.Phone,
+                            customerId: oldCustomer.Id);
+
+                    if (!newContact.Valid)
+                        return ValidationProblem(detail: $"{newContact.GetNotification()}");
+
+                    newContacts.Add(newContact);
+                }
+            }
+
+            foreach (var contactModel in model.Contacts)
+            {
+                if (string.IsNullOrEmpty(contactModel.Id))
+                    continue;
+
+                var contact =
+                    newCustomer
+                    .Contacts
+                    .Where(c => c.Id == Guid.Parse(contactModel.Id))
+                    .FirstOrDefault();
+
+                contact.Edit(
+                        firstName: contactModel.FirstName,
+                        lastName: contactModel.LastName,
+                        email: contactModel.Email,
+                        whatsApp: contactModel.WhatsApp,
+                        phone: contactModel.Phone);
+
+                if (!contact.Valid)
+                    return ValidationProblem(detail: $"{contact.GetNotification()}");
+            }
+
+            #endregion
+
+            if (newAdresses.Any())
+                foreach (var newAddress in newAdresses)
+                    newCustomer.AddAddress(newAddress);
+
+            if (newContacts.Any())
+                foreach (var contact in newContacts)
+                    newCustomer.AddContact(contact);
+
+            if (removedAdresses.Any())
+                foreach (var address in removedAdresses)
+                    newCustomer.RemoveAddress(address);
+
+            if (removedContacts.Any())
+                foreach (var contact in removedContacts)
+                    newCustomer.RemoveContact(contact);
 
             _customerRepository.Update(newCustomer);
             _uow.Commit();

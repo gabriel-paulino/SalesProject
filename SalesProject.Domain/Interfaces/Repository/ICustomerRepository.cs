@@ -9,6 +9,7 @@ namespace SalesProject.Domain.Interfaces.Repository
         List<Customer> GetAll();
         Customer Get(Guid id);
         Customer GetFullCustomer(Guid id);
+        Customer GetCompleteCustomer(Guid id);
         List<Customer> GetByName(string name);
         void Create(Customer customer);
         void Update(Customer customer);

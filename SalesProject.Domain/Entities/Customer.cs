@@ -61,7 +61,7 @@ namespace SalesProject.Domain.Entities
             this.StateRegistration = stateRegistration;
             this.Phone = phone;
             this.MunicipalRegistration = municipalRegistration;
-
+            
             DoValidations();
 
             return this;
@@ -72,6 +72,12 @@ namespace SalesProject.Domain.Entities
 
         public void AddContact(Contact contact) =>
             _contacts.Add(contact);
+
+        public void RemoveAddress(Address address) =>
+            _adresses.Remove(address);
+
+        public void RemoveContact(Contact contact) =>
+            _contacts.Remove(contact);
 
         public override void DoValidations()
         {
