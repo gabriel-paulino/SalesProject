@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,12 +15,22 @@ using SalesProject.Domain.Services;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace SalesProject.Api
 {
     public class Startup
     {
+        private static string GetPathOfXmlFromAssembly() =>
+            Path.Combine(
+                AppContext.BaseDirectory,
+                $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"
+                );
+
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration) =>
@@ -27,16 +38,27 @@ namespace SalesProject.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
+            services.AddCors(c =>
             {
-                options.AddPolicy(
+                c.AddPolicy(
                   "CorsPolicy", builder => builder
                   .WithOrigins("http://localhost:4200")
                   .AllowAnyMethod()
                   .AllowAnyHeader());
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressConsumesConstraintForFormFileParameters = true;
+                    //options.SuppressInferBindingSourcesForParameters = true;
+                    options.SuppressModelStateInvalidFilter = true;
+                    options.SuppressMapClientErrors = true;
+                    options.ClientErrorMapping[StatusCodes.Status404NotFound].Link =
+                        "https://httpstatuses.com/404";
+                });
+
+            services.AddRouting(c => c.LowercaseUrls = true);
 
             var key = Encoding.ASCII.GetBytes(Configuration["JwtKey"]);
 
@@ -61,7 +83,7 @@ namespace SalesProject.Api
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
-            services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));            
+            services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddTransient<IAddressApiService, AddressApiService>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -76,6 +98,34 @@ namespace SalesProject.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sales API", Version = "v1", });
+                c.IncludeXmlComments(GetPathOfXmlFromAssembly());
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name= "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
             });
         }
 

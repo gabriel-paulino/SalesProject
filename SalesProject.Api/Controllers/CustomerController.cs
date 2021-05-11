@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Customer;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
@@ -8,6 +9,7 @@ using SalesProject.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
 {
@@ -28,12 +30,26 @@ namespace SalesProject.Api.Controllers
             _uow = uow;
         }
 
+        /// <summary>
+        /// Get all Customers.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("api/[controller]")]
         public IActionResult GetCustomers() =>
             Ok(_customerRepository.GetAll());
 
+        /// <summary>
+        /// Get Customer by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetCustomer(Guid id)
         {
@@ -45,7 +61,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get Customer by Id with Adresses, Contacts and Products.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/full/[controller]/{id:guid}")]
         public IActionResult GetFullCustomer(Guid id)
         {
@@ -57,7 +81,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get Customer by Id with Adresses and Contacts.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/complete/[controller]/{id:guid}")]
         public IActionResult GetCompleteCustomer(Guid id)
         {
@@ -69,7 +101,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get Customers that CompanyName contains this param.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetCustomersByName(string name)
         {
@@ -81,7 +121,16 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum cliente com nome:'{name}' foi encontrado.");
         }
 
+        /// <summary>
+        /// Get fields to complete Customer registration using a WebService (ReceitaWS).
+        /// </summary>
+        /// <param name="customerCnpj"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/cnpj/{customerCnpj}")]
         public IActionResult CompleteCustomerApi(string customerCnpj)
         {
@@ -93,12 +142,20 @@ namespace SalesProject.Api.Controllers
 
             if (customerResponse.Status == "ERROR" &&
                 customerResponse.Message == "CNPJ rejeitado pela Receita Federal")
-                return NotFound($"Ops. Nenhuma empresa com cnpj:'{customerCnpj}' foi encontrada.");
+                return NotFound($"Ops. Nenhuma empresa com cnpj:'{customerCnpj.Replace("%2F", "/")}' foi encontrada.");
 
             return Ok(customerResponse);
         }
 
+        /// <summary>
+        /// Create a Customer without Adresses and Contacts.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("api/[controller]")]
         public IActionResult CreateCustomer(CreateCustomerViewModel model)
         {
@@ -125,7 +182,16 @@ namespace SalesProject.Api.Controllers
             customer);
         }
 
+        /// <summary>
+        /// Create a Customer with Adresses and Contacts.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("api/complete/[controller]")]
         public IActionResult CreateCompleteCustomer(CreateCompleteCustomerViewModel model)
         {
@@ -189,7 +255,14 @@ namespace SalesProject.Api.Controllers
             customer);
         }
 
+        /// <summary>
+        /// Delete a Customer by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteCustomer(Guid id)
         {
@@ -204,7 +277,17 @@ namespace SalesProject.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Update a Customer without Adresses and Contacts.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult EditCustomer(Guid id, EditCustomerViewModel model)
         {
@@ -231,7 +314,18 @@ namespace SalesProject.Api.Controllers
             return Ok(newCustomer);
         }
 
+        /// <summary>
+        /// Update a Customer with Adresses and Contacts.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/complete/[controller]/{id:guid}")]
         public IActionResult EditCompleteCustomer(Guid id, EditCompleteCustomerViewModel model)
         {

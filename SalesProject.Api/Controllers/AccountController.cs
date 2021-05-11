@@ -7,6 +7,7 @@ using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
 using System;
+using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
 {
@@ -27,9 +28,15 @@ namespace SalesProject.Api.Controllers
             _uow = uow;
         }
 
+        /// <summary>
+        /// Logs in to the system and sends the jwt token.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("api/[controller]/login")]
+        [Produces(MediaTypeNames.Application.Json)]
         [AllowAnonymous]
+        [Route("api/[controller]/login")]       
         public ActionResult<dynamic> Login([FromBody] LoginViewModel model)
         {
             var userTemp = new User(username: model.Username);
@@ -49,7 +56,13 @@ namespace SalesProject.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Register an Account in the system and sends the jwt token.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("api/[controller]/register")]
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
         {
@@ -87,9 +100,15 @@ namespace SalesProject.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// Change the Password of the current user.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
-        [Route("api/[controller]/changePassword")]
         [Authorize]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("api/[controller]/change-password")]        
         public ActionResult<dynamic> ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             if (model.NewPassword != model.ConfirmPassword)

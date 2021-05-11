@@ -5,6 +5,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
+using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
 {
@@ -25,7 +26,15 @@ namespace SalesProject.Api.Controllers
             _uow = uow;
         }
 
+        /// <summary>
+        /// Get Product by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetProduct(Guid id)
         {
@@ -37,7 +46,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get Produtcs that name contains this param.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetProductsByName(string name)
         {
@@ -49,7 +66,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum produto com nome:'{name}' foi encontrado.");
         }
 
+        /// <summary>
+        /// Get all Products of an specific Customer.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetProductsByCustomerId(Guid customerId)
         {
@@ -67,7 +92,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
         }
 
+        /// <summary>
+        /// Create a Product.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("api/[controller]")]
         public IActionResult CreateProduct(CreateProductViewModel model)
         {
@@ -95,7 +128,14 @@ namespace SalesProject.Api.Controllers
             product);
         }
 
+        /// <summary>
+        /// Delete a Product by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteProduct(Guid id)
         {
@@ -110,7 +150,17 @@ namespace SalesProject.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Update a Product by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult EditProduct(Guid id, EditProductViewModel model)
         {

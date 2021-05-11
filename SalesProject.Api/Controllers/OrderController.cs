@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Order;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
+using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
 {
@@ -28,7 +30,15 @@ namespace SalesProject.Api.Controllers
             _uow = uow;
         }
 
+        /// <summary>
+        /// Get Order by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetOrder(Guid id)
         {
@@ -40,7 +50,16 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get all Orders using a filter.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/filter")]
         public IActionResult GetOrderUsingFilter([FromQuery] OrderFilterViewModel model)
         {
@@ -68,7 +87,15 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum pedido foi encontrado, usando esse filtro.");
         }
 
+        /// <summary>
+        /// Create a Order.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("api/[controller]")]
         public IActionResult CreateOrder(CreateOrderViewModel model)
         {
