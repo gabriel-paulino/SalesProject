@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Order;
 using SalesProject.Domain.Entities;
@@ -88,7 +89,7 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
-        /// Create a Order.
+        /// Create an Order.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -132,6 +133,37 @@ namespace SalesProject.Api.Controllers
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{order.Id}",
             order);
+        }
+
+        /// <summary>
+        /// Cancel an Order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("api/[controller]/cancel/{id:guid}")]
+        public IActionResult CancelOrder(Guid id)
+        {
+            var order = _orderRepository.Get(id);
+
+            if (order is null)
+                return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
+
+            order.Cancel();
+
+            if (!order.Valid)
+                return ValidationProblem(detail: $"{order.GetNotification()}");
+
+            _orderRepository.Update(order);
+            _uow.Commit();
+
+            return Ok(order);
         }
     }
 }

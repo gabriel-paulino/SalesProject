@@ -46,6 +46,9 @@ namespace SalesProject.Infra.Repositories
                 .ToList();
         }
 
+        public void Update(Order order) =>
+            _context.Entry<Order>(order).State = EntityState.Modified;
+
         public void Dispose()
         {
             if (!_disposed)

@@ -65,5 +65,14 @@ namespace SalesProject.Domain.Entities
         private void UpdateTotalOrder() =>
             this.TotalOrder = OrderLines.Sum(l => l.TotalPrice);
 
+        public void Cancel()
+        {
+            if (Status == OrderStatus.Open)
+            {
+                Status = OrderStatus.Canceled;
+                return;
+            }
+            AddNotification("Não é possível cancelar esse pedido de venda.");              
+        }
     }
 }

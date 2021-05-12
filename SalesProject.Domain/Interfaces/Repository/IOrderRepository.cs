@@ -9,5 +9,6 @@ namespace SalesProject.Domain.Interfaces.Repository
         Order Get(Guid id);
         List<Order> GetOrdersUsingFilter(OrderFilter filter);
         void Create(Order order);
+        void Update(Order order);
     }
 }

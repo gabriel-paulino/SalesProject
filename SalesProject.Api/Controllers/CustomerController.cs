@@ -322,7 +322,6 @@ namespace SalesProject.Api.Controllers
         /// <returns></returns>
         [HttpPatch]
         [Produces(MediaTypeNames.Application.Json)]
-        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
