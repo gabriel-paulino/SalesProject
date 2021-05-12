@@ -40,7 +40,7 @@ namespace SalesProject.Infra.Repositories
             return userDB;
         }
 
-        public User CreateUser(User user, string visiblePassword)
+        public User Create(User user, string visiblePassword)
         {
             var hasher = new PasswordHasher<User>();
 

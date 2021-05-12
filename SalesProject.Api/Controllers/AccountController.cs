@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Account;
 using SalesProject.Domain.Entities;
@@ -87,7 +88,7 @@ namespace SalesProject.Api.Controllers
                 return ValidationProblem(
                     detail: $"Ops. O Cliente com Id: '{userTemp.CustomerId}' já possuí um usuário no sistema");
 
-            var user = _userRepository.CreateUser(userTemp, model.Password);
+            var user = _userRepository.Create(userTemp, model.Password);
             _uow.Commit();
 
             var token = _tokenService.GenerateToken(user);
@@ -107,9 +108,12 @@ namespace SalesProject.Api.Controllers
         /// <returns></returns>
         [HttpPatch]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("api/[controller]/change-password")]        
-        public ActionResult<dynamic> ChangePassword([FromBody] ChangePasswordViewModel model)
+        public IActionResult ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             if (model.NewPassword != model.ConfirmPassword)
                 return ValidationProblem(detail: "Ops. As senhas não coincidem. Tente novamente.");
@@ -123,7 +127,7 @@ namespace SalesProject.Api.Controllers
             _uow.Commit();
 
             user.HidePasswordHash();
-            return user;
+            return Ok(user);
         }
     }
 }
