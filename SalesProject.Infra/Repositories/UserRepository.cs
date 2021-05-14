@@ -19,6 +19,9 @@ namespace SalesProject.Infra.Repositories
         ~UserRepository() =>
             Dispose();
 
+        public User GetByUsername(string username) =>
+            _context.Users.FirstOrDefault(u => u.Username == username);
+
         public User SignIn(User user, string visiblePassword)
         {
             var userDB = _context.Users
@@ -51,8 +54,7 @@ namespace SalesProject.Infra.Repositories
 
         public User ChangePassword(string username, string currentPassword, string newPassword)
         {
-            var user = _context.Users
-                    .FirstOrDefault(u => u.Username.Equals(username));
+            var user = GetByUsername(username);
 
             var hasher = new PasswordHasher<User>();
 
@@ -76,16 +78,16 @@ namespace SalesProject.Infra.Repositories
             .Where(u => u.CustomerId == customerId)
             .FirstOrDefault() != null;
 
+        public bool HasAnotherUserSameUsernameOrEmail(User user) =>
+            _context.Users
+            .Where(u => u.Username == user.Username || u.Email == user.Email)
+            .Any();
+
         public void Dispose()
         {
             if (!_disposed)
                 _context.Dispose();
             GC.SuppressFinalize(this);
-        }
-
-        public bool HasAnotherUserSameUsernameOrEmail(User user) => 
-            _context.Users
-            .Where(u => u.Username == user.Username || u.Email == user.Email)
-            .Any();    
+        }  
     }
 }

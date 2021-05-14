@@ -18,17 +18,20 @@ namespace SalesProject.Api.Controllers
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IOrderRepository _orderRepository;        
         private readonly IUnitOfWork _uow;
 
         public OrderController(
             ICustomerRepository customerRepository,
             IProductRepository productRepository,
+            IUserRepository userRepository,
             IOrderRepository orderRepository,
             IUnitOfWork uow)
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
+            _userRepository = userRepository;
             _orderRepository = orderRepository;
             _uow = uow;
         }
@@ -109,6 +112,17 @@ namespace SalesProject.Api.Controllers
 
             bool isCustomer = User.IsInRole(RoleType.Customer.ToString());
 
+            if (isCustomer)
+            {
+                string username = User.Identity.Name;
+                var user = _userRepository.GetByUsername(username);
+
+                if(user.CustomerId != Guid.Parse(model.CustomerId))
+                    return ValidationProblem(detail:
+                        $"Ops. Não é possível criar esse pedido. " +
+                        $"O usuário '{username}' apenas pode criar pedidos para cliente '{_customerRepository.Get(Guid.Parse(user.CustomerId.ToString())).CompanyName}'.");
+            }
+
             var order =
                     new Order(
                         postingDate: DateTime.Parse(model.PostingDate).Date,
@@ -136,9 +150,8 @@ namespace SalesProject.Api.Controllers
 
                 if(orderLine.Product.CustomerId != order.Customer.Id)
                     return ValidationProblem(detail: 
-                        $@"Ops. Não é possível criar esse pedido.
-                        O produto '{orderLine.Product.Name}' não pertence ao cliente '{order.Customer.CompanyName}'
-                        ");
+                        $"Ops. Não é possível criar esse pedido. " +
+                        $"O produto '{orderLine.Product.Name}' não pertence ao cliente '{order.Customer.CompanyName}'");
 
                 if (isCustomer)
                 {
