@@ -63,6 +63,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("api/[controller]/register")]
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
@@ -83,6 +84,10 @@ namespace SalesProject.Api.Controllers
 
             if (!userTemp.Valid)
                 return ValidationProblem(detail: $"{userTemp.GetNotification()}");
+
+            if(_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
+                return ValidationProblem(
+                    detail: $"Ops. Já existe um usuário com esse Username ou E-mail. Tente novamente.");
 
             if (userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
                 return ValidationProblem(

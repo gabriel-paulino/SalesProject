@@ -7,6 +7,8 @@ using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -94,14 +96,18 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("api/[controller]")]
         public IActionResult CreateOrder(CreateOrderViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            bool isCustomer = User.IsInRole(RoleType.Customer.ToString());
 
             var order =
                     new Order(
@@ -111,17 +117,57 @@ namespace SalesProject.Api.Controllers
                         customer: _customerRepository.Get(Guid.Parse(model.CustomerId))
                         );
 
+            var customerErros = new List<string>();
+
             foreach (var line in model.OrderItens)
             {
+                var product = _productRepository.Get(Guid.Parse(line.ProductId));
+
+                if (product is null)
+                    return ValidationProblem(detail: $"Ops. Produto com Id:'{line.ProductId}' não foi encontrado.");
+
                 var orderLine =
                     new OrderLines(
                                    quantity: line.Quantity,
                                    unitaryPrice: line.UnitaryPrice,
                                    additionalCosts: line.AdditionalCosts,
-                                   product: _productRepository.Get(Guid.Parse(line.ProductId))
+                                   product: product
                                    );
 
+                if(orderLine.Product.CustomerId != order.Customer.Id)
+                    return ValidationProblem(detail: 
+                        $@"Ops. Não é possível criar esse pedido.
+                        O produto '{orderLine.Product.Name}' não pertence ao cliente '{order.Customer.CompanyName}'
+                        ");
+
+                if (isCustomer)
+                {
+                    if (product.CombinedQuantity != orderLine.Quantity)
+                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir quantidade igual à '{product.CombinedQuantity}'.");
+
+                    if (product.CombinedPrice != orderLine.UnitaryPrice)
+                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir preço unitário igual à '{product.CombinedPrice.ToString("C2")}'.");
+
+                    if (product.AdditionalCosts != orderLine.AdditionalCosts)
+                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir custos adicionais igual à '{product.AdditionalCosts.ToString("C2")}'.");
+                }
+
                 order.AddOrderLine(orderLine);
+            }
+
+            if (isCustomer && customerErros.Any())
+            {
+                string errorMessage = string.Empty;
+
+                foreach (var error in customerErros)
+                    errorMessage = $"{errorMessage} " +
+                                   $"{error}";
+
+                errorMessage = $"Ops... Algo deu errado: " +
+                    $"{errorMessage} " +
+                    $"Conforme definido no contrato.";
+                
+                return ValidationProblem(detail: errorMessage);
             }
 
             if (!order.Valid)
@@ -145,8 +191,8 @@ namespace SalesProject.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/cancel/{id:guid}")]
         public IActionResult CancelOrder(Guid id)
         {

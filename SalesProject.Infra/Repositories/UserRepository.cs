@@ -82,5 +82,10 @@ namespace SalesProject.Infra.Repositories
                 _context.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        public bool HasAnotherUserSameUsernameOrEmail(User user) => 
+            _context.Users
+            .Where(u => u.Username == user.Username || u.Email == user.Email)
+            .Any();    
     }
 }

@@ -9,5 +9,6 @@ namespace SalesProject.Domain.Interfaces.Repository
         User SignIn(User user, string visiblePassword);
         User ChangePassword(string username, string currentPassword, string newPassword);
         bool HasCustomerLink(Guid? customerId);
+        bool HasAnotherUserSameUsernameOrEmail(User user);
     }
 }
