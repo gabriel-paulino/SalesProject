@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SalesProject.Api.ViewModels.Order
 {
-    public class CreateOrderViewModel
+    public class EditOrderViewModel
     {
         [Required(ErrorMessage = "O campo 'Data lançamento' é obrigatório")]
         [Display(Name = "Data lançamento")]
@@ -17,15 +17,13 @@ namespace SalesProject.Api.ViewModels.Order
         public string Observation { get; set; }
 
         [Required]
-        public List<CreateOrderItem> OrderItens { get; set; }
-
-        [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
-        [Display(Name = "Cliente")]
-        public string CustomerId { get; set; }
+        public List<EditOrderItem> OrderItens { get; set; }
     }
-
-    public class CreateOrderItem
+    public class EditOrderItem
     {
+        [Display(Name = "Id")]
+        public string Id { get; set; }
+
         [Required(ErrorMessage = "O campo 'Quantidade' é obrigatório")]
         [Display(Name = "Quantidade")]
         public double Quantity { get; set; }

@@ -172,7 +172,7 @@ namespace SalesProject.Api.Controllers
                         stateRegistration: model.StateRegistration);
 
             if (!customer.Valid)
-                return ValidationProblem(detail: $"{customer.GetNotification()}");
+                return ValidationProblem($"{customer.GetNotification()}");
 
             _customerRepository.Create(customer);
             _uow.Commit();
@@ -208,7 +208,7 @@ namespace SalesProject.Api.Controllers
                         stateRegistration: model.StateRegistration);
 
             if (!customer.Valid)
-                return ValidationProblem(detail: $"{customer.GetNotification()}");
+                return ValidationProblem($"{customer.GetNotification()}");
 
             foreach (var line in model.Adresses)
             {
@@ -225,7 +225,7 @@ namespace SalesProject.Api.Controllers
                         customerId: customer.Id);
 
                 if (!address.Valid)
-                    return ValidationProblem(detail: $"{address.GetNotification()}");
+                    return ValidationProblem($"{address.GetNotification()}");
 
                 customer.AddAddress(address);
             }
@@ -241,7 +241,7 @@ namespace SalesProject.Api.Controllers
                                 customerId: customer.Id);
 
                 if (!contact.Valid)
-                    return ValidationProblem(detail: $"{contact.GetNotification()}");
+                    return ValidationProblem($"{contact.GetNotification()}");
 
                 customer.AddContact(contact);
             }
@@ -306,7 +306,7 @@ namespace SalesProject.Api.Controllers
                         stateRegistration: model.StateRegistration);
 
             if (!newCustomer.Valid)
-                return ValidationProblem(detail: $"{newCustomer.GetNotification()}");
+                return ValidationProblem($"{newCustomer.GetNotification()}");
 
             _customerRepository.Update(newCustomer);
             _uow.Commit();
@@ -343,7 +343,7 @@ namespace SalesProject.Api.Controllers
                         stateRegistration: model.StateRegistration);
 
             if (!newCustomer.Valid)
-                return ValidationProblem(detail: $"{newCustomer.GetNotification()}");
+                return ValidationProblem($"{newCustomer.GetNotification()}");
 
             #region Manage Adresses
 
@@ -390,7 +390,7 @@ namespace SalesProject.Api.Controllers
                                 customerId: oldCustomer.Id);
 
                     if (!newAddress.Valid)
-                        return ValidationProblem(detail: $"{newAddress.GetNotification()}");
+                        return ValidationProblem($"{newAddress.GetNotification()}");
 
                     newAdresses.Add(newAddress);
                 }
@@ -418,7 +418,7 @@ namespace SalesProject.Api.Controllers
                             state: addressModel.State);
 
                 if (!address.Valid)
-                    return ValidationProblem(detail: $"{address.GetNotification()}");
+                    return ValidationProblem($"{address.GetNotification()}");
             }
 
             #endregion
@@ -465,7 +465,7 @@ namespace SalesProject.Api.Controllers
                             customerId: oldCustomer.Id);
 
                     if (!newContact.Valid)
-                        return ValidationProblem(detail: $"{newContact.GetNotification()}");
+                        return ValidationProblem($"{newContact.GetNotification()}");
 
                     newContacts.Add(newContact);
                 }
@@ -490,7 +490,7 @@ namespace SalesProject.Api.Controllers
                         phone: contactModel.Phone);
 
                 if (!contact.Valid)
-                    return ValidationProblem(detail: $"{contact.GetNotification()}");
+                    return ValidationProblem($"{contact.GetNotification()}");
             }
 
             #endregion

@@ -117,7 +117,7 @@ namespace SalesProject.Api.Controllers
                         customerId: Guid.Parse(model.CustomerId));
 
             if (!contact.Valid)
-                return ValidationProblem(detail: $"{contact.GetNotification()}");
+                return ValidationProblem($"{contact.GetNotification()}");
 
             _contactRepository.Create(contact);
             _uow.Commit();
@@ -180,7 +180,7 @@ namespace SalesProject.Api.Controllers
                         phone: model.Phone);
 
             if (!newContact.Valid)
-                return ValidationProblem(detail: $"{newContact.GetNotification()}");
+                return ValidationProblem($"{newContact.GetNotification()}");
 
             _contactRepository.Update(newContact);
             _uow.Commit();

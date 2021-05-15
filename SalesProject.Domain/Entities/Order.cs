@@ -11,7 +11,7 @@ namespace SalesProject.Domain.Entities
         public Order()
         {
             this.Status = OrderStatus.Open;
-            _orderLines = new List<OrderLines>();
+            _orderLines = new List<OrderLine>();
         }
 
         public Order(
@@ -25,25 +25,46 @@ namespace SalesProject.Domain.Entities
             this.DeliveryDate = deliveryDate;
             this.Status = OrderStatus.Open;
             this.Observation = observation;
-            _orderLines = new List<OrderLines>();
+            _orderLines = new List<OrderLine>();
 
             DoValidations();
         }
 
-        private IList<OrderLines> _orderLines;
+        private IList<OrderLine> _orderLines;
 
         public DateTime PostingDate { get; private set; }
         public DateTime DeliveryDate { get; private set; }
         public OrderStatus Status { get; private set; }
         public decimal TotalOrder { get; private set; }
         public string Observation { get; private set; }
-        public IReadOnlyCollection<OrderLines> OrderLines { get => _orderLines.ToArray(); }
+        public IReadOnlyCollection<OrderLine> OrderLines { get => _orderLines.ToArray(); }
         public Customer Customer { get; private set; }
         public Guid? CustomerId { get; private set; }
 
-        public void AddOrderLine(OrderLines orderLine)
+
+        public Order Edit(
+            DateTime postingDate,
+            DateTime deliveryDate,
+            string observation)
+        {
+            this.PostingDate = postingDate;
+            this.DeliveryDate = deliveryDate;
+            this.Observation = observation;
+
+            DoValidations();
+
+            return this;
+        }
+
+        public void AddOrderLine(OrderLine orderLine)
         {
             _orderLines.Add(orderLine);
+            UpdateTotalOrder();
+        }
+
+        public void RemoveOrderLine(OrderLine orderLine)
+        {
+            _orderLines.Remove(orderLine);
             UpdateTotalOrder();
         }
 
@@ -62,7 +83,7 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
 
-        private void UpdateTotalOrder() =>
+        public void UpdateTotalOrder() =>
             this.TotalOrder = OrderLines.Sum(l => l.TotalPrice);
 
         public void Cancel()

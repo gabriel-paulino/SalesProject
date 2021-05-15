@@ -118,7 +118,7 @@ namespace SalesProject.Api.Controllers
                         customerId: Guid.Parse(model.CustomerId));
 
             if (!product.Valid)
-                return ValidationProblem(detail: $"{product.GetNotification()}");
+                return ValidationProblem($"{product.GetNotification()}");
 
             _productRepository.Create(product);
             _uow.Commit();
@@ -182,7 +182,7 @@ namespace SalesProject.Api.Controllers
                         details: model.Details);
 
             if (!newProduct.Valid)
-                return ValidationProblem(detail: $"{newProduct.GetNotification()}");
+                return ValidationProblem($"{newProduct.GetNotification()}");
 
             _productRepository.Update(newProduct);
             _uow.Commit();

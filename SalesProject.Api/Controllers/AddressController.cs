@@ -169,7 +169,7 @@ namespace SalesProject.Api.Controllers
                         customerId: Guid.Parse(model.CustomerId));
 
             if (!address.Valid)
-                return ValidationProblem(detail: $"{address.GetNotification()}");
+                return ValidationProblem($"{address.GetNotification()}");
 
             _addressRepository.Create(address);
             _uow.Commit();
@@ -235,7 +235,7 @@ namespace SalesProject.Api.Controllers
                         state: model.State);
 
             if (!newAddress.Valid)
-                return ValidationProblem(detail: $"{newAddress.GetNotification()}");
+                return ValidationProblem($"{newAddress.GetNotification()}");
 
             _addressRepository.Update(newAddress);
             _uow.Commit();

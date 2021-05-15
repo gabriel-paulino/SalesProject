@@ -5,9 +5,9 @@ using SalesProject.Domain.Entities;
 
 namespace SalesProject.Infra.Mapping
 {
-    public class OrderLinesMap : IEntityTypeConfiguration<OrderLines>
+    public class OrderLinesMap : IEntityTypeConfiguration<OrderLine>
     {
-        public void Configure(EntityTypeBuilder<OrderLines> builder)
+        public void Configure(EntityTypeBuilder<OrderLine> builder)
         {
             builder.Property(c => c.Id).
                 ValueGeneratedOnAdd().

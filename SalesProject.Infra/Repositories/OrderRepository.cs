@@ -32,6 +32,7 @@ namespace SalesProject.Infra.Repositories
         public List<Order> GetOrdersUsingFilter(OrderFilter filter)
         {
             IQueryable<Order> query = _context.Orders;
+
             if (filter.IsFilledCustomerId()) 
                 query = query.Where(o => o.CustomerId == filter.CustomerId);
             if (filter.IsFilledOrderStatus()) 
@@ -42,7 +43,7 @@ namespace SalesProject.Infra.Repositories
                 query = query.Where(o => o.PostingDate <= filter.EndDate);
 
             return query
-                .Include(ol => ol.OrderLines)
+                .Include(o => o.OrderLines)
                 .ToList();
         }
 

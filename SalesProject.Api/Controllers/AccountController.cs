@@ -45,7 +45,7 @@ namespace SalesProject.Api.Controllers
             var user = _userRepository.SignIn(userTemp, model.VisiblePassword);
 
             if (!user.Valid)
-                return ValidationProblem(detail: $"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetNotification()}");
 
             var token = _tokenService.GenerateToken(user);
             user.HidePasswordHash();
@@ -69,7 +69,7 @@ namespace SalesProject.Api.Controllers
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
         {
             if (model.Password != model.ConfirmPassword)
-                return ValidationProblem(detail: "Ops. As senhas não coincidem. Tente novamente.");
+                return ValidationProblem("Ops. As senhas não coincidem. Tente novamente.");
 
             var userTemp = (RoleType)model.Role == RoleType.Customer
                 ? new User(
@@ -83,7 +83,7 @@ namespace SalesProject.Api.Controllers
                 ;
 
             if (!userTemp.Valid)
-                return ValidationProblem(detail: $"{userTemp.GetNotification()}");
+                return ValidationProblem($"{userTemp.GetNotification()}");
 
             if(_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
                 return ValidationProblem(
@@ -121,13 +121,13 @@ namespace SalesProject.Api.Controllers
         public IActionResult ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             if (model.NewPassword != model.ConfirmPassword)
-                return ValidationProblem(detail: "Ops. As senhas não coincidem. Tente novamente.");
+                return ValidationProblem("Ops. As senhas não coincidem. Tente novamente.");
 
             var username = User.Identity.Name;
             var user = _userRepository.ChangePassword(username, model.CurrentPassword, model.NewPassword);
 
             if(!user.Valid)
-                return ValidationProblem(detail: $"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetNotification()}");
 
             _uow.Commit();
 

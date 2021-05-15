@@ -83,7 +83,7 @@ namespace SalesProject.Api.Controllers
                     );
 
             if (!filter.Valid)
-                return ValidationProblem(detail: $"{filter.GetNotification()}");
+                return ValidationProblem($"{filter.GetNotification()}");
 
             var orders = _orderRepository.GetOrdersUsingFilter(filter);
 
@@ -95,6 +95,7 @@ namespace SalesProject.Api.Controllers
 
         /// <summary>
         /// Create an Order.
+        /// Customers can create Orders, but they must follow the contract.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -118,7 +119,7 @@ namespace SalesProject.Api.Controllers
                 var user = _userRepository.GetByUsername(username);
 
                 if(user.CustomerId != Guid.Parse(model.CustomerId))
-                    return ValidationProblem(detail:
+                    return ValidationProblem(
                         $"Ops. Não é possível criar esse pedido. " +
                         $"O usuário '{username}' apenas pode criar pedidos para cliente '{_customerRepository.Get(Guid.Parse(user.CustomerId.ToString())).CompanyName}'.");
             }
@@ -138,10 +139,10 @@ namespace SalesProject.Api.Controllers
                 var product = _productRepository.Get(Guid.Parse(line.ProductId));
 
                 if (product is null)
-                    return ValidationProblem(detail: $"Ops. Produto com Id:'{line.ProductId}' não foi encontrado.");
+                    return ValidationProblem($"Ops. Produto com Id:'{line.ProductId}' não foi encontrado.");
 
                 var orderLine =
-                    new OrderLines(
+                    new OrderLine(
                                    quantity: line.Quantity,
                                    unitaryPrice: line.UnitaryPrice,
                                    additionalCosts: line.AdditionalCosts,
@@ -149,7 +150,7 @@ namespace SalesProject.Api.Controllers
                                    );
 
                 if(orderLine.Product.CustomerId != order.Customer.Id)
-                    return ValidationProblem(detail: 
+                    return ValidationProblem(
                         $"Ops. Não é possível criar esse pedido. " +
                         $"O produto '{orderLine.Product.Name}' não pertence ao cliente '{order.Customer.CompanyName}'");
 
@@ -180,11 +181,11 @@ namespace SalesProject.Api.Controllers
                     $"{errorMessage} " +
                     $"Conforme definido no contrato.";
                 
-                return ValidationProblem(detail: errorMessage);
+                return ValidationProblem(errorMessage);
             }
 
             if (!order.Valid)
-                return ValidationProblem(detail: $"{order.GetNotification()}");
+                return ValidationProblem($"{order.GetNotification()}");
 
             _orderRepository.Create(order);
             _uow.Commit();
@@ -195,7 +196,7 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
-        /// Cancel an Order
+        /// Cancel an Order.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -217,12 +218,142 @@ namespace SalesProject.Api.Controllers
             order.Cancel();
 
             if (!order.Valid)
-                return ValidationProblem(detail: $"{order.GetNotification()}");
+                return ValidationProblem($"{order.GetNotification()}");
 
             _orderRepository.Update(order);
             _uow.Commit();
 
             return Ok(order);
+        }
+
+        /// <summary>
+        /// Update an Order.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/{id:guid}")]
+        public IActionResult EditOrder(Guid id, EditOrderViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentOrder = _orderRepository.Get(id);
+
+            if (currentOrder is null)
+                return NotFound($"Ops. Pedido de Venda com Id:'{id}' não foi encontrado.");
+
+            if (currentOrder.Status != OrderStatus.Open)
+                return ValidationProblem($"Ops. Não é possível alterar esse Pedido, pois o Status não é 'Aberto'.");
+
+            var updatedOrder = currentOrder.
+                        Edit(
+                        postingDate: DateTime.Parse(model.PostingDate).Date,
+                        deliveryDate: DateTime.Parse(model.DeliveryDate).Date,
+                        observation: model.Observation);
+
+            if (!updatedOrder.Valid)
+                return ValidationProblem($"{updatedOrder.GetNotification()}");
+
+            List<OrderLine> newOrderLines = new List<OrderLine>();
+            List<OrderLine> removedOrderLines = new List<OrderLine>();
+
+            foreach (var orderLine in updatedOrder.OrderLines)
+            {
+                bool remove = false;
+
+                for (int i = 0; i < model.OrderItens.Count; i++)
+                {
+                    Guid currentIdOrderLines = string.IsNullOrEmpty(model.OrderItens[i].Id)
+                    ? new Guid()
+                    : Guid.Parse(model.OrderItens[i].Id);
+
+                    if (orderLine.Id == currentIdOrderLines)
+                        break;
+
+                    if (i == model.OrderItens.Count - 1)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+                if (remove)
+                    removedOrderLines.Add(orderLine);
+            }
+
+            foreach (var orderLineModel in model.OrderItens)
+            {
+                if (string.IsNullOrEmpty(orderLineModel.Id))
+                {
+                    var product = _productRepository.Get(Guid.Parse(orderLineModel.ProductId));
+
+                    if (product is null)
+                        return ValidationProblem($"Ops. Produto com Id:'{orderLineModel.ProductId}' não foi encontrado.");
+
+                    var newOrderLine =
+                            new OrderLine(
+                                   quantity: orderLineModel.Quantity,
+                                   unitaryPrice: orderLineModel.UnitaryPrice,
+                                   additionalCosts: orderLineModel.AdditionalCosts,
+                                   product: product
+                                   );
+
+                    if (!newOrderLine.Valid)
+                        return ValidationProblem($"{newOrderLine.GetNotification()}");
+
+                    newOrderLines.Add(newOrderLine);
+                }
+            }
+
+            foreach (var orderLineModel in model.OrderItens)
+            {
+                if (string.IsNullOrEmpty(orderLineModel.Id))
+                    continue;
+
+                var orderLine =
+                    updatedOrder
+                    .OrderLines
+                    .Where(ol => ol.Id == Guid.Parse(orderLineModel.Id))
+                    .FirstOrDefault();
+
+                var product = _productRepository.Get(Guid.Parse(orderLineModel.ProductId));
+
+                if (product is null)
+                    return ValidationProblem($"Ops. Produto com Id:'{orderLineModel.ProductId}' não foi encontrado.");
+
+                orderLine.Edit(
+                                quantity: orderLineModel.Quantity,
+                                unitaryPrice: orderLineModel.UnitaryPrice,
+                                additionalCosts: orderLineModel.AdditionalCosts,
+                                product: product
+                                );
+
+                if (!orderLine.Valid)
+                    return ValidationProblem($"{orderLine.GetNotification()}");
+            }
+
+            if (newOrderLines.Any())
+                foreach (var newOrderLine in newOrderLines)
+                    updatedOrder.AddOrderLine(newOrderLine);
+
+            if (removedOrderLines.Any())
+                foreach (var orderLine in removedOrderLines)
+                    updatedOrder.RemoveOrderLine(orderLine);
+
+            updatedOrder.UpdateTotalOrder();
+
+            _orderRepository.Update(updatedOrder);
+            _uow.Commit();
+
+            return Ok(updatedOrder);
         }
     }
 }
