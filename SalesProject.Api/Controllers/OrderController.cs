@@ -227,6 +227,37 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
+        /// Approve an Order.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/approve/{id:guid}")]
+        public IActionResult ApproveOrder(Guid id)
+        {
+            var order = _orderRepository.Get(id);
+
+            if (order is null)
+                return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
+
+            order.Approve();
+
+            if (!order.Valid)
+                return ValidationProblem($"{order.GetNotification()}");
+
+            _orderRepository.Update(order);
+            _uow.Commit();
+
+            return Ok(order);
+        }
+
+        /// <summary>
         /// Update an Order.
         /// </summary>
         /// <param name="id"></param>

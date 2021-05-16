@@ -95,5 +95,15 @@ namespace SalesProject.Domain.Entities
             }
             AddNotification("Não é possível cancelar esse pedido de venda.");              
         }
+
+        public void Approve()
+        {
+            if (Status == OrderStatus.Open)
+            {
+                Status = OrderStatus.Approved;
+                return;
+            }
+            AddNotification("Não é possível aprovar esse pedido de venda.");
+        }
     }
 }
