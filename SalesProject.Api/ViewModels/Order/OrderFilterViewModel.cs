@@ -9,7 +9,7 @@ namespace SalesProject.Api.ViewModels.Order
         public Guid? CustomerId { get; set; }
 
         [Display(Name = "Status")]
-        [Range(1, 3)]
+        [Range(1, 4)]
         public int? Status { get; set; }
 
         [Display(Name = "Data inicial")]

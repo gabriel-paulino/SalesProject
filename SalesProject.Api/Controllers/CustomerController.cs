@@ -186,7 +186,9 @@ namespace SalesProject.Api.Controllers
         /// Create a Customer with Adresses and Contacts.
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>A newly created Customer</returns>
+        /// <response code="201">Returns the newly created customer</response>
+        /// <response code="400">If the customer is invalid</response> 
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [Consumes(MediaTypeNames.Application.Json)]

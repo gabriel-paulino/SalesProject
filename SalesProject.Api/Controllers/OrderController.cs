@@ -386,5 +386,32 @@ namespace SalesProject.Api.Controllers
 
             return Ok(updatedOrder);
         }
+
+        /// <summary>
+        /// Get Order Information by period.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/dashboard")]
+        public IActionResult Dashboard([FromQuery] OrderDashboardViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var orderDashboard = _orderRepository.GetInformationByPeriod(model.StartDate, model.EndDate);
+
+            if (orderDashboard != null)
+                return orderDashboard.Valid 
+                    ? Ok(orderDashboard)
+                    : ValidationProblem($"{orderDashboard.GetNotification()}");
+            
+            return NotFound($"Ops. Não foi possível encontrar dados para esse período pedido.");
+        }
+
     }
 }

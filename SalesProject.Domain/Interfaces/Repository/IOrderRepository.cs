@@ -10,5 +10,6 @@ namespace SalesProject.Domain.Interfaces.Repository
         List<Order> GetOrdersUsingFilter(OrderFilter filter);
         void Create(Order order);
         void Update(Order order);
+        OrderDashboard GetInformationByPeriod(DateTime start, DateTime end);
     }
 }
