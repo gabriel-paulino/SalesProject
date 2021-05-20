@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Address;
 using SalesProject.Domain.Entities;
@@ -37,8 +38,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetAddress(Guid id)
@@ -57,8 +61,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="description"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/description/{description}")]
         public IActionResult GetAddresesByDescription(string description)
@@ -77,8 +84,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="city"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/city/{city}")]
         public IActionResult GetAddresesByCity(string city)
@@ -97,9 +107,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="zipCode"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/zipcode/{zipCode}")]
         public IActionResult CompleteAddressApi(string zipCode)
@@ -121,8 +134,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="customerId"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetAddresesByCustomerId(Guid customerId)
@@ -147,9 +163,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/[controller]")]
         public IActionResult CreateAddress(CreateAddressViewModel model)
         {
@@ -185,7 +204,10 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Authorize(Roles = "Seller,Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteAddress(Guid id)
@@ -208,9 +230,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult EditAddress(Guid id, EditAddressViewModel model)

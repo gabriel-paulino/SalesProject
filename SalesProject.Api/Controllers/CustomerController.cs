@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Customer;
 using SalesProject.Domain.Entities;
@@ -35,8 +36,11 @@ namespace SalesProject.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/[controller]")]
         public IActionResult GetCustomers() =>
             Ok(_customerRepository.GetAll());
@@ -47,8 +51,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetCustomer(Guid id)
@@ -67,8 +74,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/full/[controller]/{id:guid}")]
         public IActionResult GetFullCustomer(Guid id)
@@ -87,8 +97,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/complete/[controller]/{id:guid}")]
         public IActionResult GetCompleteCustomer(Guid id)
@@ -107,8 +120,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetCustomersByName(string name)
@@ -127,9 +143,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="customerCnpj"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/cnpj/{customerCnpj}")]
         public IActionResult CompleteCustomerApi(string customerCnpj)
@@ -153,9 +172,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/[controller]")]
         public IActionResult CreateCustomer(CreateCustomerViewModel model)
         {
@@ -190,10 +212,13 @@ namespace SalesProject.Api.Controllers
         /// <response code="201">Returns the newly created customer</response>
         /// <response code="400">If the customer is invalid</response> 
         [HttpPost]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/complete/[controller]")]
         public IActionResult CreateCompleteCustomer(CreateCompleteCustomerViewModel model)
         {
@@ -263,7 +288,10 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Authorize(Roles = "Seller,Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteCustomer(Guid id)
@@ -286,9 +314,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult EditCustomer(Guid id, EditCustomerViewModel model)
@@ -323,9 +354,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/complete/[controller]/{id:guid}")]
         public IActionResult EditCompleteCustomer(Guid id, EditCompleteCustomerViewModel model)

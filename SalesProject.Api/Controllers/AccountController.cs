@@ -63,7 +63,10 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "It,Administrator")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("api/[controller]/register")]
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
@@ -112,7 +115,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch]
-        [Authorize]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

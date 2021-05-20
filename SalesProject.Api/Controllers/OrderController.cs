@@ -42,8 +42,10 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetOrder(Guid id)
@@ -62,9 +64,11 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/filter")]
         public IActionResult GetOrderUsingFilter([FromQuery] OrderFilterViewModel model)
@@ -205,6 +209,7 @@ namespace SalesProject.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/cancel/{id:guid}")]
@@ -236,6 +241,7 @@ namespace SalesProject.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/approve/{id:guid}")]
@@ -393,9 +399,12 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/dashboard")]
         public IActionResult Dashboard([FromQuery] OrderDashboardViewModel model)
