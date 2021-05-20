@@ -139,5 +139,30 @@ namespace SalesProject.Api.Controllers
             user.HidePasswordHash();
             return Ok(user);
         }
+
+        /// <summary>
+        /// Delete an User by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize(Roles = "It,Administrator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/{id:guid}")]
+        public IActionResult DeleteUser(Guid id)
+        {
+            var user = _userRepository.Get(id);
+
+            if (user == null)
+                return NotFound($"Ops. Usuário com Id:'{id}' não foi encontrado.");
+
+            _userRepository.Delete(user);
+            _uow.Commit();
+
+            return Ok();
+        }
     }
 }

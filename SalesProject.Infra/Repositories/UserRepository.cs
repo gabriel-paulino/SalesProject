@@ -19,6 +19,9 @@ namespace SalesProject.Infra.Repositories
         ~UserRepository() =>
             Dispose();
 
+        public User Get(Guid id) =>
+            _context.Users.Find(id);
+
         public User GetByUsername(string username) =>
             _context.Users.FirstOrDefault(u => u.Username == username);
 
@@ -73,6 +76,9 @@ namespace SalesProject.Infra.Repositories
             return user;
         }
 
+        public void Delete(User user) =>
+            _context.Users.Remove(user);
+
         public bool HasCustomerLink(Guid? customerId) =>
            _context.Users
             .Where(u => u.CustomerId == customerId)
@@ -88,6 +94,6 @@ namespace SalesProject.Infra.Repositories
             if (!_disposed)
                 _context.Dispose();
             GC.SuppressFinalize(this);
-        }  
+        }
     }
 }
