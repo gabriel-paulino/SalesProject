@@ -63,7 +63,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "It,Administrator")]
+        //[Authorize(Roles = "It,Administrator")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -77,10 +77,12 @@ namespace SalesProject.Api.Controllers
             var userTemp = (RoleType)model.Role == RoleType.Customer
                 ? new User(
                     username: model.Username,
+                    name: model.Name,
                     email: model.Email,
                     customerId: Guid.Parse(model.CustomerId))
                 : new User(
                     username: model.Username,
+                    name: model.Name,
                     email: model.Email,
                     role: (RoleType)model.Role)
                 ;

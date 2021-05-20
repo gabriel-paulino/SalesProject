@@ -8,6 +8,10 @@ namespace SalesProject.Api.ViewModels.Account
         [Required(ErrorMessage = "O campo 'Usuário' é obrigatório")]
         public string Username { get; set; }
 
+        [Display(Name = "Nome")]
+        [Required(ErrorMessage = "O campo 'Nome' é obrigatório")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "O campo 'E-mail' é obrigatório")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }

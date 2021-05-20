@@ -19,6 +19,12 @@ namespace SalesProject.Infra.Mapping
                 HasColumnType("varchar(50)").
                 IsRequired();
 
+            builder.Property(u => u.Name).
+                HasColumnName(UserConstants.FieldName).
+                HasMaxLength(50).
+                HasColumnType("varchar(50)").
+                IsRequired();
+
             builder.Property(u => u.Email).
                 HasColumnName(UserConstants.FieldEmail).
                 HasMaxLength(50).

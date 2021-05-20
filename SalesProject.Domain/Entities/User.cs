@@ -11,10 +11,12 @@ namespace SalesProject.Domain.Entities
 
         public User(
             string username,
+            string name,
             string email,
             Guid? customerId)
         {
             this.Username = string.IsNullOrEmpty(username) ? email : username;
+            this.Name = name;
             this.Email = email;
             this.Role = RoleType.Customer;
             this.CustomerId = customerId;
@@ -24,10 +26,12 @@ namespace SalesProject.Domain.Entities
 
         public User(
             string username,
+            string name,
             string email,
             RoleType role)
         {
             this.Username = string.IsNullOrEmpty(username) ? email : username;
+            this.Name = name;
             this.Email = email;
             this.Role = role;
 
@@ -35,6 +39,7 @@ namespace SalesProject.Domain.Entities
         }
 
         public string Username { get; private set; }
+        public string Name { get; private set; }
         public string Email { get; private set; }
         public string PasswordHash { get; private set; }
         public RoleType Role { get; private set; }
@@ -59,6 +64,8 @@ namespace SalesProject.Domain.Entities
         {
             if (string.IsNullOrEmpty(Username))
                 AddNotification("O preenchimento do campo 'Usuário' é obrigatório.");
+            if (string.IsNullOrEmpty(Name))
+                AddNotification("O preenchimento do campo 'Nome' é obrigatório.");
             if (string.IsNullOrEmpty(Email))
                 AddNotification("O preenchimento do campo 'E-mail' é obrigatório.");
         }

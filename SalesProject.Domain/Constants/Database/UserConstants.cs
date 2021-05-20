@@ -5,6 +5,7 @@
         public const string
             TableUser = "Usuario",
             FieldUsername = "Usuario",
+            FieldName = "Nome",
             FieldEmail = "Email",
             FieldPasswordHash = "SenhaCriptografada",
             FieldRole = "Funcao",
