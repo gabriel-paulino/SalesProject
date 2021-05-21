@@ -186,7 +186,7 @@ namespace SalesProject.Api.Controllers
 
             var customer =
                     new Customer(
-                        cnpj: model.Cnpj,
+                        cnpj: RemoveCharacters(model.Cnpj),
                         companyName: model.CompanyName,
                         opening: DateTime.Parse(model.Opening).Date,
                         phone: model.Phone,
@@ -195,6 +195,9 @@ namespace SalesProject.Api.Controllers
 
             if (!customer.Valid)
                 return ValidationProblem($"{customer.GetNotification()}");
+
+            if (_customerRepository.HasAnotherCustomerWithThisCnpj(customer.Cnpj))
+                return ValidationProblem($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
 
             _customerRepository.Create(customer);
             _uow.Commit();
@@ -227,7 +230,7 @@ namespace SalesProject.Api.Controllers
 
             var customer =
                     new Customer(
-                        cnpj: model.Cnpj,
+                        cnpj: RemoveCharacters(model.Cnpj),
                         companyName: model.CompanyName,
                         opening: DateTime.Parse(model.Opening).Date,
                         phone: model.Phone,
@@ -236,6 +239,9 @@ namespace SalesProject.Api.Controllers
 
             if (!customer.Valid)
                 return ValidationProblem($"{customer.GetNotification()}");
+
+            if (_customerRepository.HasAnotherCustomerWithThisCnpj(customer.Cnpj))
+                return ValidationProblem($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
 
             foreach (var line in model.Adresses)
             {
@@ -552,5 +558,8 @@ namespace SalesProject.Api.Controllers
 
             return Ok(newCustomer);
         }
+
+        private string RemoveCharacters(string cnpj) =>
+            cnpj.Replace(".", string.Empty).Replace("/", string.Empty).Replace("-", string.Empty);
     }
 }

@@ -48,6 +48,9 @@ namespace SalesProject.Infra.Repositories
         public List<Customer> GetByName(string name) =>
             _context.Customers.Where(x => x.CompanyName.Contains(name)).ToList();
 
+        public bool HasAnotherCustomerWithThisCnpj(string cnpj) =>
+            _context.Customers.Where(x => x.Cnpj == cnpj).Any();
+
         public void Update(Customer customer) =>
             _context.Entry<Customer>(customer).State = EntityState.Modified;
 

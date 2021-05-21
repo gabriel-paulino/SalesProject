@@ -16,15 +16,18 @@ namespace SalesProject.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
         private readonly ITokenService _tokenService;
 
         public AccountController(
             IUserRepository userRepository,
+            ICustomerRepository customerRepository,
             ITokenService tokenService,
             IUnitOfWork uow)
         {
             _userRepository = userRepository;
+            _customerRepository = customerRepository;
             _tokenService = tokenService;
             _uow = uow;
         }
@@ -37,7 +40,7 @@ namespace SalesProject.Api.Controllers
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [AllowAnonymous]
-        [Route("api/[controller]/login")]       
+        [Route("api/[controller]/login")]
         public ActionResult<dynamic> Login([FromBody] LoginViewModel model)
         {
             var userTemp = new User(username: model.Username);
@@ -90,7 +93,7 @@ namespace SalesProject.Api.Controllers
             if (!userTemp.Valid)
                 return ValidationProblem($"{userTemp.GetNotification()}");
 
-            if(_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
+            if (_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
                 return ValidationProblem(
                     detail: $"Ops. Já existe um usuário com esse Username ou E-mail. Tente novamente.");
 
@@ -122,7 +125,7 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("api/[controller]/change-password")]        
+        [Route("api/[controller]/change-password")]
         public IActionResult ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             if (model.NewPassword != model.ConfirmPassword)
@@ -131,7 +134,7 @@ namespace SalesProject.Api.Controllers
             var username = User.Identity.Name;
             var user = _userRepository.ChangePassword(username, model.CurrentPassword, model.NewPassword);
 
-            if(!user.Valid)
+            if (!user.Valid)
                 return ValidationProblem($"{user.GetNotification()}");
 
             _uow.Commit();
@@ -163,6 +166,38 @@ namespace SalesProject.Api.Controllers
             _uow.Commit();
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Change the Role of a specific User.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize(Roles = "It,Administrator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("api/[controller]/change-role")]
+        public IActionResult ChangeRole(Guid id, ChangeRoleViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = _userRepository.Get(id);
+
+            user.ChangeRole((RoleType)model.Role);
+
+            if (!user.Valid)
+                return ValidationProblem($"{user.GetNotification()}");
+
+            _uow.Commit();
+
+            user.HidePasswordHash();
+            return Ok(user);
         }
     }
 }
