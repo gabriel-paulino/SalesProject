@@ -67,9 +67,9 @@ namespace SalesProject.Api.Controllers
         [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/filter")]
         public IActionResult GetOrderUsingFilter([FromQuery] OrderFilterViewModel model)
         {
@@ -94,7 +94,7 @@ namespace SalesProject.Api.Controllers
             if (orders.Count != 0)
                 return Ok(orders);
 
-            return NotFound($"Ops. Nenhum pedido foi encontrado, usando esse filtro.");
+            return NoContent();
         }
 
         /// <summary>
