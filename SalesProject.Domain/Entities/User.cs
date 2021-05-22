@@ -50,20 +50,20 @@ namespace SalesProject.Domain.Entities
         public void EncryptPassword(string passwordHash) =>
             this.PasswordHash = passwordHash;
 
-        public void ChangeRole(RoleType role)
+        public void ChangeRole(RoleType newRole)
         {
             if (this.Role == RoleType.Customer)
             {
                 AddNotification($"Ops. Não é possível atribur uma função de 'Funcionário' para um cliente.");
                 return;
             }
-            if (role == RoleType.Customer)
+            if (newRole == RoleType.Customer)
             {
                 AddNotification($"Ops. Não é possível atribur a função de 'Cliente' para um funcionário.");
                 return;
             }
-                
-            this.Role = role;
+            
+            this.Role = newRole;
             DoValidations();
         }
 

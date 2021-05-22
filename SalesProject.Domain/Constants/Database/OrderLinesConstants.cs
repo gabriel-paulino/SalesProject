@@ -3,12 +3,12 @@
     public struct OrderLinesConstants
     {
         public const string
-            TableOrderLines = "ItemPedidoVenda",
+            TableOrderLines = "ItemPedido",
             FieldQuantity = "Quantidade",
-            FieldUnitaryPrice = "PrecoUnitario",
-            FieldTotalPrice = "PrecoTotal",
+            FieldUnitaryPrice = "ValorUnitario",
+            FieldTotalPrice = "TotalItem",
             FieldAdditionalCosts = "CustosAdicionais",
-            FieldOrderId = "PedidoVendaId",
+            FieldOrderId = "PedidoId",
             FieldProductId = "ProdutoId";
     }
 }

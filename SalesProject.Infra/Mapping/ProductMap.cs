@@ -9,47 +9,47 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(p => p.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
-            builder.Property(c => c.Name).
+            builder.Property(p => p.Name).
                 HasColumnName(ProductConstants.FieldName).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
                 IsRequired();
 
-            builder.Property(c => c.NcmCode).
+            builder.Property(p => p.NcmCode).
                 HasColumnName(ProductConstants.FieldNcmCode).
                 HasMaxLength(15).
                 HasColumnType("varchar(15)");
 
-            builder.Property(c => c.CombinedPrice).
+            builder.Property(p => p.CombinedPrice).
                 HasColumnName(ProductConstants.FieldCombinedPrice).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.AdditionalCosts).
+            builder.Property(p => p.AdditionalCosts).
                 HasColumnName(ProductConstants.FieldAdditionalCosts).
                 HasColumnType("money");
 
-            builder.Property(c => c.CombinedQuantity).
+            builder.Property(p => p.CombinedQuantity).
                 HasColumnName(ProductConstants.FieldCombinedQuantity).
                 IsRequired();
 
-            builder.Property(c => c.Details).
+            builder.Property(p => p.Details).
                 HasColumnName(ProductConstants.FieldDetails).
                 HasMaxLength(500).
                 HasColumnType("varchar(500)");
 
-            builder.Property(c => c.CustomerId).
+            builder.Property(p => p.CustomerId).
                 HasColumnName(ProductConstants.FieldCustomerId).
                 IsRequired(false);
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
+            builder.Ignore(p => p.Notifications);
+            builder.Ignore(p => p.Valid);
 
-            builder.HasKey(c => c.Id);
+            builder.HasKey(p => p.Id);
             builder.ToTable(ProductConstants.TableProduct);
         }
     }

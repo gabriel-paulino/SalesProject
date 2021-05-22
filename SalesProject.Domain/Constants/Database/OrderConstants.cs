@@ -3,11 +3,11 @@
     public struct OrderConstants
     {
         public const string
-            TableOrder = "PedidoVenda",
+            TableOrder = "Pedido",
             FieldPostingDate = "DataLancamento",
             FieldDeliveryDate = "DataEntrega",
             FieldStatus = "Status",
-            FieldTotalOrder = "TotalPedido",
+            FieldTotalOrder = "Total",
             FieldObservation = "Observacao",
             FieldCustomerId = "ClienteId";
     }

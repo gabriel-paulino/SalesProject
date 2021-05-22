@@ -9,41 +9,43 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<OrderLine> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(ol => ol.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
-            builder.Property(c => c.Quantity).
+            builder.Property(ol => ol.Quantity).
                HasColumnName(OrderLinesConstants.FieldQuantity).
                IsRequired();
 
-            builder.Property(c => c.UnitaryPrice).
+            builder.Property(ol => ol.UnitaryPrice).
                 HasColumnName(OrderLinesConstants.FieldUnitaryPrice).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.TotalPrice).
+            builder.Property(ol => ol.TotalPrice).
                 HasColumnName(OrderLinesConstants.FieldTotalPrice).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.AdditionalCosts).
+            builder.Property(ol => ol.AdditionalCosts).
                 HasColumnName(OrderLinesConstants.FieldAdditionalCosts).
                 HasColumnType("money");
 
-            builder.Property(c => c.OrderId).
+            builder.Property(ol => ol.OrderId).
                 HasColumnName(OrderLinesConstants.FieldOrderId);
 
-            builder.Property(c => c.ProductId).
+            builder.Property(ol => ol.ProductId).
                 HasColumnName(OrderLinesConstants.FieldProductId).
                 IsRequired(false);
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
+            builder.Ignore(ol => ol.Notifications);
+            builder.Ignore(ol => ol.Valid);
 
-            builder.HasOne(c => c.Product).WithMany().OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(ol => ol.Product)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasKey(c => c.Id);
+            builder.HasKey(ol => ol.Id);
             builder.ToTable(OrderLinesConstants.TableOrderLines);
         }
     }

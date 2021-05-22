@@ -37,11 +37,11 @@ namespace SalesProject.Infra.Mapping
                 HasColumnType("varchar(250)").
                 IsRequired();
 
-            builder.Property(c => c.Role).
+            builder.Property(u => u.Role).
                 HasColumnName(UserConstants.FieldRole).
                 HasConversion<int>();
 
-            builder.Property(c => c.CustomerId).
+            builder.Property(u => u.CustomerId).
                 HasColumnName(UserConstants.FieldCustomerId).
                 IsRequired(false);
 

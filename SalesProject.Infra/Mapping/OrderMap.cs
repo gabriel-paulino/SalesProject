@@ -9,49 +9,49 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(o => o.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
-            builder.Property(c => c.PostingDate).
+            builder.Property(o => o.PostingDate).
                HasColumnName(OrderConstants.FieldPostingDate).
                HasColumnType("date").
                IsRequired();
 
-            builder.Property(c => c.DeliveryDate).
+            builder.Property(o => o.DeliveryDate).
                 HasColumnName(OrderConstants.FieldDeliveryDate).
                 HasColumnType("date").
                 IsRequired();
 
-            builder.Property(c => c.Status).
+            builder.Property(o => o.Status).
                 HasColumnName(OrderConstants.FieldStatus).
                 HasConversion<int>();
 
-            builder.Property(c => c.TotalOrder).
+            builder.Property(o => o.TotalOrder).
                 HasColumnName(OrderConstants.FieldTotalOrder).
                 HasColumnType("money");
 
-            builder.Property(c => c.Observation).
+            builder.Property(o => o.Observation).
                 HasColumnName(OrderConstants.FieldObservation).
                 HasMaxLength(300).
                 HasColumnType("varchar(300)");
 
-            builder.Property(c => c.CustomerId).
+            builder.Property(o => o.CustomerId).
                 HasColumnName(OrderConstants.FieldCustomerId).
                 IsRequired(false);
 
             builder.HasIndex(c => new { c.Status, c.PostingDate });
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
+            builder.Ignore(o => o.Notifications);
+            builder.Ignore(o => o.Valid);
 
-            builder.HasKey(c => c.Id);
+            builder.HasKey(o => o.Id);
 
-            builder.HasMany(c => c.OrderLines).
+            builder.HasMany(o => o.OrderLines).
                 WithOne().
                 HasForeignKey(fk => fk.OrderId);
 
-            builder.HasOne(c => c.Customer).
+            builder.HasOne(o => o.Customer).
                 WithMany().
                 OnDelete(DeleteBehavior.SetNull);
 

@@ -143,7 +143,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="customerCnpj"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Seller,Administrator")]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -178,6 +178,7 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("api/[controller]")]
         public IActionResult CreateCustomer(CreateCustomerViewModel model)
         {
@@ -197,7 +198,7 @@ namespace SalesProject.Api.Controllers
                 return ValidationProblem($"{customer.GetNotification()}");
 
             if (_customerRepository.HasAnotherCustomerWithThisCnpj(customer.Cnpj))
-                return ValidationProblem($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
+                return Conflict($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
 
             _customerRepository.Create(customer);
             _uow.Commit();
@@ -222,6 +223,7 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Route("api/complete/[controller]")]
         public IActionResult CreateCompleteCustomer(CreateCompleteCustomerViewModel model)
         {
@@ -241,7 +243,7 @@ namespace SalesProject.Api.Controllers
                 return ValidationProblem($"{customer.GetNotification()}");
 
             if (_customerRepository.HasAnotherCustomerWithThisCnpj(customer.Cnpj))
-                return ValidationProblem($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
+                return Conflict($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");
 
             foreach (var line in model.Adresses)
             {

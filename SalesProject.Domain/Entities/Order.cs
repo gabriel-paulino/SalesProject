@@ -105,5 +105,15 @@ namespace SalesProject.Domain.Entities
             }
             AddNotification("Não é possível aprovar esse pedido de venda.");
         }
+
+        public void Bill()
+        {
+            if (Status == OrderStatus.Approved)
+            {
+                Status = OrderStatus.Billed;
+                return;
+            }
+            AddNotification("Não é possível faturar esse pedido de venda.");
+        }
     }
 }
