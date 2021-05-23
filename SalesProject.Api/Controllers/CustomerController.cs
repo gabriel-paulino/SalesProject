@@ -19,15 +19,18 @@ namespace SalesProject.Api.Controllers
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICnpjApiService _cnpjApiService;
+        private readonly IAddressApiService _addressApiService;
         private readonly IUnitOfWork _uow;
 
         public CustomerController(
-            ICustomerRepository customerRepository,
-            ICnpjApiService cnpjApiService,
+            ICustomerRepository customerRepository, 
+            ICnpjApiService cnpjApiService, 
+            IAddressApiService addressApiService, 
             IUnitOfWork uow)
         {
             _customerRepository = customerRepository;
             _cnpjApiService = cnpjApiService;
+            _addressApiService = addressApiService;
             _uow = uow;
         }
 
@@ -192,7 +195,8 @@ namespace SalesProject.Api.Controllers
                         opening: DateTime.Parse(model.Opening).Date,
                         phone: model.Phone,
                         municipalRegistration: model.MunicipalRegistration,
-                        stateRegistration: model.StateRegistration);
+                        stateRegistration: model.StateRegistration,
+                        email: model.Email);
 
             if (!customer.Valid)
                 return ValidationProblem($"{customer.GetNotification()}");
@@ -237,7 +241,8 @@ namespace SalesProject.Api.Controllers
                         opening: DateTime.Parse(model.Opening).Date,
                         phone: model.Phone,
                         municipalRegistration: model.MunicipalRegistration,
-                        stateRegistration: model.StateRegistration);
+                        stateRegistration: model.StateRegistration,
+                        email: model.Email);
 
             if (!customer.Valid)
                 return ValidationProblem($"{customer.GetNotification()}");
@@ -261,6 +266,9 @@ namespace SalesProject.Api.Controllers
 
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
+
+                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
+                address.SetCodeCity(codeCity: ibgeCode);
 
                 customer.AddAddress(address);
             }
@@ -344,7 +352,8 @@ namespace SalesProject.Api.Controllers
                         Edit(
                         phone: model.Phone,
                         municipalRegistration: model.MunicipalRegistration,
-                        stateRegistration: model.StateRegistration);
+                        stateRegistration: model.StateRegistration,
+                        email: model.Email);
 
             if (!newCustomer.Valid)
                 return ValidationProblem($"{newCustomer.GetNotification()}");
@@ -384,7 +393,8 @@ namespace SalesProject.Api.Controllers
                         Edit(
                         phone: model.Phone,
                         municipalRegistration: model.MunicipalRegistration,
-                        stateRegistration: model.StateRegistration);
+                        stateRegistration: model.StateRegistration,
+                        email: model.Email);
 
             if (!newCustomer.Valid)
                 return ValidationProblem($"{newCustomer.GetNotification()}");
@@ -436,6 +446,9 @@ namespace SalesProject.Api.Controllers
                     if (!newAddress.Valid)
                         return ValidationProblem($"{newAddress.GetNotification()}");
 
+                    string ibgeCode = _addressApiService.GetIbgeCode(newAddress.ZipCode);
+                    newAddress.SetCodeCity(codeCity: ibgeCode);
+
                     newAdresses.Add(newAddress);
                 }
             }
@@ -463,6 +476,9 @@ namespace SalesProject.Api.Controllers
 
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
+
+                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
+                address.SetCodeCity(codeCity: ibgeCode);
             }
 
             #endregion

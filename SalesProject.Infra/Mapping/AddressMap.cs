@@ -48,6 +48,12 @@ namespace SalesProject.Infra.Mapping
                 HasColumnType("varchar(20)").
                 IsRequired();
 
+            builder.Property(a => a.CodeCity).
+                HasColumnName(AddressConstants.FieldCodeCity).
+                HasMaxLength(30).
+                HasColumnType("varchar(30)").
+                IsRequired();
+
             builder.Property(a => a.Number).
                 HasColumnName(AddressConstants.FieldNumber);
 

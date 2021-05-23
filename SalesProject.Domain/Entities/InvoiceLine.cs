@@ -11,7 +11,8 @@ namespace SalesProject.Domain.Entities
             OrderLine orderLine,
             TaxLine taxLine)
         {
-
+            ItemName = orderLine.Product.Name;
+            NcmCode = orderLine.Product.NcmCode;
             Quantity = orderLine.Quantity;
             UnitaryPrice = orderLine.UnitaryPrice;
             AdditionalCosts = orderLine.AdditionalCosts;
@@ -24,7 +25,6 @@ namespace SalesProject.Domain.Entities
             ValueIcms = taxLine.ValueIcms;
             CstPis = taxLine.CstPis;
             ValueBaseCalcPis = taxLine.ValueBaseCalcPis;
-            QuantityBaseCalcPis = taxLine.QuantityBaseCalcPis;
             AliquotPis = taxLine.AliquotPis;
             ValuePis = taxLine.ValuePis;
             CstCofins = taxLine.CstCofins;
@@ -38,7 +38,9 @@ namespace SalesProject.Domain.Entities
         }
 
         public Guid InvoiceId { get; private set; }
-        public double Quantity { get; private set; }
+        public string ItemName { get; private set; }
+        public string NcmCode { get; private set; }
+        public int Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalPrice { get; private set; }
         public decimal TotalTax { get; private set; }
@@ -46,13 +48,12 @@ namespace SalesProject.Domain.Entities
 
         public string OriginIcms { get; private set; }
         public string CstIcms { get; private set; }
-        public double DeterminationMode { get; private set; } //BaseCalc
+        public int DeterminationMode { get; private set; } //BaseCalc
         public decimal ValueBaseCalcIcms { get; private set; } //BaseCalc
-        public double AliquotIcms { get; private set; }
+        public int AliquotIcms { get; private set; }
         public decimal ValueIcms { get; private set; }
         public string CstPis { get; private set; }
         public decimal ValueBaseCalcPis { get; private set; } //BaseCalc
-        public double QuantityBaseCalcPis { get; private set; } //BaseCalc
         public double AliquotPis { get; private set; }
         public decimal ValuePis { get; private set; }
         public string CstCofins { get; private set; }
@@ -71,7 +72,7 @@ namespace SalesProject.Domain.Entities
             if (!Valid)
                 return;
 
-            TotalPrice = (decimal)Quantity * (UnitaryPrice + AdditionalCosts);
+            TotalPrice = Quantity * (UnitaryPrice + AdditionalCosts);
         }
 
         private void CalculateTotalTaxes() =>

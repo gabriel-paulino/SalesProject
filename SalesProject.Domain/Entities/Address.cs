@@ -30,20 +30,6 @@ namespace SalesProject.Domain.Entities
             DoValidations();
         }
 
-        public Address(
-            string zipCode,
-            string street,
-            string neighborhood,
-            string city,
-            string state)
-        {
-            this.ZipCode = zipCode;
-            this.Street = street;
-            this.Neighborhood = neighborhood;
-            this.City = city;
-            this.State = state;
-        }
-
         public string Description { get; private set; }
         public string ZipCode { get; private set; }
         public AddressType? Type { get; private set; }
@@ -51,6 +37,7 @@ namespace SalesProject.Domain.Entities
         public string Neighborhood { get; private set; }
         public int Number { get; private set; }
         public string City { get; private set; }
+        public string CodeCity { get; private set; }
         public string State { get; private set; }
         public Guid CustomerId { get; private set; }
 
@@ -77,6 +64,8 @@ namespace SalesProject.Domain.Entities
 
             return this;
         }
+
+        public void SetCodeCity(string codeCity) => this.CodeCity = codeCity;
 
         public override void DoValidations()
         {

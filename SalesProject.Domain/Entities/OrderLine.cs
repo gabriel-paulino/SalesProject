@@ -8,7 +8,7 @@ namespace SalesProject.Domain.Entities
         public OrderLine() { }
 
         public OrderLine(
-            double quantity,
+            int quantity,
             decimal unitaryPrice,
             decimal additionalCosts,
             Product product)
@@ -23,7 +23,7 @@ namespace SalesProject.Domain.Entities
         }
 
         public Guid OrderId { get; private set; }
-        public double Quantity { get; private set; }
+        public int Quantity { get; private set; }
         public decimal UnitaryPrice { get; private set; }
         public decimal AdditionalCosts { get; private set; }
         public decimal TotalPrice { get; private set; }
@@ -31,7 +31,7 @@ namespace SalesProject.Domain.Entities
         public Product Product { get; private set; }
 
         public OrderLine Edit(
-            double quantity,
+            int quantity,
             decimal unitaryPrice,
             decimal additionalCosts,
             Product product)

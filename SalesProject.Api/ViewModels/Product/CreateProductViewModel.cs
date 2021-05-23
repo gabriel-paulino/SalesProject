@@ -8,6 +8,7 @@ namespace SalesProject.Api.ViewModels.Product
         [Display(Name = "Nome")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "O campo 'Código ncm' é obrigatório")]
         [Display(Name = "Código ncm")]
         public string NcmCode { get; set; }
 

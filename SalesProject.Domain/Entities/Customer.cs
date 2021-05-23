@@ -21,10 +21,12 @@ namespace SalesProject.Domain.Entities
             DateTime? opening,
             string phone,
             string municipalRegistration,
-            string stateRegistration)
+            string stateRegistration,
+            string email)
         {
             this.Cnpj = cnpj;
             this.CompanyName = companyName;
+            this.Email = email;
             this.StateRegistration = stateRegistration;
             this.Opening = opening;
             this.Phone = phone;
@@ -44,6 +46,7 @@ namespace SalesProject.Domain.Entities
         public string Cnpj { get; private set; }
         public string CompanyName { get; private set; }
         public string StateRegistration { get; private set; }
+        public string Email { get; private set; }
         public DateTime? Opening { get; private set; }
         public string Phone { get; private set; }
         public DateTime ClientSince { get; private set; }
@@ -56,11 +59,13 @@ namespace SalesProject.Domain.Entities
         public Customer Edit(
             string phone,
             string municipalRegistration,
-            string stateRegistration)
+            string stateRegistration,
+            string email)
         {
             this.StateRegistration = stateRegistration;
             this.Phone = phone;
             this.MunicipalRegistration = municipalRegistration;
+            this.Email = email;
             
             DoValidations();
 
@@ -93,6 +98,8 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Nome da empresa' é obrigatório.");
             if (string.IsNullOrEmpty(StateRegistration))
                 AddNotification("O preenchimento do campo 'Inscrição estadual' é obrigatório.");
+            if (string.IsNullOrEmpty(Email))
+                AddNotification("O preenchimento do campo 'Email' é obrigatório.");
         }
 
         private void ValidateCnpj()

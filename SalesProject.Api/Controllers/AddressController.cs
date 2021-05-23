@@ -107,7 +107,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="zipCode"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Seller,Administrator")]
+        //[Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -190,6 +190,9 @@ namespace SalesProject.Api.Controllers
             if (!address.Valid)
                 return ValidationProblem($"{address.GetNotification()}");
 
+            string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
+            address.SetCodeCity(codeCity: ibgeCode);
+
             _addressRepository.Create(address);
             _uow.Commit();
 
@@ -261,6 +264,9 @@ namespace SalesProject.Api.Controllers
 
             if (!newAddress.Valid)
                 return ValidationProblem($"{newAddress.GetNotification()}");
+
+            string ibgeCode = _addressApiService.GetIbgeCode(newAddress.ZipCode);
+            newAddress.SetCodeCity(codeCity: ibgeCode);
 
             _addressRepository.Update(newAddress);
             _uow.Commit();

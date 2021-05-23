@@ -18,6 +18,12 @@ namespace SalesProject.Infra.Mapping
                 HasColumnType("date").
                 IsRequired();
 
+            builder.Property(i => i.OriginOperation).
+                HasColumnName(InvoiceLinesConstants.FieldOriginOperation).
+                HasMaxLength(150).
+                HasColumnType("varchar(150)").
+                IsRequired();
+
             builder.Property(i => i.BaseCalcIcms).
                 HasColumnName(InvoiceConstants.FieldBaseCalcIcms).
                 HasColumnType("money").
@@ -37,6 +43,11 @@ namespace SalesProject.Infra.Mapping
                 HasColumnName(InvoiceConstants.FieldTotalInvoice).
                 HasColumnType("money").
                 IsRequired();
+
+            builder.Property(c => c.IntegratedPlugNotasApi).
+                HasColumnName(InvoiceConstants.FieldIntegratedPlugNotasApi).
+                HasMaxLength(1).
+                HasColumnType("varchar(1)");
 
             builder.Property(i => i.OrderId).
                 HasColumnName(InvoiceConstants.FieldOrderId).

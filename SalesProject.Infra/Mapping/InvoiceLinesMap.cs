@@ -9,105 +9,113 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<InvoiceLine> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(il => il.Id).
                 ValueGeneratedOnAdd().
                 HasColumnType("uniqueidentifier");
 
-            builder.Property(c => c.Quantity).
+            builder.Property(il => il.ItemName).
+                HasColumnName(InvoiceLinesConstants.FieldItemName).
+                HasMaxLength(50).
+                HasColumnType("varchar(50)").
+                IsRequired();
+
+            builder.Property(il => il.NcmCode).
+                HasColumnName(InvoiceLinesConstants.FieldNcmCode).
+                HasMaxLength(15).
+                HasColumnType("varchar(15)");
+
+            builder.Property(il => il.Quantity).
                HasColumnName(InvoiceLinesConstants.FieldQuantity).
                IsRequired();
 
-            builder.Property(c => c.UnitaryPrice).
+            builder.Property(il => il.UnitaryPrice).
                 HasColumnName(InvoiceLinesConstants.FieldUnitaryPrice).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.TotalPrice).
+            builder.Property(il => il.TotalPrice).
                 HasColumnName(InvoiceLinesConstants.FieldTotalPrice).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.TotalTax).
+            builder.Property(il => il.TotalTax).
                 HasColumnName(InvoiceLinesConstants.FieldTotalTax).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.AdditionalCosts).
+            builder.Property(il => il.AdditionalCosts).
                 HasColumnName(InvoiceLinesConstants.FieldAdditionalCosts).
                 HasColumnType("money");
 
-            builder.Property(c => c.ValueBaseCalcIcms).
+            builder.Property(il => il.ValueBaseCalcIcms).
                 HasColumnName(InvoiceLinesConstants.FieldValueBaseCalcIcms).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.ValueIcms).
+            builder.Property(il => il.ValueIcms).
                 HasColumnName(InvoiceLinesConstants.FieldValueIcms).
                 HasColumnType("money").
                 IsRequired();
 
-            builder.Property(c => c.AliquotIcms).
+            builder.Property(il => il.AliquotIcms).
                 HasColumnName(InvoiceLinesConstants.FieldAliquotIcms).
                 IsRequired();
 
-            builder.Property(c => c.CstIcms).
+            builder.Property(il => il.CstIcms).
                 HasColumnName(InvoiceLinesConstants.FieldCstIcms).
                 HasMaxLength(3).
                 HasColumnType("varchar(3)").
                 IsRequired();
 
-            builder.Property(c => c.OriginIcms).
+            builder.Property(il => il.OriginIcms).
                 HasColumnName(InvoiceLinesConstants.FieldOriginIcms).
                 HasMaxLength(3).
                 HasColumnType("varchar(1)").
                 IsRequired();
 
-            builder.Property(c => c.DeterminationMode).
+            builder.Property(il => il.DeterminationMode).
                 HasColumnName(InvoiceLinesConstants.FieldDeterminationMode).
                 IsRequired();
 
-            builder.Property(c => c.CstPis).
+            builder.Property(il => il.CstPis).
                 HasColumnName(InvoiceLinesConstants.FieldCstPis).
                 HasMaxLength(3).
                 HasColumnType("varchar(3)");
 
-            builder.Property(c => c.ValueBaseCalcPis).
+            builder.Property(il => il.ValueBaseCalcPis).
                 HasColumnName(InvoiceLinesConstants.FieldValueBaseCalcPis).
                 HasColumnType("money");
 
-            builder.Property(c => c.QuantityBaseCalcPis).
-                HasColumnName(InvoiceLinesConstants.FieldQuantityBaseCalcPis);
-
-            builder.Property(c => c.AliquotPis).
+            builder.Property(il => il.AliquotPis).
                HasColumnName(InvoiceLinesConstants.FieldAliquotPis);
 
-            builder.Property(c => c.ValuePis).
+            builder.Property(il => il.ValuePis).
                 HasColumnName(InvoiceLinesConstants.FieldValuePis).
                 HasColumnType("money");
 
-            builder.Property(c => c.CstCofins).
+            builder.Property(il => il.CstCofins).
                 HasColumnName(InvoiceLinesConstants.FieldCstCofins).
                 HasMaxLength(3).
                 HasColumnType("varchar(3)");
 
-            builder.Property(c => c.ValueBaseCalcCofins).
+            builder.Property(il => il.ValueBaseCalcCofins).
                 HasColumnName(InvoiceLinesConstants.FieldValueBaseCalcCofins).
                 HasColumnType("money");
 
-            builder.Property(c => c.AliquotCofins).
+            builder.Property(il => il.AliquotCofins).
                 HasColumnName(InvoiceLinesConstants.FieldAliquotCofins);
 
-            builder.Property(c => c.ValueCofins).
+            builder.Property(il => il.ValueCofins).
                 HasColumnName(InvoiceLinesConstants.FieldValueCofins).
                 HasColumnType("money");
 
-            builder.Property(c => c.InvoiceId).
+            builder.Property(il => il.InvoiceId).
                 HasColumnName(InvoiceLinesConstants.FieldInvoiceId);
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
+            builder.Ignore(il => il.Notifications);
+            builder.Ignore(il => il.Valid);
 
-            builder.HasKey(c => c.Id);
+            builder.HasKey(il => il.Id);
             builder.ToTable(InvoiceLinesConstants.TableInvoiceLines);
         }
     }

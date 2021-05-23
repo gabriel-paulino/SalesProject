@@ -14,6 +14,7 @@ namespace SalesProject.Domain.Entities
             Order = order;
             ReleaseDate = DateTime.Today.Date;
             OriginOperation = "Vendas";
+            IntegratedPlugNotasApi = 'N';
             _invoiceLines = new List<InvoiceLine>();
 
             DoValidations();
@@ -29,6 +30,7 @@ namespace SalesProject.Domain.Entities
         public decimal TotalIcms { get; private set; }
         public decimal TotalProducts { get; private set; }
         public decimal TotalInvoice { get; private set; }
+        public char IntegratedPlugNotasApi { get; private set; }
 
         public IReadOnlyCollection<InvoiceLine> InvoiceLines { get => _invoiceLines.ToArray(); }
 
@@ -36,10 +38,6 @@ namespace SalesProject.Domain.Entities
         {
             _invoiceLines.Add(invoiceLine);
             UpdateInvoiceValues();
-        }
-
-        public override void DoValidations()
-        {
         }
 
         private void UpdateInvoiceValues()
@@ -52,5 +50,9 @@ namespace SalesProject.Domain.Entities
 
             TotalIcms = InvoiceLines.Sum(l => l.ValueIcms);
         }
+
+        private void MarkAsIntegrated() => IntegratedPlugNotasApi = 'Y';
+
+        public override void DoValidations() { }
     }
 }

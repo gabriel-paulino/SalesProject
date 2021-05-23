@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace SalesProject.Api
 {
@@ -56,6 +57,11 @@ namespace SalesProject.Api
                     options.SuppressMapClientErrors = true;
                     options.ClientErrorMapping[StatusCodes.Status404NotFound].Link =
                         "https://httpstatuses.com/404";
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
 
             services.AddRouting(c => c.LowercaseUrls = true);
@@ -83,7 +89,8 @@ namespace SalesProject.Api
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
-            services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));
+            //services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));
+            services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddTransient<IAddressApiService, AddressApiService>();
             services.AddScoped<IUserRepository, UserRepository>();

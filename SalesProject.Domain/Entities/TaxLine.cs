@@ -7,13 +7,12 @@
         public TaxLine(
             string originIcms,
             string cstIcms,
-            double determinationMode,
+            int determinationMode,
             decimal valueBaseCalcIcms,
-            double aliquotIcms,
+            int aliquotIcms,
             decimal valueIcms,
             string cstPis,
             decimal valueBaseCalcPis,
-            double quantityBaseCalcPis,
             double aliquotPis,
             decimal valuePis,
             string cstCofins,
@@ -29,7 +28,6 @@
             ValueIcms = valueIcms;
             CstPis = cstPis;
             ValueBaseCalcPis = valueBaseCalcPis;
-            QuantityBaseCalcPis = quantityBaseCalcPis;
             AliquotPis = aliquotPis;
             ValuePis = valuePis;
             CstCofins = cstCofins;
@@ -40,13 +38,12 @@
 
         public string OriginIcms { get; private set; }
         public string CstIcms { get; private set; }
-        public double DeterminationMode { get; private set; } //BaseCalc
+        public int DeterminationMode { get; private set; } //BaseCalc
         public decimal ValueBaseCalcIcms { get; private set; } //BaseCalc
-        public double AliquotIcms { get; private set; }
+        public int AliquotIcms { get; private set; }
         public decimal ValueIcms { get; private set; }
         public string CstPis { get; private set; }
         public decimal ValueBaseCalcPis { get; private set; } //BaseCalc
-        public double QuantityBaseCalcPis { get; private set; } //BaseCalc
         public double AliquotPis { get; private set; }
         public decimal ValuePis { get; private set; }
         public string CstCofins { get; private set; }
@@ -58,13 +55,12 @@
             new TaxLine(
                         originIcms: "0",
                         cstIcms: "00",
-                        determinationMode: 0.0,
+                        determinationMode: 0,
                         valueBaseCalcIcms: totalLineOrder,
-                        aliquotIcms: 7.0,
+                        aliquotIcms: 7,
                         valueIcms: totalLineOrder * 0.07m,
                         cstPis: "07",
                         valueBaseCalcPis: 0.0m,
-                        quantityBaseCalcPis: 0.0,
                         aliquotPis: 0.0,
                         valuePis: 0.0m,
                         cstCofins: "07",

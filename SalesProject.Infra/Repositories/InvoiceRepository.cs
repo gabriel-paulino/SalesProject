@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesProject.Domain.Entities;
+using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
@@ -17,6 +18,14 @@ namespace SalesProject.Infra.Repositories
 
         ~InvoiceRepository() =>
             Dispose();
+
+        public Invoice Get(Guid id) =>
+            _context.Invoices
+                .Include(i => i.InvoiceLines)
+                .Include(i => i.Order)
+                .ThenInclude(o => o.Customer)
+                .ThenInclude(c => c.Adresses)
+                .FirstOrDefault(i => i.Id == id);
 
         public Invoice GetByOrderId(Guid orderId) =>
             _context.Invoices

@@ -138,7 +138,7 @@ namespace SalesProject.Api.Controllers
 
             var customerErros = new List<string>();
 
-            foreach (var line in model.OrderItens)
+            foreach (var line in model.OrderLines)
             {
                 var product = _productRepository.Get(Guid.Parse(line.ProductId));
 
@@ -307,16 +307,16 @@ namespace SalesProject.Api.Controllers
             {
                 bool remove = false;
 
-                for (int i = 0; i < model.OrderItens.Count; i++)
+                for (int i = 0; i < model.OrderLines.Count; i++)
                 {
-                    Guid currentIdOrderLines = string.IsNullOrEmpty(model.OrderItens[i].Id)
+                    Guid currentIdOrderLines = string.IsNullOrEmpty(model.OrderLines[i].Id)
                     ? new Guid()
-                    : Guid.Parse(model.OrderItens[i].Id);
+                    : Guid.Parse(model.OrderLines[i].Id);
 
                     if (orderLine.Id == currentIdOrderLines)
                         break;
 
-                    if (i == model.OrderItens.Count - 1)
+                    if (i == model.OrderLines.Count - 1)
                     {
                         remove = true;
                         break;
@@ -326,7 +326,7 @@ namespace SalesProject.Api.Controllers
                     removedOrderLines.Add(orderLine);
             }
 
-            foreach (var orderLineModel in model.OrderItens)
+            foreach (var orderLineModel in model.OrderLines)
             {
                 if (string.IsNullOrEmpty(orderLineModel.Id))
                 {
@@ -350,7 +350,7 @@ namespace SalesProject.Api.Controllers
                 }
             }
 
-            foreach (var orderLineModel in model.OrderItens)
+            foreach (var orderLineModel in model.OrderLines)
             {
                 if (string.IsNullOrEmpty(orderLineModel.Id))
                     continue;

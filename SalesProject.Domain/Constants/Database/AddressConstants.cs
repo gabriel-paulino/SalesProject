@@ -12,6 +12,7 @@
             FieldNumber = "Numero",
             FieldCity = "Cidade",
             FieldState = "Uf",
+            FieldCodeCity = "CodigoIbgeCidade",
             FieldCustomerId = "ClienteId";
     }
 }

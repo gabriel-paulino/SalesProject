@@ -11,6 +11,7 @@
             FieldTelNumber = "Telefone",
             FieldClientSince = "DataCadastro",
             FieldMunicipalRegistration = "InscricaoMunicipal",
-            FieldStateRegistration = "InscricaoEstadual";
+            FieldStateRegistration = "InscricaoEstadual",
+            FieldEmail = "Email";
     }
 }

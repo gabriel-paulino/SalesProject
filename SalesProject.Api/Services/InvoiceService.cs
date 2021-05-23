@@ -2,6 +2,7 @@
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
+using System;
 using System.Collections.Generic;
 
 namespace SalesProject.Api.Services
@@ -22,6 +23,9 @@ namespace SalesProject.Api.Services
             _uow = uow;
         }
 
+        public Invoice Get (Guid id) =>
+            _invoiceRepository.Get(id);
+        
         public Invoice CreateBasedInOrder(Order order)
         {
             var invoice = new Invoice(order);

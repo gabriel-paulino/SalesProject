@@ -17,7 +17,39 @@ namespace SalesProject.Api.Services
                 zipCode = $"0{zipCode}";
 
             var url = $"https://ws.apicep.com/cep/{zipCode}.json";
+            string json = GetJsonResponse(url);
 
+            var addressResponse = JsonConvert.DeserializeObject<AddressApi>(json);
+
+            return new
+                AddressApi(
+                    status: addressResponse.Status,
+                    code: addressResponse.Code,
+                    city: addressResponse.City,
+                    state: addressResponse.State,
+                    district: addressResponse.District,
+                    address: addressResponse.Address
+                    );
+        }
+
+        public string GetIbgeCode(string zipCode)
+        {
+            zipCode = zipCode
+                .Replace("-", string.Empty);
+
+            if (zipCode.Length == 7)
+                zipCode = $"0{zipCode}";
+
+            var url = $"https://api.postmon.com.br/v1/cep/{zipCode}";
+            string json = GetJsonResponse(url);
+
+            var ibge = JsonConvert.DeserializeObject<IbgeCode>(json);
+
+            return ibge.Cidade_info.Codigo_ibge ?? "Not_found";
+        }
+
+        private static string GetJsonResponse(string url)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip;
 
@@ -30,17 +62,7 @@ namespace SalesProject.Api.Services
                 json = reader.ReadToEnd();
             }
 
-            var addressResponse = JsonConvert.DeserializeObject<AddressApi>(json);
-
-            return new
-                AddressApi(
-                    status: addressResponse.Status,
-                    code: addressResponse.Code,                  
-                    city: addressResponse.City,
-                    state: addressResponse.State,
-                    district: addressResponse.District,
-                    address: addressResponse.Address
-                    );
+            return json;
         }
     }
 }

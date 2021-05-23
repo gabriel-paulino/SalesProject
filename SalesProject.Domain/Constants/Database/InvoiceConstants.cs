@@ -10,6 +10,7 @@
             FieldTotalIcms = "ValorIcms",
             FieldTotalProducts = "TotalProdutos",
             FieldTotalInvoice = "TotaNota",
+            FieldIntegratedPlugNotasApi = "NotaEnviada",
             FieldOrderId = "PedidoId";
     }
 }

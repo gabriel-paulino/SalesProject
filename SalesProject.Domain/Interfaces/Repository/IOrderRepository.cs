@@ -7,6 +7,7 @@ namespace SalesProject.Domain.Interfaces.Repository
     public interface IOrderRepository : IDisposable
     {
         Order Get(Guid id);
+        Order GetToCreateInvoice(Guid id);
         List<Order> GetOrdersUsingFilter(OrderFilter filter);
         void Create(Order order);
         void Update(Order order);

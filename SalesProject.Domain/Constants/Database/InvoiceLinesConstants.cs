@@ -4,7 +4,10 @@
     {
         public const string
             TableInvoiceLines = "ItemNotaFiscal",
+            FieldItemName = "NomeProduto",
+            FieldNcmCode = "CodigoNcm",
             FieldQuantity = "Quantidade",
+            FieldOriginOperation = "NaturezaOperacao",
             FieldUnitaryPrice = "ValorUnitario",
             FieldTotalPrice = "ValorTotal",
             FieldTotalTax = "ImpostoTotal",
@@ -18,7 +21,6 @@
             FieldValueIcms = "ValorIcms",
             FieldCstPis = "CstPis",
             FieldValueBaseCalcPis = "BaseCalcPis",
-            FieldQuantityBaseCalcPis = "QuantidadeBaseCalcPis",
             FieldAliquotPis = "AliquotaPis",
             FieldValuePis = "ValorPis",
             FieldCstCofins = "CstCofins",

@@ -15,6 +15,10 @@ namespace SalesProject.Api.ViewModels.Customer
         [Display(Name = "Inscrição municipal")]
         public string MunicipalRegistration { get; set; }
 
+        [Required(ErrorMessage = "O campo 'E-mail' é obrigatório")]
+        [Display(Name = "E-mail")]
+        public string Email { get; set; }
+
         [Required]
         public List<EditCustomerAddress> Adresses { get; set; }
 

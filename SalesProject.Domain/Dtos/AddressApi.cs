@@ -25,4 +25,24 @@
         public string District { get; private set; }
         public string Address { get; private set; }
     }
+
+    public class IbgeCode
+    {
+        public IbgeCode(CidadeInfo cidade_info)
+        {
+            this.Cidade_info = cidade_info;
+        }
+
+        public CidadeInfo Cidade_info { get; private set; }
+    }
+
+    public class CidadeInfo
+    {
+        public CidadeInfo(string codigo_ibge)
+        {
+            Codigo_ibge = codigo_ibge;
+        }
+
+        public string Codigo_ibge { get; private set; }
+    }
 }
