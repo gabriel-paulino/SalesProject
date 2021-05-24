@@ -91,8 +91,13 @@ namespace SalesProject.Api.Controllers
             var response = (IRestResponse)_plugNotasApiService.SendInvoice(invoice);
 
             if (response.StatusCode == HttpStatusCode.OK)
-                return Ok(response.Content);
+            {
+                //Atualizar coluna BD marcar que foi integrado a NF
+                _invoiceService.MarkAsIntegrated(invoice);
 
+                return Ok(response.Content);
+            }
+             
             return BadRequest(response.Content);
         }
 

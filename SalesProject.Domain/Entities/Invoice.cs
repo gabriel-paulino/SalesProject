@@ -51,7 +51,7 @@ namespace SalesProject.Domain.Entities
             TotalIcms = InvoiceLines.Sum(l => l.ValueIcms);
         }
 
-        private void MarkAsIntegrated() => IntegratedPlugNotasApi = 'Y';
+        public void MarkAsIntegrated() => IntegratedPlugNotasApi = 'Y';
 
         public override void DoValidations() { }
     }

@@ -23,9 +23,9 @@ namespace SalesProject.Api.Services
             _uow = uow;
         }
 
-        public Invoice Get (Guid id) =>
+        public Invoice Get(Guid id) =>
             _invoiceRepository.Get(id);
-        
+
         public Invoice CreateBasedInOrder(Order order)
         {
             var invoice = new Invoice(order);
@@ -53,6 +53,13 @@ namespace SalesProject.Api.Services
             _uow.Commit();
 
             return invoice;
+        }
+
+        public void MarkAsIntegrated(Invoice invoice)
+        {
+            invoice.MarkAsIntegrated();
+            _invoiceRepository.Update(invoice);
+            _uow.Commit();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesProject.Domain.Entities;
-using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
@@ -34,6 +33,9 @@ namespace SalesProject.Infra.Repositories
 
         public void Create(Invoice invoice) =>
             _context.Invoices.Add(invoice);
+
+        public void Update(Invoice invoice) =>
+            _context.Entry<Invoice>(invoice).State = EntityState.Modified;
 
         public void Dispose()
         {
