@@ -21,12 +21,13 @@ namespace SalesProject.Api.Services
         {
             var plugNotasApi = Initialize(invoice);
 
-            var config = new JsonSerializerOptions();
+            var options = new JsonSerializerOptions()
+            {
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
 
-            config.IgnoreNullValues = true;
-            config.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-
-            string jsonInvoice = JsonSerializer.Serialize(plugNotasApi, options: config);
+            string jsonInvoice = JsonSerializer.Serialize(plugNotasApi, options);
 
             string url = "https://api.sandbox.plugnotas.com.br/nfe";
             var client = new RestClient(url);
@@ -45,7 +46,6 @@ namespace SalesProject.Api.Services
         private PlugNotasApi Initialize(Invoice invoice)
         {
             var plugNotas = new PlugNotasApi();
-            var items = new List<Iten>();
 
             var address = invoice.Order.Customer.Adresses.Where(a => a.Type == AddressType.Billing).FirstOrDefault();
 
@@ -79,7 +79,7 @@ namespace SalesProject.Api.Services
 
             plugNotas.Destinatario = receiver;
 
-            var itensPlugNotas = new List<Iten>();
+            var itemsPlugNotas = new List<Iten>();
 
             foreach (var item in invoice.InvoiceLines)
             {
@@ -133,10 +133,10 @@ namespace SalesProject.Api.Services
 
                 itemPlugNotas.Tributos = taxes;
 
-                itensPlugNotas.Add(itemPlugNotas);
+                itemsPlugNotas.Add(itemPlugNotas);
             }
 
-            plugNotas.Itens = itensPlugNotas;
+            plugNotas.Itens = itemsPlugNotas;
 
             var payments = new List<Pagamento>();
 

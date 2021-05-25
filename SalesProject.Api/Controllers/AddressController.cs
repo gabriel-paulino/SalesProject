@@ -107,7 +107,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="zipCode"></param>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize(Roles = "Seller,Administrator")]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

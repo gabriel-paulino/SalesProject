@@ -30,6 +30,29 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
+        /// Get Invoice by orderId.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/{orderId:guid}")]
+        public IActionResult GetByOrderId(Guid orderId)
+        {
+            var invoice = _invoiceService.GetByOrderId(orderId);
+
+            if (invoice != null)
+                return Ok(invoice);
+
+            return NotFound($"Ops. Nota fiscal  vinculada ao Pedido:'{orderId}' não foi encontrada.");
+        }
+
+
+        /// <summary>
         /// Create an Invoice based in an order.
         /// </summary>
         /// <param name="orderId"></param>
@@ -92,14 +115,10 @@ namespace SalesProject.Api.Controllers
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                //Atualizar coluna BD marcar que foi integrado a NF
                 _invoiceService.MarkAsIntegrated(invoice);
-
                 return Ok(response.Content);
-            }
-             
+            }             
             return BadRequest(response.Content);
         }
-
     }
 }

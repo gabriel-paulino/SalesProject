@@ -53,7 +53,7 @@ namespace SalesProject.Infra.Mapping
                 HasColumnName(CustomerConstants.FieldMunicipalRegistration).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)");
-            
+
             builder.Ignore(c => c.Adresses);
             builder.Ignore(c => c.Contacts);
             builder.Ignore(c => c.Products);

@@ -8,5 +8,6 @@ namespace SalesProject.Domain.Services
         Invoice CreateBasedInOrder(Order order);
         void MarkAsIntegrated(Invoice invoice);
         Invoice Get(Guid id);
+        Invoice GetByOrderId(Guid orderId);
     }
 }

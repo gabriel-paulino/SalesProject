@@ -28,8 +28,11 @@ namespace SalesProject.Infra.Repositories
 
         public Invoice GetByOrderId(Guid orderId) =>
             _context.Invoices
-                .Include(c => c.InvoiceLines)
-                .FirstOrDefault(c => c.OrderId == orderId);
+                .Include(i => i.InvoiceLines)
+                .Include(i => i.Order)
+                .ThenInclude(o => o.Customer)
+                .ThenInclude(c => c.Adresses)
+                .FirstOrDefault(i => i.OrderId == orderId);
 
         public void Create(Invoice invoice) =>
             _context.Invoices.Add(invoice);
