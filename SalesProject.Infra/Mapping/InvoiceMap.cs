@@ -11,47 +11,57 @@ namespace SalesProject.Infra.Mapping
         {
             builder.Property(i => i.Id).
                 ValueGeneratedOnAdd().
-                HasColumnType("uniqueidentifier");
+                HasColumnType("uniqueidentifier").
+                HasComment(InvoiceConstants.Id);
 
             builder.Property(i => i.ReleaseDate).
                 HasColumnName(InvoiceConstants.FieldReleaseDate).
                 HasColumnType("date").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.ReleaseDate);
 
             builder.Property(i => i.OriginOperation).
-                HasColumnName(InvoiceLinesConstants.FieldOriginOperation).
+                HasColumnName(InvoiceConstants.FieldOriginOperation).
                 HasMaxLength(150).
                 HasColumnType("varchar(150)").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.OriginOperation);
 
             builder.Property(i => i.BaseCalcIcms).
                 HasColumnName(InvoiceConstants.FieldBaseCalcIcms).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.BaseCalcIcms);
 
             builder.Property(i => i.TotalIcms).
                 HasColumnName(InvoiceConstants.FieldTotalIcms).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalIcms);
 
             builder.Property(i => i.TotalProducts).
                 HasColumnName(InvoiceConstants.FieldTotalProducts).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalProducts);
 
             builder.Property(i => i.TotalInvoice).
                 HasColumnName(InvoiceConstants.FieldTotalInvoice).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalInvoice);
 
             builder.Property(c => c.IntegratedPlugNotasApi).
                 HasColumnName(InvoiceConstants.FieldIntegratedPlugNotasApi).
                 HasMaxLength(1).
-                HasColumnType("varchar(1)");
+                HasColumnType("varchar(1)").
+                IsRequired().
+                HasComment(InvoiceConstants.IntegratedPlugNotasApi);
 
             builder.Property(i => i.OrderId).
                 HasColumnName(InvoiceConstants.FieldOrderId).
-                IsRequired(false);
+                IsRequired(false).
+                HasComment(InvoiceConstants.OrderId);
 
             builder.Ignore(i => i.Notifications);
             builder.Ignore(i => i.Valid);

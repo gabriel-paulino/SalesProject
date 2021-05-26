@@ -11,48 +11,57 @@ namespace SalesProject.Infra.Mapping
         {
             builder.Property(c => c.Id).
                 ValueGeneratedOnAdd().
-                HasColumnType("uniqueidentifier");
+                HasColumnType("uniqueidentifier").
+                HasComment(CustomerConstants.Id);
 
             builder.Property(c => c.Cnpj).
                 HasMaxLength(18).
                 HasColumnType("varchar(18)").
-                IsRequired();
+                IsRequired().
+                HasComment(CustomerConstants.Cnpj);
 
             builder.Property(c => c.CompanyName).
                 HasColumnName(CustomerConstants.FieldCompanyName).
                 HasMaxLength(100).
                 HasColumnType("varchar(100)").
-                IsRequired();
+                IsRequired().
+                HasComment(CustomerConstants.CompanyName);
 
             builder.Property(c => c.Email).
                 HasColumnName(CustomerConstants.FieldEmail).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
-                IsRequired();
+                IsRequired().
+                HasComment(CustomerConstants.Email);
 
             builder.Property(c => c.StateRegistration).
                 HasColumnName(CustomerConstants.FieldStateRegistration).
                 HasMaxLength(30).
                 HasColumnType("varchar(30)").
-                IsRequired();
+                IsRequired().
+                HasComment(CustomerConstants.StateRegistration);
 
             builder.Property(c => c.Opening).
                 HasColumnName(CustomerConstants.FieldOpening).
-                HasColumnType("date");
+                HasColumnType("date").
+                HasComment(CustomerConstants.Opening);
 
             builder.Property(c => c.Phone).
                 HasColumnName(CustomerConstants.FieldTelNumber).
                 HasMaxLength(20).
-                HasColumnType("varchar(20)");
+                HasColumnType("varchar(20)").
+                HasComment(CustomerConstants.Phone);
 
             builder.Property(c => c.ClientSince).
                 HasColumnName(CustomerConstants.FieldClientSince).
-                HasColumnType("date");
+                HasColumnType("date").
+                HasComment(CustomerConstants.ClientSince);
 
             builder.Property(c => c.MunicipalRegistration).
                 HasColumnName(CustomerConstants.FieldMunicipalRegistration).
                 HasMaxLength(30).
-                HasColumnType("varchar(30)");
+                HasColumnType("varchar(30)").
+                HasComment(CustomerConstants.MunicipalRegistration);
 
             builder.Ignore(c => c.Adresses);
             builder.Ignore(c => c.Contacts);

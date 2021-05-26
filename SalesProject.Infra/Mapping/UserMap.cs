@@ -11,40 +11,46 @@ namespace SalesProject.Infra.Mapping
         {
             builder.Property(u => u.Id).
                 ValueGeneratedOnAdd().
-                HasColumnType("uniqueidentifier");
+                HasColumnType("uniqueidentifier").
+                HasComment(UserConstants.Id);
 
             builder.Property(u => u.Username).
                 HasColumnName(UserConstants.FieldUsername).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
-                IsRequired();
+                IsRequired().
+                HasComment(UserConstants.Username);
 
             builder.Property(u => u.Name).
                 HasColumnName(UserConstants.FieldName).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
-                IsRequired();
+                IsRequired().
+                HasComment(UserConstants.Name);
 
             builder.Property(u => u.Email).
                 HasColumnName(UserConstants.FieldEmail).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
-                IsRequired();
+                IsRequired().
+                HasComment(UserConstants.Email);
 
             builder.Property(u => u.PasswordHash).
                 HasColumnName(UserConstants.FieldPasswordHash).
                 HasMaxLength(250).
                 HasColumnType("varchar(250)").
-                IsRequired();
+                IsRequired().
+                HasComment(UserConstants.PasswordHash);
 
             builder.Property(u => u.Role).
                 HasColumnName(UserConstants.FieldRole).
-                HasConversion<int>();
+                HasConversion<int>().
+                HasComment(UserConstants.Role);
 
             builder.Property(u => u.CustomerId).
                 HasColumnName(UserConstants.FieldCustomerId).
-                IsRequired(false);
-
+                IsRequired(false).
+                HasComment(UserConstants.CustomerId);
 
             builder.Ignore(u => u.Notifications);
             builder.Ignore(u => u.Valid);

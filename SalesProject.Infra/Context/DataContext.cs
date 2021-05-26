@@ -17,9 +17,9 @@ namespace SalesProject.Infra.Context
             builder.ApplyConfiguration(new ContactMap());
             builder.ApplyConfiguration(new ProductMap());
             builder.ApplyConfiguration(new OrderMap());
-            builder.ApplyConfiguration(new OrderLinesMap());
+            builder.ApplyConfiguration(new OrderLineMap());
             builder.ApplyConfiguration(new InvoiceMap());
-            builder.ApplyConfiguration(new InvoiceLinesMap());
+            builder.ApplyConfiguration(new InvoiceLineMap());
         }
 
         public DbSet<User> Users { get; set; }
