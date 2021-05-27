@@ -4,8 +4,11 @@ using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Services;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 
 namespace SalesProject.Api.Services
@@ -13,9 +16,13 @@ namespace SalesProject.Api.Services
     public class PlugNotasApiService : IPlugNotasApiService
     {
         private readonly IConfiguration _configuration;
+        private readonly string _url;
 
-        public PlugNotasApiService(IConfiguration configuration) =>
+        public PlugNotasApiService(IConfiguration configuration)
+        {
             _configuration = configuration;
+            _url = "https://api.sandbox.plugnotas.com.br/";
+        }
 
         public object SendInvoice(Invoice invoice)
         {
@@ -29,8 +36,7 @@ namespace SalesProject.Api.Services
 
             string jsonInvoice = JsonSerializer.Serialize(plugNotasApi, options);
 
-            string url = "https://api.sandbox.plugnotas.com.br/nfe";
-            var client = new RestClient(url);
+            var client = new RestClient($"{_url}nfe");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("accept", "application/json");
@@ -38,9 +44,69 @@ namespace SalesProject.Api.Services
             request.AddHeader("Content-Type", "application/json");
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody($"[{jsonInvoice}]");
+
+            return client.Execute(request);
+        }
+
+        public object ConsultSefaz(string invoiceIdPlugNotas)
+        {
+            var client = new RestClient(_url);
+            client.Timeout = -1;
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/resumo", Method.GET);
+            request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
+            request.OnBeforeDeserialization = response => { response.ContentType = "application/json"; };
+
+            return client.Execute(request);
+        }
+
+        public object DownloadInvoicePdf(string invoiceIdPlugNotas)
+        {
+            var client = new RestClient(_url);
+            client.Timeout = -1;
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/pdf", Method.GET);
+            request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
+            request.OnBeforeDeserialization = response => { response.ContentType = "application/pdf"; };
+
             IRestResponse response = client.Execute(request);
 
-            return response;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                byte[] document = client.DownloadData(request);
+
+                string path = $@"C:/nota-fiscal/pdf/{invoiceIdPlugNotas}.pdf";
+
+                FileInfo file = new FileInfo(path);
+                file.Directory.Create();
+                File.WriteAllBytes(file.FullName, document);
+
+                return string.Empty;
+            }
+            return response.Content;
+        }
+
+        public object DownloadInvoiceXml(string invoiceIdPlugNotas)
+        {
+            var client = new RestClient(_url);
+            client.Timeout = -1;
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/cce/xml", Method.GET);
+            request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
+            request.OnBeforeDeserialization = response => { response.ContentType = "application/xml"; };
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                byte[] document = client.DownloadData(request);
+
+                string path = $@"C:/nota-fiscal/xml/{invoiceIdPlugNotas}.xml";
+
+                FileInfo file = new FileInfo(path);
+                file.Directory.Create();
+                File.WriteAllBytes(file.FullName, document);
+
+                return string.Empty;
+            }
+            return response.Content;
         }
 
         private PlugNotasApi Initialize(Invoice invoice)

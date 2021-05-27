@@ -95,20 +95,6 @@ namespace SalesProject.Domain.Dtos
         public double Valor { get; set; }
     }
 
-    //public class Telefone
-    //{
-    //    public string Ddd { get; set; }
-    //    public string Numero { get; set; }
-    //}
-
-    //public class ResponsavelTecnico
-    //{
-    //    public string CpfCnpj { get; set; }
-    //    public string Nome { get; set; }
-    //    public string Email { get; set; }
-    //    public Telefone Telefone { get; set; }
-    //}
-
     public class PlugNotasApi
     {
         public string IdIntegracao { get; set; }
@@ -119,6 +105,39 @@ namespace SalesProject.Domain.Dtos
         public Destinatario Destinatario { get; set; }
         public List<Iten> Itens { get; set; }
         public List<Pagamento> Pagamentos { get; set; }
-        //public ResponsavelTecnico ResponsavelTecnico { get; set; }
+    }
+
+    public class Document
+    {
+        public Document(
+            string idIntegracao, 
+            string emitente, 
+            string id)
+        {
+            IdIntegracao = idIntegracao;
+            Emitente = emitente;
+            Id = id;
+        }
+
+        public string IdIntegracao { get; set; }
+        public string Emitente { get; set; }
+        public string Id { get; set; }
+    }
+
+    public class PlugNotasResponse
+    {
+        public PlugNotasResponse(
+            List<Document> documents, 
+            string message, 
+            string protocol)
+        {
+            Documents = documents;
+            Message = message;
+            Protocol = protocol;
+        }
+
+        public List<Document> Documents { get; set; }
+        public string Message { get; set; }
+        public string Protocol { get; set; }
     }
 }

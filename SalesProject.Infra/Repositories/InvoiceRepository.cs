@@ -18,6 +18,28 @@ namespace SalesProject.Infra.Repositories
         ~InvoiceRepository() =>
             Dispose();
 
+        public object GetInvoiceIdByOrderId(Guid orderId)
+        {
+            return
+            (from invoice in _context.Invoices
+             where invoice.OrderId == orderId
+             select new
+             {
+                 invoice.Id
+             }).FirstOrDefault();
+        }
+
+        public object GetInvoiceIdOfPlugNotasByOrderId(Guid orderId)
+        {
+            return
+            (from invoice in _context.Invoices
+             where invoice.OrderId == orderId
+             select new
+             {
+                 invoice.IdPlugNotasIntegration
+             }).FirstOrDefault();
+        }
+
         public Invoice Get(Guid id) =>
             _context.Invoices
                 .Include(i => i.InvoiceLines)

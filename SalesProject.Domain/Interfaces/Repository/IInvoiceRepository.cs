@@ -8,6 +8,8 @@ namespace SalesProject.Domain.Interfaces.Repository
         void Create(Invoice invoice);
         Invoice Get(Guid id);
         Invoice GetByOrderId(Guid orderId);
+        object GetInvoiceIdByOrderId(Guid orderId);
+        object GetInvoiceIdOfPlugNotasByOrderId(Guid orderId);
         void Update(Invoice invoice);
     }
 }

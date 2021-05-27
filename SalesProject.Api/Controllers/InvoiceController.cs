@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RestSharp;
+using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
@@ -48,9 +50,52 @@ namespace SalesProject.Api.Controllers
             if (invoice != null)
                 return Ok(invoice);
 
-            return NotFound($"Ops. Nota fiscal  vinculada ao Pedido:'{orderId}' não foi encontrada.");
+            return NotFound($"Ops. Nenhuma Nota fiscal vinculada ao Pedido: '{orderId}' foi encontrada.");
         }
 
+        /// <summary>
+        /// Get only InvoiceId of a specific Order.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/id/{orderId:guid}")]
+        public IActionResult GetIdByOrderId(Guid orderId)
+        {
+            var id = _invoiceService.GetInvoiceIdByOrderId(orderId);
+
+            if (id != null)
+                return Ok(id);
+
+            return NotFound($"Ops. Nenhum Id de Nota fiscal vinculado ao Pedido: '{orderId}' foi encontrado.");
+        }
+
+        /// <summary>
+        /// Get only Id of Invoice of Plug Notas Api by a specific Order.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/plug-notas-id/{orderId:guid}")]
+        public IActionResult GetInvoiceIdOfPlugNotasByOrderId(Guid orderId)
+        {
+            var invoiceIdPlugNotas = _invoiceService.GetInvoiceIdOfPlugNotasByOrderId(orderId);
+
+            if (invoiceIdPlugNotas != null)
+                return Ok(invoiceIdPlugNotas);
+
+            return NotFound($"Ops. Nenhum Id de Nota fiscal  vinculado ao Pedido: '{orderId}' foi encontrado.");
+        }
 
         /// <summary>
         /// Create an Invoice based in an order.
@@ -94,7 +139,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPatch]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,10 +160,89 @@ namespace SalesProject.Api.Controllers
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                _invoiceService.MarkAsIntegrated(invoice);
+                var plugNotasResponse = JsonConvert.DeserializeObject<PlugNotasResponse>(response.Content);
+
+                string invoiceIdPlugNotas = string.Empty;
+
+                foreach (var document in plugNotasResponse.Documents)
+                {
+                    invoiceIdPlugNotas = document.Id;
+                    break;
+                }
+
+                _invoiceService.MarkAsIntegrated(invoice, invoiceIdPlugNotas);
                 return Ok(response.Content);
             }             
             return BadRequest(response.Content);
+        }
+
+        /// <summary>
+        /// Get information about an Invoice in Sefaz using the Id of Plug Notas Api.
+        /// </summary>
+        /// <param name="invoiceIdPlugNotas"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("api/[controller]/consult/{invoiceIdPlugNotas}")]
+        public IActionResult Consult(string invoiceIdPlugNotas)
+        {
+            var response = (IRestResponse)_plugNotasApiService.ConsultSefaz(invoiceIdPlugNotas);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+                return Ok(response.Content);
+            
+            return BadRequest(response.Content);
+        }
+
+        /// <summary>
+        /// Downaload a PDF of an Invoice by Id of Plug Notas Api.
+        /// </summary>
+        /// <param name="invoiceIdPlugNotas"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("api/[controller]/download-pdf/{invoiceIdPlugNotas}")]
+        public IActionResult DownloadPdf(string invoiceIdPlugNotas)
+        {
+            string response = (string)_plugNotasApiService.DownloadInvoicePdf(invoiceIdPlugNotas);
+
+            if (string.IsNullOrEmpty(response))
+                return Ok($"Download do Pdf da Nota fiscal realizado com sucesso. Pdf disponível em 'C:/nota-fiscal/pdf/{invoiceIdPlugNotas}.pdf'");
+
+            return BadRequest(response);
+        }
+
+        /// <summary>
+        /// Download a XML of an Invoice by Id of Plug Notas Api.
+        /// </summary>
+        /// <param name="invoiceIdPlugNotas"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize()]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("api/[controller]/download-xml/{invoiceIdPlugNotas}")]
+        public IActionResult DownloadXml(string invoiceIdPlugNotas)
+        {
+            string response = (string)_plugNotasApiService.DownloadInvoiceXml(invoiceIdPlugNotas);
+
+            if (string.IsNullOrEmpty(response))
+                return Ok($"Download do Xml da Nota fiscal realizado com sucesso. Xml disponível em 'C:/nota-fiscal/xml/{invoiceIdPlugNotas}.xml'");
+
+            return BadRequest(response);
         }
     }
 }

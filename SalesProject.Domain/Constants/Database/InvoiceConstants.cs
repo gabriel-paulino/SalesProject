@@ -11,6 +11,7 @@
             FieldTotalProducts = "TotalProdutos",
             FieldTotalInvoice = "TotalNota",
             FieldIntegratedPlugNotasApi = "NotaEnviada",
+            FieldIdPlugNotasIntegration = "NotaIdPlugNotas",
             FieldOrderId = "PedidoId";
 
         public const string
@@ -22,6 +23,7 @@
             TotalProducts = "Valor total dos produtos da Nota fiscal.",
             TotalInvoice = "Valor total da Nota fiscal.",
             IntegratedPlugNotasApi = "Nota fiscal foi enviada para Sefaz? Y: Sim, N: Não.",
+            IdPlugNotasIntegration = "Chave da Nota Fiscal integrada com Plug Notas Api.",
             OrderId = "Vínculo com a tabela de Pedido (Fk).";
     }
 }

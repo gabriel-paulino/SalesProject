@@ -16,18 +16,15 @@ namespace SalesProject.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _uow;
         private readonly ITokenService _tokenService;
 
         public AccountController(
             IUserRepository userRepository,
-            ICustomerRepository customerRepository,
             ITokenService tokenService,
             IUnitOfWork uow)
         {
             _userRepository = userRepository;
-            _customerRepository = customerRepository;
             _tokenService = tokenService;
             _uow = uow;
         }

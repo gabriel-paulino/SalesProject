@@ -28,6 +28,12 @@ namespace SalesProject.Api.Services
         public Invoice Get(Guid id) =>
             _invoiceRepository.Get(id);
 
+        public object GetInvoiceIdByOrderId(Guid orderId) =>
+            _invoiceRepository.GetInvoiceIdByOrderId(orderId);
+
+        public object GetInvoiceIdOfPlugNotasByOrderId(Guid orderId) =>
+            _invoiceRepository.GetInvoiceIdOfPlugNotasByOrderId(orderId);
+
         public Invoice GetByOrderId(Guid orderId) =>
             _invoiceRepository.GetByOrderId(orderId);
         
@@ -60,9 +66,9 @@ namespace SalesProject.Api.Services
             return invoice;
         }
 
-        public void MarkAsIntegrated(Invoice invoice)
+        public void MarkAsIntegrated(Invoice invoice, string invoiceIdPlugNotas)
         {
-            invoice.MarkAsIntegrated();
+            invoice.MarkAsIntegrated(invoiceIdPlugNotas);
             _invoiceRepository.Update(invoice);
             _uow.Commit();
         }

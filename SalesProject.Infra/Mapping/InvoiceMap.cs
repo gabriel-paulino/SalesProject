@@ -58,6 +58,13 @@ namespace SalesProject.Infra.Mapping
                 IsRequired().
                 HasComment(InvoiceConstants.IntegratedPlugNotasApi);
 
+            builder.Property(c => c.IdPlugNotasIntegration).
+                HasColumnName(InvoiceConstants.FieldIdPlugNotasIntegration).
+                HasMaxLength(40).
+                HasColumnType("varchar(40)").
+                IsRequired(false).
+                HasComment(InvoiceConstants.IdPlugNotasIntegration);
+
             builder.Property(i => i.OrderId).
                 HasColumnName(InvoiceConstants.FieldOrderId).
                 IsRequired(false).

@@ -31,6 +31,7 @@ namespace SalesProject.Domain.Entities
         public decimal TotalProducts { get; private set; }
         public decimal TotalInvoice { get; private set; }
         public char IntegratedPlugNotasApi { get; private set; }
+        public string IdPlugNotasIntegration { get; private set; }
 
         public IReadOnlyCollection<InvoiceLine> InvoiceLines { get => _invoiceLines.ToArray(); }
 
@@ -51,7 +52,11 @@ namespace SalesProject.Domain.Entities
             TotalIcms = InvoiceLines.Sum(l => l.ValueIcms);
         }
 
-        public void MarkAsIntegrated() => IntegratedPlugNotasApi = 'Y';
+        public void MarkAsIntegrated(string invoiceIdPlugNotas) 
+        {
+            IntegratedPlugNotasApi = 'Y';
+            IdPlugNotasIntegration = invoiceIdPlugNotas;
+        } 
 
         public override void DoValidations() { }
     }
