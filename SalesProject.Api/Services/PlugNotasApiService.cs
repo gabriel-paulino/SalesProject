@@ -4,7 +4,6 @@ using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Services;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,37 +14,63 @@ namespace SalesProject.Api.Services
 {
     public class PlugNotasApiService : IPlugNotasApiService
     {
+        private readonly IInvoiceService _invoiceService;
         private readonly IConfiguration _configuration;
         private readonly string _url;
 
-        public PlugNotasApiService(IConfiguration configuration)
+        public PlugNotasApiService(
+            IInvoiceService invoiceService,
+            IConfiguration configuration)
         {
+            _invoiceService = invoiceService;
             _configuration = configuration;
             _url = "https://api.sandbox.plugnotas.com.br/";
         }
 
         public object SendInvoice(Invoice invoice)
         {
-            var plugNotasApi = Initialize(invoice);
+            var invoicePlugNotas = Initialize(invoice);
+            var options = GetOptionsForSerializationJson();
 
-            var options = new JsonSerializerOptions()
+            string jsonInvoice = JsonSerializer.Serialize(invoicePlugNotas, options);
+
+            return Send($"[{jsonInvoice}]");
+        }
+
+        public string SendAllInvoices(List<Invoice> invoices)
+        {
+            var invoicesPlugNotas = new List<PlugNotasApi>();
+
+            foreach (var invoice in invoices)
             {
-                IgnoreNullValues = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
+                var invoicePlugNotas = Initialize(invoice);
+                invoicesPlugNotas.Add(invoicePlugNotas);
+            }
 
-            string jsonInvoice = JsonSerializer.Serialize(plugNotasApi, options);
+            var options = GetOptionsForSerializationJson();
 
-            var client = new RestClient($"{_url}nfe");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
-            request.AddHeader("Content-Type", "application/json");
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody($"[{jsonInvoice}]");
+            string jsonInvoices = JsonSerializer.Serialize(invoicesPlugNotas, options);
 
-            return client.Execute(request);
+            var response = Send(jsonInvoices);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var plugNotasResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PlugNotasResponse>(response.Content);
+
+                foreach (var invoice in invoices)
+                {
+                    foreach (var document in plugNotasResponse.Documents)
+                    {
+                        if (document.IdIntegracao.ToUpper() != invoice.Id.ToString().ToUpper())
+                            continue;
+
+                        _invoiceService.MarkAsIntegrated(invoice, document.Id);
+                    }
+                }
+                return string.Empty;
+            }
+
+            return response.Content;
         }
 
         public object ConsultSefaz(string invoiceIdPlugNotas)
@@ -59,7 +84,7 @@ namespace SalesProject.Api.Services
             return client.Execute(request);
         }
 
-        public object DownloadInvoicePdf(string invoiceIdPlugNotas)
+        public string DownloadInvoicePdf(string invoiceIdPlugNotas)
         {
             var client = new RestClient(_url);
             client.Timeout = -1;
@@ -84,7 +109,7 @@ namespace SalesProject.Api.Services
             return response.Content;
         }
 
-        public object DownloadInvoiceXml(string invoiceIdPlugNotas)
+        public string DownloadInvoiceXml(string invoiceIdPlugNotas)
         {
             var client = new RestClient(_url);
             client.Timeout = -1;
@@ -214,6 +239,27 @@ namespace SalesProject.Api.Services
             plugNotas.Pagamentos = payments;
 
             return plugNotas;
+        }
+
+        private JsonSerializerOptions GetOptionsForSerializationJson() =>
+            new JsonSerializerOptions()
+            {
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+        private IRestResponse Send(string json)
+        {
+            var client = new RestClient($"{_url}nfe");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(json);
+
+            return client.Execute(request);
         }
     }
 }

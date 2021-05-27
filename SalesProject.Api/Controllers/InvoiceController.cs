@@ -177,6 +177,33 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
+        /// Sends All non-integrated Invoices to the Plug Notas Api.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize(Roles = "Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("api/[controller]/send-all")]
+        public IActionResult SendAll()
+        {
+            var invoices = _invoiceService.GetAllInvoicesAbleToSend();
+
+            if (!invoices.Any())
+                return BadRequest($"Ops. Não existem Notas fiscais a serem enviadas.");
+
+            string response = _plugNotasApiService.SendAllInvoices(invoices);
+
+            if (string.IsNullOrEmpty(response))
+                return Ok(@$"Todas as {invoices.Count} Notas Fiscais foram enviadas com sucesso.");
+            
+            return BadRequest(response);
+        }
+
+        /// <summary>
         /// Get information about an Invoice in Sefaz using the Id of Plug Notas Api.
         /// </summary>
         /// <param name="invoiceIdPlugNotas"></param>
@@ -214,7 +241,7 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/download-pdf/{invoiceIdPlugNotas}")]
         public IActionResult DownloadPdf(string invoiceIdPlugNotas)
         {
-            string response = (string)_plugNotasApiService.DownloadInvoicePdf(invoiceIdPlugNotas);
+            string response = _plugNotasApiService.DownloadInvoicePdf(invoiceIdPlugNotas);
 
             if (string.IsNullOrEmpty(response))
                 return Ok($"Download do Pdf da Nota fiscal realizado com sucesso. Pdf disponível em 'C:/nota-fiscal/pdf/{invoiceIdPlugNotas}.pdf'");
@@ -237,7 +264,7 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/download-xml/{invoiceIdPlugNotas}")]
         public IActionResult DownloadXml(string invoiceIdPlugNotas)
         {
-            string response = (string)_plugNotasApiService.DownloadInvoiceXml(invoiceIdPlugNotas);
+            string response = _plugNotasApiService.DownloadInvoiceXml(invoiceIdPlugNotas);
 
             if (string.IsNullOrEmpty(response))
                 return Ok($"Download do Xml da Nota fiscal realizado com sucesso. Xml disponível em 'C:/nota-fiscal/xml/{invoiceIdPlugNotas}.xml'");

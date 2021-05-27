@@ -1,11 +1,9 @@
 ﻿using SalesProject.Domain.Entities;
-using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SalesProject.Api.Services
 {
@@ -36,7 +34,7 @@ namespace SalesProject.Api.Services
 
         public Invoice GetByOrderId(Guid orderId) =>
             _invoiceRepository.GetByOrderId(orderId);
-        
+
         public Invoice CreateBasedInOrder(Order order)
         {
             var invoice = new Invoice(order);
@@ -72,5 +70,8 @@ namespace SalesProject.Api.Services
             _invoiceRepository.Update(invoice);
             _uow.Commit();
         }
+
+        public List<Invoice> GetAllInvoicesAbleToSend() =>
+            _invoiceRepository.GetAllInvoicesAbleToSend();
     }
 }

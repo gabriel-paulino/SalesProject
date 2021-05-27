@@ -1,5 +1,6 @@
 ﻿using SalesProject.Domain.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace SalesProject.Domain.Interfaces.Repository
 {
@@ -10,6 +11,7 @@ namespace SalesProject.Domain.Interfaces.Repository
         Invoice GetByOrderId(Guid orderId);
         object GetInvoiceIdByOrderId(Guid orderId);
         object GetInvoiceIdOfPlugNotasByOrderId(Guid orderId);
+        List<Invoice> GetAllInvoicesAbleToSend();
         void Update(Invoice invoice);
     }
 }

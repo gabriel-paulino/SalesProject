@@ -3,6 +3,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SalesProject.Infra.Repositories
@@ -55,6 +56,15 @@ namespace SalesProject.Infra.Repositories
                 .ThenInclude(o => o.Customer)
                 .ThenInclude(c => c.Adresses)
                 .FirstOrDefault(i => i.OrderId == orderId);
+
+        public List<Invoice> GetAllInvoicesAbleToSend() =>
+            _context.Invoices
+                .Include(i => i.InvoiceLines)
+                .Include(i => i.Order)
+                .ThenInclude(o => o.Customer)
+                .ThenInclude(c => c.Adresses)
+                .Where(i => i.IntegratedPlugNotasApi == 'N')
+                .ToList();
 
         public void Create(Invoice invoice) =>
             _context.Invoices.Add(invoice);
