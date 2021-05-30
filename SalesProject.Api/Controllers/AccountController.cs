@@ -206,10 +206,10 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]")]
         public IActionResult GetAll()
         {
-            var ids = _userRepository.GetAll();
+            var users = _userRepository.GetAll();
 
-            if (ids != null)
-                return Ok(ids);
+            if (users != null)
+                return Ok(users);
 
             return NotFound($"Ops. Nenhum usuário foi cadastrado.");
         }
