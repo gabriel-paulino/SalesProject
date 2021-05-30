@@ -50,7 +50,7 @@ namespace SalesProject.Domain.Dtos
         public string Origem { get; set; }
         public string Cst { get; set; }
         public BaseCalculo BaseCalculo { get; set; }
-        public int Aliquota { get; set; }
+        public double Aliquota { get; set; }
         public double Valor { get; set; }
     }
 
