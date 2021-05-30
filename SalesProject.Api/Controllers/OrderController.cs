@@ -419,7 +419,7 @@ namespace SalesProject.Api.Controllers
                     ? Ok(orderDashboard)
                     : ValidationProblem($"{orderDashboard.GetNotification()}");
             
-            return NotFound($"Ops. Não foi possível encontrar dados para esse período pedido.");
+            return BadRequest($"Ops. Não foi possível encontrar dados para esse período pedido.");
         }
 
     }

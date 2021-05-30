@@ -73,7 +73,8 @@ namespace SalesProject.Infra.Repositories
                 .Orders
                 .Where(o => o.PostingDate >= start && o.PostingDate <= end);
 
-            return new OrderDashboard(
+            return query.Any()
+                ? new OrderDashboard(
                     start: start,
                     end: end,
                     openOrders: query.Where(o => o.Status == OrderStatus.Open).Count(),
@@ -84,7 +85,8 @@ namespace SalesProject.Infra.Repositories
                     lowestOrder: query.Min(o => o.TotalOrder),
                     averageOrders: query.Average(o => o.TotalOrder),
                     totalSales: query.Where(o => o.Status == OrderStatus.Billed).Sum(o => o.TotalOrder)
-                    );
+                    )
+                : null;
         }
     }
 }
