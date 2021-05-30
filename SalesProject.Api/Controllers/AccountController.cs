@@ -196,5 +196,22 @@ namespace SalesProject.Api.Controllers
             user.HidePasswordHash();
             return Ok(user);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "It,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]")]
+        public IActionResult GetAll()
+        {
+            var ids = _userRepository.GetAll();
+
+            if (ids != null)
+                return Ok(ids);
+
+            return NotFound($"Ops. Nenhum usuário foi cadastrado.");
+        }
     }
 }

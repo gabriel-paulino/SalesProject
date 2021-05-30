@@ -7,6 +7,7 @@ namespace SalesProject.Domain.Interfaces.Repository
     {
         User Get(Guid id);
         User GetByUsername(string username);
+        object GetAll();
         User Create(User user, string visiblePassword);
         User SignIn(User user, string visiblePassword);
         User ChangePassword(string username, string currentPassword, string newPassword);

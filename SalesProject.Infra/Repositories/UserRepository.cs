@@ -25,6 +25,18 @@ namespace SalesProject.Infra.Repositories
         public User GetByUsername(string username) =>
             _context.Users.FirstOrDefault(u => u.Username == username);
 
+        public object GetAll() =>
+                (from user in _context.Users
+                 select new
+                 {
+                     user.Id,
+                     user.Username,
+                     user.Name,
+                     user.Email,
+                     user.Role,
+                     user.CustomerId
+                 }).ToList();
+
         public User SignIn(User user, string visiblePassword)
         {
             var userDB = _context.Users
@@ -71,7 +83,7 @@ namespace SalesProject.Infra.Repositories
 
             user.EncryptPassword(hasher.HashPassword(user, newPassword));
 
-           _context.Entry<User>(user).State = EntityState.Modified;
+            _context.Entry<User>(user).State = EntityState.Modified;
 
             return user;
         }
