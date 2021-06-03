@@ -63,7 +63,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Roles = "It,Administrator")]
+        [Authorize(Roles = "It,Administrator")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -197,6 +197,10 @@ namespace SalesProject.Api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Get all Users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = "It,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
