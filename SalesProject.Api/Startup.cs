@@ -13,6 +13,7 @@ using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
 using SalesProject.Infra.Context;
+using SalesProject.Infra.Extension;
 using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
 using System;
@@ -166,6 +167,15 @@ namespace SalesProject.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
+
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (!scope.ServiceProvider.GetService<DataContext>().MigrationsApplied())
+                {
+                    scope.ServiceProvider.GetService<DataContext>().Database.Migrate();
+                    scope.ServiceProvider.GetService<DataContext>().Seed();
+                }
+            }
         }
     }
 }
