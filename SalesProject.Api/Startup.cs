@@ -90,7 +90,6 @@ namespace SalesProject.Api
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
-            //services.AddTransient<ITokenService>(sp => new TokenService(Configuration["JwtKey"]));
             services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddTransient<IAddressApiService, AddressApiService>();
