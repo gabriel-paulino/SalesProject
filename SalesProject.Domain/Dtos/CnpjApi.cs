@@ -3,11 +3,12 @@
     public class CnpjApi
     {
         public CnpjApi(
-            string status, 
-            string cnpj, 
-            string nome, 
-            string telefone, 
-            string abertura, 
+            string status,
+            string cnpj,
+            string nome,
+            string telefone,
+            string abertura,
+            string email,
             string message)
         {
             Status = status;
@@ -15,6 +16,7 @@
             Nome = nome;
             Telefone = telefone;
             Abertura = abertura;
+            Email = email;
             Message = message;
         }
 
@@ -23,6 +25,7 @@
         public string Nome { get; private set; }
         public string Telefone { get; private set; }
         public string Abertura { get; private set; }
+        public string Email { get; private set; }
         public string Message { get; private set; }
     }
 }

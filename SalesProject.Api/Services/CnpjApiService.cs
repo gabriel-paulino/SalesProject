@@ -37,6 +37,7 @@ namespace SalesProject.Api.Services
                     cnpj: customerResponse.Cnpj,
                     nome: customerResponse.Nome,
                     telefone: customerResponse.Telefone,
+                    email: customerResponse.Email,
                     abertura: customerResponse.Abertura,
                     message: customerResponse.Message ?? string.Empty
                     );

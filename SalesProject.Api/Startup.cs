@@ -53,7 +53,7 @@ namespace SalesProject.Api
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     options.SuppressConsumesConstraintForFormFileParameters = true;
-                    //options.SuppressInferBindingSourcesForParameters = true;
+                    options.SuppressInferBindingSourcesForParameters = false;
                     options.SuppressModelStateInvalidFilter = true;
                     options.SuppressMapClientErrors = true;
                     options.ClientErrorMapping[StatusCodes.Status404NotFound].Link =
