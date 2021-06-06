@@ -4,6 +4,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SalesProject.Infra.Repositories
@@ -24,6 +25,9 @@ namespace SalesProject.Infra.Repositories
 
         public User GetByUsername(string username) =>
             _context.Users.FirstOrDefault(u => u.Username == username);
+
+        public List<User> GetUsersByName(string name) =>
+            _context.Users.Where(x => x.Name.Contains(name)).ToList();
 
         public object GetAll() =>
                 (from user in _context.Users
@@ -91,6 +95,9 @@ namespace SalesProject.Infra.Repositories
         public void Delete(User user) =>
             _context.Users.Remove(user);
 
+        public void Update(User user) =>
+            _context.Entry<User>(user).State = EntityState.Modified;
+
         public bool HasCustomerLink(Guid? customerId) =>
            _context.Users
             .Where(u => u.CustomerId == customerId)
@@ -99,6 +106,11 @@ namespace SalesProject.Infra.Repositories
         public bool HasAnotherUserSameUsernameOrEmail(User user) =>
             _context.Users
             .Where(u => u.Username == user.Username || u.Email == user.Email)
+            .Any();
+
+        public bool HasAnotherUserWithSameEmail(string email) =>
+            _context.Users
+            .Where(u => u.Email == email)
             .Any();
 
         public void Dispose()

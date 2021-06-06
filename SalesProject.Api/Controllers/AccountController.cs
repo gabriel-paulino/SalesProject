@@ -112,7 +112,7 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
-        /// Change the Password of the current user.
+        /// Change the Password of the current logged User.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -139,6 +139,44 @@ namespace SalesProject.Api.Controllers
             user.HidePasswordHash();
             return Ok(user);
         }
+
+        /// <summary>
+        /// Change Name and E-mail of the current logged User.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("api/[controller]")]
+        public IActionResult Edit([FromBody] EditUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var username = User.Identity.Name;
+            var user = _userRepository.GetByUsername(username);
+
+            user.Edit(
+                newName: model.NewName,
+                newEmail: model.NewEmail);
+
+            if (!user.Valid)
+                return ValidationProblem($"{user.GetNotification()}");
+
+            if (_userRepository.HasAnotherUserWithSameEmail(user.Email))
+                return ValidationProblem($"Ops. Esse E-mail já está em uso.");
+
+            _userRepository.Update(user);
+            _uow.Commit();
+
+            user.HidePasswordHash();
+            return Ok(user);
+        }
+
 
         /// <summary>
         /// Delete an User by Id.
@@ -216,6 +254,58 @@ namespace SalesProject.Api.Controllers
                 return Ok(users);
 
             return NotFound($"Ops. Nenhum usuário foi cadastrado.");
+        }
+
+        /// <summary>
+        /// Get an User by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "It,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/{id:guid}")]
+        public IActionResult GetUserByCustomerId(Guid id)
+        {
+            var user = _userRepository.Get(id);
+
+            if (user != null)
+            {
+                user.HidePasswordHash();
+                return Ok(user);
+            }
+
+            return NotFound($"Ops. Nenhum usuário com Id:'{id}' foi encontrado.");
+        }
+
+        /// <summary>
+        /// Get all users with Name contains this param.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "It,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/name/{name}")]
+        public IActionResult GetUsersByName(string name)
+        {
+            var users = _userRepository.GetUsersByName(name);
+
+            if (users.Count > 0) {
+                foreach (var user in users)
+                    user.HidePasswordHash();
+                
+                return Ok(users);
+            }
+            return NotFound($"Ops. Nenhum usuário com Nome:'{name}' foi encontrado.");
         }
     }
 }
