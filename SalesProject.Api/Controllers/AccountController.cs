@@ -71,6 +71,9 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/register")]
         public ActionResult<dynamic> Register([FromBody] RegisterViewModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (model.Password != model.ConfirmPassword)
                 return ValidationProblem("Ops. As senhas não coincidem. Tente novamente.");
 
