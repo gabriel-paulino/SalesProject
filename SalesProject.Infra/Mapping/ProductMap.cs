@@ -9,47 +9,55 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(p => p.Id).
                 ValueGeneratedOnAdd().
-                HasColumnType("uniqueidentifier");
+                HasColumnType("uniqueidentifier").
+                HasComment(ProductConstants.Id);
 
-            builder.Property(c => c.Name).
+            builder.Property(p => p.Name).
                 HasColumnName(ProductConstants.FieldName).
                 HasMaxLength(50).
                 HasColumnType("varchar(50)").
-                IsRequired();
+                IsRequired().
+                HasComment(ProductConstants.Name);
 
-            builder.Property(c => c.NcmCode).
+            builder.Property(p => p.NcmCode).
                 HasColumnName(ProductConstants.FieldNcmCode).
                 HasMaxLength(15).
-                HasColumnType("varchar(15)");
+                HasColumnType("varchar(15)").
+                HasComment(ProductConstants.NcmCode);
 
-            builder.Property(c => c.CombinedPrice).
+            builder.Property(p => p.CombinedPrice).
                 HasColumnName(ProductConstants.FieldCombinedPrice).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(ProductConstants.CombinedPrice);
 
-            builder.Property(c => c.AdditionalCosts).
+            builder.Property(p => p.AdditionalCosts).
                 HasColumnName(ProductConstants.FieldAdditionalCosts).
-                HasColumnType("money");
+                HasColumnType("money").
+                HasComment(ProductConstants.AdditionalCosts);
 
-            builder.Property(c => c.CombinedQuantity).
+            builder.Property(p => p.CombinedQuantity).
                 HasColumnName(ProductConstants.FieldCombinedQuantity).
-                IsRequired();
+                IsRequired().
+                HasComment(ProductConstants.CombinedQuantity);
 
-            builder.Property(c => c.Details).
+            builder.Property(p => p.Details).
                 HasColumnName(ProductConstants.FieldDetails).
                 HasMaxLength(500).
-                HasColumnType("varchar(500)");
+                HasColumnType("varchar(500)").
+                HasComment(ProductConstants.Details);
 
-            builder.Property(c => c.CustomerId).
+            builder.Property(p => p.CustomerId).
                 HasColumnName(ProductConstants.FieldCustomerId).
-                IsRequired(false);
+                IsRequired(false).
+                HasComment(ProductConstants.CustomerId);
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
+            builder.Ignore(p => p.Notifications);
+            builder.Ignore(p => p.Valid);
 
-            builder.HasKey(c => c.Id);
+            builder.HasKey(p => p.Id);
             builder.ToTable(ProductConstants.TableProduct);
         }
     }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Contact;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using System;
+using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
 {
@@ -25,7 +27,18 @@ namespace SalesProject.Api.Controllers
             _uow = uow;
         }
 
+        /// <summary>
+        /// Get a Contact by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetContact(Guid id)
         {
@@ -37,7 +50,18 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
         }
 
+        /// <summary>
+        /// Get all contacts with FullName contains this param.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetContactsByName(string name)
         {
@@ -49,7 +73,18 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum contato com nome:'{name}' foi encontrado.");
         }
 
+        /// <summary>
+        /// Get all Contacts of an specific Customer.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetContactsByCustomerId(Guid customerId)
         {
@@ -67,7 +102,18 @@ namespace SalesProject.Api.Controllers
             return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
         }
 
+        /// <summary>
+        /// Create a Contact.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/[controller]")]
         public IActionResult CreateContact(CreateContactViewModel model)
         {
@@ -84,7 +130,7 @@ namespace SalesProject.Api.Controllers
                         customerId: Guid.Parse(model.CustomerId));
 
             if (!contact.Valid)
-                return ValidationProblem(detail: $"{contact.GetNotification()}");
+                return ValidationProblem($"{contact.GetNotification()}");
 
             _contactRepository.Create(contact);
             _uow.Commit();
@@ -94,7 +140,17 @@ namespace SalesProject.Api.Controllers
             contact);
         }
 
+        /// <summary>
+        /// Delete a Contact by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
+        [Authorize(Roles = "Seller,Administrator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteContact(Guid id)
         {
@@ -109,7 +165,20 @@ namespace SalesProject.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Update a Contact by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
+        [Authorize(Roles = "Seller,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
         public IActionResult EditContact(Guid id, EditContactViewModel model)
         {
@@ -130,7 +199,7 @@ namespace SalesProject.Api.Controllers
                         phone: model.Phone);
 
             if (!newContact.Valid)
-                return ValidationProblem(detail: $"{newContact.GetNotification()}");
+                return ValidationProblem($"{newContact.GetNotification()}");
 
             _contactRepository.Update(newContact);
             _uow.Commit();

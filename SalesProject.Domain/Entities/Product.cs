@@ -58,18 +58,29 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateNcmCode();
         }
 
         private void ValidateFillingMandatoryFields()
         {
             if (string.IsNullOrEmpty(Name))
                 AddNotification("O preenchimento do campo 'Nome do produto' é obrigatório.");
+            if (string.IsNullOrEmpty(NcmCode))
+                AddNotification("O preenchimento do campo 'Código Ncm' é obrigatório.");
             if (CombinedPrice <= 0)
                 AddNotification("Valor do campo 'Preço combinado' está inválido.");
             if (CombinedQuantity <= 0)
                 AddNotification("A 'Previsão mínima mensal' informada é inválida.");
             if (CombinedQuantity < 0)
                 AddNotification("O 'Custo adicional' informado é inválido.");
+        }
+
+        private void ValidateNcmCode()
+        {
+            if(!(NcmCode.Length == 2 || NcmCode.Length == 8))
+                AddNotification("O 'Código Ncm' deve possuir 2 ou 8 caractéres.");
+            if(!(int.TryParse(NcmCode, out int result)))
+                AddNotification("O 'Código Ncm' informado é inválido.");
         }
     }
 }

@@ -11,16 +11,18 @@ namespace SalesProject.Infra.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new UserMap());
             builder.ApplyConfiguration(new CustomerMap());
             builder.ApplyConfiguration(new AddressMap());
             builder.ApplyConfiguration(new ContactMap());
             builder.ApplyConfiguration(new ProductMap());
             builder.ApplyConfiguration(new OrderMap());
-            builder.ApplyConfiguration(new OrderLinesMap());
+            builder.ApplyConfiguration(new OrderLineMap());
             builder.ApplyConfiguration(new InvoiceMap());
-            builder.ApplyConfiguration(new InvoiceLinesMap());
+            builder.ApplyConfiguration(new InvoiceLineMap());
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addreses { get; set; }
         public DbSet<Contact> Contacts { get; set; }

@@ -9,107 +9,55 @@ namespace SalesProject.Domain.Entities
     {
         public Invoice() { }
 
-        public Invoice(
-            int number,
-            int series,
-            string originOperation,
-            DateTime releaseDate,
-            DateTime leaveDate,
-            string leaveHour,
-            string additionalInformation,
-            Company company,
-            Shipping shipping)
+        public Invoice(Order order)
         {
-            Number = number;
-            Series = series;
-            OriginOperation = originOperation;
-            ReleaseDate = releaseDate;
-            LeaveDate = leaveDate;
-            LeaveHour = leaveHour;
-
-            //Todo: Validar quais parametros fazem sentido serem passados pelo construtor
-            CarrierName = shipping.CarrierName;
-            PaidBy = shipping.PaidBy;
-            AnttCode = shipping.AnttCode;
-            LicensePlate = shipping.LicensePlate;
-            CarrierCnpj = shipping.CarrierCnpj;
-            StateRegistration = shipping.StateRegistration;
-            Quantity = shipping.Quantity;
-            Type = shipping.Type;
-            Branch = shipping.Branch;
-            Numeration = shipping.Numeration;
-            GrossWeight = shipping.GrossWeight;
-            NetWeight = shipping.NetWeight;
-            CarrierAddress = shipping.GetShippingAddressToInvoice();
-            CarrierCity = shipping.CarrierAddress.City;
-            CarrierState = shipping.CarrierAddress.State;
-
-            AdditionalInformation = additionalInformation;
-            Company = company;
-            Shipping = shipping;
-            _invoiceLines = new List<InvoiceLines>();
+            Order = order;
+            ReleaseDate = DateTime.Today.Date;
+            OriginOperation = "Vendas";
+            IntegratedPlugNotasApi = 'N';
+            _invoiceLines = new List<InvoiceLine>();
 
             DoValidations();
         }
 
-        private IList<InvoiceLines> _invoiceLines;
+        private IList<InvoiceLine> _invoiceLines;
 
         public Order Order { get; private set; }
         public Guid? OrderId { get; private set; }
-        public int Number { get; private set; }
-        public int Series { get; private set; }
-        public string OriginOperation { get; private set; }
-        public Company Company { get; private set; }
         public DateTime ReleaseDate { get; private set; }
-        public DateTime LeaveDate { get; private set; }
-        public string LeaveHour { get; private set; }
-        public Shipping Shipping { get; private set; }
-
-        public string CarrierName { get; private set; }
-        public string PaidBy { get; private set; }
-        public string AnttCode { get; private set; }
-        public string LicensePlate { get; private set; }
-        public string CarrierCnpj { get; private set; }
-        public string StateRegistration { get; private set; }
-        public double Quantity { get; private set; }
-        public string Type { get; private set; }
-        public string Branch { get; private set; }
-        public string Numeration { get; private set; }
-        public double GrossWeight { get; private set; }
-        public double NetWeight { get; private set; }
-        public string CarrierAddress { get; private set; }
-        public string CarrierCity { get; private set; }
-        public string CarrierState { get; private set; }
-
+        public string OriginOperation { get; private set; }
         public decimal BaseCalcIcms { get; private set; }
         public decimal TotalIcms { get; private set; }
-        public decimal BaseCalcOtherIcms { get; private set; }
-        public decimal TotalOtherIcms { get; private set; }
         public decimal TotalProducts { get; private set; }
-        public decimal ShippingCost { get; private set; }
-        public decimal InsuranceCost { get; private set; }
-        public decimal TotalDiscont { get; private set; }
-        public decimal OtherCosts { get; private set; }
-        public decimal IpiValue { get; private set; }
         public decimal TotalInvoice { get; private set; }
-        public string AdditionalInformation { get; private set; }
-        public string ReservedFisco { get; private set; }
-        public IReadOnlyCollection<InvoiceLines> InvoiceLines { get => _invoiceLines.ToArray(); }
+        public char IntegratedPlugNotasApi { get; private set; }
+        public string IdPlugNotasIntegration { get; private set; }
 
-        public void AddInvoiceLine(InvoiceLines invoiceLine)
+        public IReadOnlyCollection<InvoiceLine> InvoiceLines { get => _invoiceLines.ToArray(); }
+
+        public void AddInvoiceLine(InvoiceLine invoiceLine)
         {
             _invoiceLines.Add(invoiceLine);
             UpdateInvoiceValues();
         }
 
-        public override void DoValidations()
-        {
-        }
-
         private void UpdateInvoiceValues()
         {
-            //Atualizar Frete, Impostos no geral, Produtos, Desconto e Valor total basedo nas linhas
-            //Em debug verificar se será necessario resetar os totais antes do foreach
+            decimal total = InvoiceLines.Sum(l => l.TotalPrice);
+
+            TotalInvoice = total;
+            TotalProducts = total;
+            BaseCalcIcms = total;
+
+            TotalIcms = InvoiceLines.Sum(l => l.ValueIcms);
         }
+
+        public void MarkAsIntegrated(string invoiceIdPlugNotas) 
+        {
+            IntegratedPlugNotasApi = 'Y';
+            IdPlugNotasIntegration = invoiceIdPlugNotas;
+        } 
+
+        public override void DoValidations() { }
     }
 }

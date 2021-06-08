@@ -9,188 +9,77 @@ namespace SalesProject.Infra.Mapping
     {
         public void Configure(EntityTypeBuilder<Invoice> builder)
         {
-            builder.Property(c => c.Id).
+            builder.Property(i => i.Id).
                 ValueGeneratedOnAdd().
-                HasColumnType("uniqueidentifier");
+                HasColumnType("uniqueidentifier").
+                HasComment(InvoiceConstants.Id);
 
-            builder.Property(c => c.Number).
-               HasColumnName(InvoiceConstants.FieldNumber).
-               IsRequired();
-
-            builder.Property(c => c.Series).
-                HasColumnName(InvoiceConstants.FieldSeries).
-                IsRequired();
-
-            builder.Property(c => c.OriginOperation).
-                HasColumnName(InvoiceConstants.FieldOriginOperation).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)").
-                IsRequired();
-
-            builder.Property(c => c.ReleaseDate).
+            builder.Property(i => i.ReleaseDate).
                 HasColumnName(InvoiceConstants.FieldReleaseDate).
                 HasColumnType("date").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.ReleaseDate);
 
-            builder.Property(c => c.LeaveDate).
-                HasColumnName(InvoiceConstants.FieldLeaveDate).
-                HasColumnType("date").
-                IsRequired();
+            builder.Property(i => i.OriginOperation).
+                HasColumnName(InvoiceConstants.FieldOriginOperation).
+                HasMaxLength(150).
+                HasColumnType("varchar(150)").
+                IsRequired().
+                HasComment(InvoiceConstants.OriginOperation);
 
-            builder.Property(c => c.LeaveHour).
-                HasColumnName(InvoiceConstants.FieldLeaveHour).
-                HasMaxLength(30).
-                HasColumnType("varchar(30)");
-
-            builder.Property(c => c.CarrierName).
-                HasColumnName(InvoiceConstants.FieldCarrierName).
-                HasMaxLength(100).
-                HasColumnType("varchar(100)").
-                IsRequired();
-
-            builder.Property(c => c.PaidBy).
-                HasColumnName(InvoiceConstants.FieldPaidBy).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)").
-                IsRequired();
-
-            builder.Property(c => c.AnttCode).
-                HasColumnName(InvoiceConstants.FieldAnttCode).
-                HasMaxLength(10).
-                HasColumnType("varchar(10)");
-
-            builder.Property(c => c.LicensePlate).
-                HasColumnName(InvoiceConstants.FieldLicensePlate).
-                HasMaxLength(10).
-                HasColumnType("varchar(10)");
-
-            builder.Property(c => c.CarrierCnpj).
-                HasColumnName(InvoiceConstants.FieldCarrierCnpj).
-                HasMaxLength(18).
-                HasColumnType("varchar(18)").
-                IsRequired();
-
-            builder.Property(c => c.StateRegistration).
-                HasColumnName(InvoiceConstants.FieldStateRegistration).
-                HasMaxLength(30).
-                HasColumnType("varchar(30)").
-                IsRequired();
-
-            builder.Property(c => c.Quantity).
-                HasColumnName(InvoiceConstants.FieldQuantity).
-                IsRequired();
-
-            builder.Property(c => c.Type).
-                HasColumnName(InvoiceConstants.FieldType).
-                HasMaxLength(30).
-                HasColumnType("varchar(30)").
-                IsRequired();
-
-            builder.Property(c => c.Branch).
-                HasColumnName(InvoiceConstants.FieldBranch).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)");
-
-            builder.Property(c => c.Numeration).
-                HasColumnName(InvoiceConstants.FieldNumeration).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)");
-
-            builder.Property(c => c.GrossWeight).
-                HasColumnName(InvoiceConstants.FieldGrossWeight);
-
-            builder.Property(c => c.NetWeight).
-                HasColumnName(InvoiceConstants.FieldNetWeight);
-
-            builder.Property(c => c.CarrierAddress).
-                HasColumnName(InvoiceConstants.FieldCarrierAddress).
-                HasMaxLength(160).
-                HasColumnType("varchar(160)").
-                IsRequired();
-
-            builder.Property(c => c.CarrierCity).
-                HasColumnName(InvoiceConstants.FieldCarrierCity).
-                HasMaxLength(20).
-                HasColumnType("varchar(20)").
-                IsRequired();
-
-            builder.Property(c => c.CarrierState).
-                HasColumnName(InvoiceConstants.FieldCarrierState).
-                HasMaxLength(2).
-                HasColumnType("varchar(2)").
-                IsRequired();
-
-            builder.Property(c => c.BaseCalcIcms).
+            builder.Property(i => i.BaseCalcIcms).
                 HasColumnName(InvoiceConstants.FieldBaseCalcIcms).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.BaseCalcIcms);
 
-            builder.Property(c => c.TotalIcms).
+            builder.Property(i => i.TotalIcms).
                 HasColumnName(InvoiceConstants.FieldTotalIcms).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalIcms);
 
-            builder.Property(c => c.BaseCalcOtherIcms).
-                HasColumnName(InvoiceConstants.FieldBaseCalcOtherIcms).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalOtherIcms).
-                HasColumnName(InvoiceConstants.FieldTotalOtherIcms).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalProducts).
+            builder.Property(i => i.TotalProducts).
                 HasColumnName(InvoiceConstants.FieldTotalProducts).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalProducts);
 
-            builder.Property(c => c.ShippingCost).
-                HasColumnName(InvoiceConstants.FieldShippingCost).
-                HasColumnType("money");
-
-            builder.Property(c => c.InsuranceCost).
-                HasColumnName(InvoiceConstants.FieldInsuranceCost).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalDiscont).
-                HasColumnName(InvoiceConstants.FieldTotalDiscont).
-                HasColumnType("money");
-
-            builder.Property(c => c.OtherCosts).
-                HasColumnName(InvoiceConstants.FieldOtherCosts).
-                HasColumnType("money");
-
-            builder.Property(c => c.IpiValue).
-                HasColumnName(InvoiceConstants.FieldIpiValue).
-                HasColumnType("money");
-
-            builder.Property(c => c.TotalInvoice).
+            builder.Property(i => i.TotalInvoice).
                 HasColumnName(InvoiceConstants.FieldTotalInvoice).
                 HasColumnType("money").
-                IsRequired();
+                IsRequired().
+                HasComment(InvoiceConstants.TotalInvoice);
 
-            builder.Property(c => c.AdditionalInformation).
-                HasColumnName(InvoiceConstants.FieldAdditionalInformation).
-                HasMaxLength(1024).
-                HasColumnType("varchar(1024)");
+            builder.Property(c => c.IntegratedPlugNotasApi).
+                HasColumnName(InvoiceConstants.FieldIntegratedPlugNotasApi).
+                HasMaxLength(1).
+                HasColumnType("varchar(1)").
+                IsRequired().
+                HasComment(InvoiceConstants.IntegratedPlugNotasApi);
 
-            builder.Property(c => c.ReservedFisco).
-                HasColumnName(InvoiceConstants.FieldReservedFisco).
-                HasMaxLength(1024).
-                HasColumnType("varchar(1024)");
+            builder.Property(c => c.IdPlugNotasIntegration).
+                HasColumnName(InvoiceConstants.FieldIdPlugNotasIntegration).
+                HasMaxLength(40).
+                HasColumnType("varchar(40)").
+                IsRequired(false).
+                HasComment(InvoiceConstants.IdPlugNotasIntegration);
 
-            builder.Property(c => c.OrderId).
+            builder.Property(i => i.OrderId).
                 HasColumnName(InvoiceConstants.FieldOrderId).
-                IsRequired(false);
+                IsRequired(false).
+                HasComment(InvoiceConstants.OrderId);
 
-            builder.Ignore(c => c.Notifications);
-            builder.Ignore(c => c.Valid);
-            builder.Ignore(c => c.Company);
-            builder.Ignore(c => c.Shipping);
+            builder.Ignore(i => i.Notifications);
+            builder.Ignore(i => i.Valid);
 
-            builder.HasMany(c => c.InvoiceLines).WithOne();
-            builder.HasOne(c => c.Order).WithOne().OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(i => i.InvoiceLines).WithOne();
 
-            builder.HasKey(c => c.Id);
+            builder.HasOne(i => i.Order)
+                .WithOne()
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasKey(i => i.Id);
             builder.ToTable(InvoiceConstants.TableInvoice);
         }
     }

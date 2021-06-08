@@ -10,37 +10,37 @@ namespace SalesProject.Infra.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext _context;
         private bool _disposed = false;
 
         public ProductRepository(DataContext dataContext) =>
-            _dataContext = dataContext;
+            _context = dataContext;
 
         ~ProductRepository() =>
             Dispose();
 
         public void Create(Product product) =>
-            _dataContext.Products.Add(product);
+            _context.Products.Add(product);
 
         public void Delete(Product product) =>
-            _dataContext.Products.Remove(product);
+            _context.Products.Remove(product);
 
         public Product Get(Guid id) =>
-            _dataContext.Products.Find(id);
+            _context.Products.Find(id);
 
         public List<Product> GetByName(string name) =>
-            _dataContext.Products.Where(x => x.Name.Contains(name)).ToList();
+            _context.Products.Where(x => x.Name.Contains(name)).ToList();
 
         public List<Product> GetByCustomerId(Guid customerId) =>
-            _dataContext.Products.Where(x => x.CustomerId.Equals(customerId)).ToList();
+            _context.Products.Where(x => x.CustomerId.Equals(customerId)).ToList();
 
         public void Update(Product product) =>
-            _dataContext.Entry<Product>(product).State = EntityState.Modified;
+            _context.Entry<Product>(product).State = EntityState.Modified;
 
         public void Dispose()
         {
             if (!_disposed)
-                _dataContext.Dispose();
+                _context.Dispose();
             GC.SuppressFinalize(this);
         }
     }

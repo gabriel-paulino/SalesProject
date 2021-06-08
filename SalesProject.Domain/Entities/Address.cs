@@ -37,6 +37,7 @@ namespace SalesProject.Domain.Entities
         public string Neighborhood { get; private set; }
         public int Number { get; private set; }
         public string City { get; private set; }
+        public string CodeCity { get; private set; }
         public string State { get; private set; }
         public Guid CustomerId { get; private set; }
 
@@ -64,9 +65,12 @@ namespace SalesProject.Domain.Entities
             return this;
         }
 
+        public void SetCodeCity(string codeCity) => this.CodeCity = codeCity;
+
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateAddressType();
             ValidateZipCode();
         }
 
@@ -83,15 +87,23 @@ namespace SalesProject.Domain.Entities
             if (string.IsNullOrEmpty(City))
                 AddNotification("O preenchimento do campo 'Cidade' é obrigatório.");
             if (string.IsNullOrEmpty(State))
-                AddNotification("O preenchimento do campo 'Uf' é obrigatório.");
+                AddNotification("O preenchimento do campo 'UF' é obrigatório.");
             if (Number <= 0)
                 AddNotification("O 'Número' informado é inválido.");
         }
 
+        private void ValidateAddressType()
+        {
+            if (Type != AddressType.Billing &&
+                Type != AddressType.Delivery &&
+                Type != AddressType.Other)
+                AddNotification("O 'Tipo de endereço' informado é inválido.");
+        }
+
         private void ValidateZipCode()
         {
-            if (!Validation.Validation.ZipCodeIsValid(ZipCode))
+            if (!Validation.Validation.IsValidZipCode(ZipCode))
                 AddNotification("O 'Cep' informado é inválido.");
-        }
+        }  
     }
 }

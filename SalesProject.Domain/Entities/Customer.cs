@@ -21,10 +21,12 @@ namespace SalesProject.Domain.Entities
             DateTime? opening,
             string phone,
             string municipalRegistration,
-            string stateRegistration)
+            string stateRegistration,
+            string email)
         {
             this.Cnpj = cnpj;
             this.CompanyName = companyName;
+            this.Email = email;
             this.StateRegistration = stateRegistration;
             this.Opening = opening;
             this.Phone = phone;
@@ -44,6 +46,7 @@ namespace SalesProject.Domain.Entities
         public string Cnpj { get; private set; }
         public string CompanyName { get; private set; }
         public string StateRegistration { get; private set; }
+        public string Email { get; private set; }
         public DateTime? Opening { get; private set; }
         public string Phone { get; private set; }
         public DateTime ClientSince { get; private set; }
@@ -51,20 +54,35 @@ namespace SalesProject.Domain.Entities
         public IReadOnlyCollection<Address> Adresses { get => _adresses.ToArray(); }
         public IReadOnlyCollection<Contact> Contacts { get => _contacts.ToArray(); }
         public IReadOnlyCollection<Product> Products { get => _products.ToArray(); }
+        public User User { get; private set; }
 
         public Customer Edit(
             string phone,
             string municipalRegistration,
-            string stateRegistration)
+            string stateRegistration,
+            string email)
         {
             this.StateRegistration = stateRegistration;
             this.Phone = phone;
             this.MunicipalRegistration = municipalRegistration;
-
+            this.Email = email;
+            
             DoValidations();
 
             return this;
         }
+
+        public void AddAddress(Address address) =>
+            _adresses.Add(address);
+
+        public void AddContact(Contact contact) =>
+            _contacts.Add(contact);
+
+        public void RemoveAddress(Address address) =>
+            _adresses.Remove(address);
+
+        public void RemoveContact(Contact contact) =>
+            _contacts.Remove(contact);
 
         public override void DoValidations()
         {
@@ -80,11 +98,13 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Nome da empresa' é obrigatório.");
             if (string.IsNullOrEmpty(StateRegistration))
                 AddNotification("O preenchimento do campo 'Inscrição estadual' é obrigatório.");
+            if (string.IsNullOrEmpty(Email))
+                AddNotification("O preenchimento do campo 'Email' é obrigatório.");
         }
 
         private void ValidateCnpj()
         {
-            if (!Validation.Validation.CnpjIsValid(Cnpj))
+            if (!Validation.Validation.IsValidCnpj(Cnpj))
                 AddNotification("O 'Cnpj' informado é inválido.");
         }
     }
