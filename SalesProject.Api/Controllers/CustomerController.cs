@@ -273,6 +273,9 @@ namespace SalesProject.Api.Controllers
                 customer.AddAddress(address);
             }
 
+            if (!customer.Adresses.Where(a => a.Type == AddressType.Billing).Any())
+                return ValidationProblem($"Ops. Para adicionar um Cliente é necesssario um Endereço do tipo Cobrança");
+
             foreach (var line in model.Contacts)
             {
                 var contact =
@@ -570,6 +573,9 @@ namespace SalesProject.Api.Controllers
             if (removedContacts.Any())
                 foreach (var contact in removedContacts)
                     newCustomer.RemoveContact(contact);
+
+            if (!newCustomer.Adresses.Where(a => a.Type == AddressType.Billing).Any())
+                return ValidationProblem($"Ops. Falha ao editar Cliente '{newCustomer.CompanyName}', deve possuir um Endereço do tipo Cobrança");
 
             _customerRepository.Update(newCustomer);
             _uow.Commit();
