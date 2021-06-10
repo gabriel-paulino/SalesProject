@@ -102,7 +102,7 @@ namespace SalesProject.Api.Controllers
         }
 
         /// <summary>
-        /// Get fields to complete Address registration using a WebService (ApiCep).
+        /// Get fields to complete Address registration using a WebService (Viacep).
         /// </summary>
         /// <param name="zipCode"></param>
         /// <returns></returns>
@@ -112,18 +112,13 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/zipcode/{zipCode}")]
         public IActionResult CompleteAddressApi(string zipCode)
         {
             var addressResponse = _addressApiService.CompleteAddressApi(zipCode);
 
-            if (addressResponse.Status == 400)
-                return BadRequest($"Ops. O cep:'{zipCode}' é inválido.");
-
-            if (addressResponse.Status == 404)
-                return NotFound($"Ops. Nenhum endereço para o cep:'{zipCode}' foi encontrado.");
+            if (addressResponse is null)
+                return BadRequest($"Ops. Algo deu errado com o cep:'{zipCode}'.");
 
             return Ok(addressResponse);
         }
@@ -190,8 +185,7 @@ namespace SalesProject.Api.Controllers
             if (!address.Valid)
                 return ValidationProblem($"{address.GetNotification()}");
 
-            string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
-            address.SetCodeCity(codeCity: ibgeCode);
+            address.SetCodeCity(codeCity: model.CodeCity);
 
             _addressRepository.Create(address);
             _uow.Commit();
@@ -265,8 +259,7 @@ namespace SalesProject.Api.Controllers
             if (!newAddress.Valid)
                 return ValidationProblem($"{newAddress.GetNotification()}");
 
-            string ibgeCode = _addressApiService.GetIbgeCode(newAddress.ZipCode);
-            newAddress.SetCodeCity(codeCity: ibgeCode);
+            newAddress.SetCodeCity(codeCity: model.CodeCity);
 
             _addressRepository.Update(newAddress);
             _uow.Commit();

@@ -267,8 +267,7 @@ namespace SalesProject.Api.Controllers
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
 
-                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
-                address.SetCodeCity(codeCity: ibgeCode);
+                address.SetCodeCity(codeCity: line.CodeCity);
 
                 customer.AddAddress(address);
             }
@@ -449,8 +448,7 @@ namespace SalesProject.Api.Controllers
                     if (!newAddress.Valid)
                         return ValidationProblem($"{newAddress.GetNotification()}");
 
-                    string ibgeCode = _addressApiService.GetIbgeCode(newAddress.ZipCode);
-                    newAddress.SetCodeCity(codeCity: ibgeCode);
+                    newAddress.SetCodeCity(codeCity: addressModel.CodeCity);
 
                     newAdresses.Add(newAddress);
                 }
@@ -480,8 +478,7 @@ namespace SalesProject.Api.Controllers
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
 
-                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
-                address.SetCodeCity(codeCity: ibgeCode);
+                address.SetCodeCity(codeCity: addressModel.CodeCity);
             }
 
             #endregion
