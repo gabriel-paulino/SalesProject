@@ -19,7 +19,6 @@ namespace SalesProject.Api.Controllers
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICnpjApiService _cnpjApiService;
-        private readonly IAddressApiService _addressApiService;
         private readonly IUnitOfWork _uow;
 
         public CustomerController(
@@ -30,7 +29,6 @@ namespace SalesProject.Api.Controllers
         {
             _customerRepository = customerRepository;
             _cnpjApiService = cnpjApiService;
-            _addressApiService = addressApiService;
             _uow = uow;
         }
 
