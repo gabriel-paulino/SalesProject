@@ -44,7 +44,7 @@ namespace SalesProject.Api.Controllers
         {
             var contact = _contactRepository.Get(id);
 
-            if (contact != null)
+            if (contact is not null)
                 return Ok(contact);
 
             return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
@@ -90,7 +90,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(customerId);
 
-            if (customer != null)
+            if (customer is not null)
             {
                 var contacts = _contactRepository.GetByCustomerId(customerId);
 
@@ -156,7 +156,7 @@ namespace SalesProject.Api.Controllers
         {
             var contact = _contactRepository.Get(id);
 
-            if (contact == null)
+            if (contact is null)
                 return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
 
             _contactRepository.Delete(contact);
@@ -187,7 +187,7 @@ namespace SalesProject.Api.Controllers
 
             var oldContact = _contactRepository.Get(id);
 
-            if (oldContact == null)
+            if (oldContact is null)
                 return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
 
             var newContact = oldContact.

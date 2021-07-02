@@ -49,7 +49,7 @@ namespace SalesProject.Api.Controllers
         {
             var address = _addressRepository.Get(id);
 
-            if (address != null)
+            if (address is not null)
                 return Ok(address);
 
             return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
@@ -140,7 +140,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(customerId);
 
-            if (customer != null)
+            if (customer is not null)
             {
                 var adresses = _addressRepository.GetByCustomerId(customerId);
 
@@ -211,7 +211,7 @@ namespace SalesProject.Api.Controllers
         {
             var address = _addressRepository.Get(id);
 
-            if (address == null)
+            if (address is null)
                 return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
 
             _addressRepository.Delete(address);
@@ -242,7 +242,7 @@ namespace SalesProject.Api.Controllers
 
             var oldAddress = _addressRepository.Get(id);
 
-            if (oldAddress == null)
+            if (oldAddress is null)
                 return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
 
             var newAddress = oldAddress.

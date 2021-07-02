@@ -197,7 +197,7 @@ namespace SalesProject.Api.Controllers
         {
             var user = _userRepository.Get(id);
 
-            if (user == null)
+            if (user is null)
                 return NotFound($"Ops. Usuário com Id:'{id}' não foi encontrado.");
 
             _userRepository.Delete(user);
@@ -253,7 +253,7 @@ namespace SalesProject.Api.Controllers
         {
             var users = _userRepository.GetAll();
 
-            if (users != null)
+            if (users is not null)
                 return Ok(users);
 
             return NotFound($"Ops. Nenhum usuário foi cadastrado.");
@@ -276,7 +276,7 @@ namespace SalesProject.Api.Controllers
         {
             var user = _userRepository.Get(id);
 
-            if (user != null)
+            if (user is not null)
             {
                 user.HidePasswordHash();
                 return Ok(user);

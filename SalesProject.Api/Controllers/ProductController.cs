@@ -44,7 +44,7 @@ namespace SalesProject.Api.Controllers
         {
             var product = _productRepository.Get(id);
 
-            if (product != null)
+            if (product is not null)
                 return Ok(product);
 
             return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
@@ -56,7 +56,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Seller,Administrator")]
+        [Authorize(Roles = "Customer,Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -90,7 +90,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(customerId);
 
-            if (customer != null)
+            if (customer is not null)
             {
                 var products = _productRepository.GetByCustomerId(customerId);
 
@@ -157,7 +157,7 @@ namespace SalesProject.Api.Controllers
         {
             var product = _productRepository.Get(id);
 
-            if (product == null)
+            if (product is null)
                 return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
 
             _productRepository.Delete(product);
@@ -188,7 +188,7 @@ namespace SalesProject.Api.Controllers
 
             var oldProduct = _productRepository.Get(id);
 
-            if (oldProduct == null)
+            if (oldProduct is null)
                 return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
 
             var newProduct = oldProduct.

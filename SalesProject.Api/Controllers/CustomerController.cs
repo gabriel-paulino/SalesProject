@@ -62,7 +62,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -85,7 +85,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.GetFullCustomer(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -108,7 +108,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.GetCompleteCustomer(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -313,7 +313,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(id);
 
-            if (customer == null)
+            if (customer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             _customerRepository.Delete(customer);
@@ -344,7 +344,7 @@ namespace SalesProject.Api.Controllers
 
             var oldCustomer = _customerRepository.Get(id);
 
-            if (oldCustomer == null)
+            if (oldCustomer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             var newCustomer = oldCustomer.
@@ -385,7 +385,7 @@ namespace SalesProject.Api.Controllers
 
             var oldCustomer = _customerRepository.GetCompleteCustomer(id);
 
-            if (oldCustomer == null)
+            if (oldCustomer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             var newCustomer = oldCustomer.

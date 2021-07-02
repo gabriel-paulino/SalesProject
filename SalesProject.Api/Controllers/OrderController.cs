@@ -52,7 +52,7 @@ namespace SalesProject.Api.Controllers
         {
             var order = _orderRepository.Get(id);
 
-            if (order != null)
+            if (order is not null)
                 return Ok(order);
 
             return NotFound($"Ops. Pedido de venda com Id:'{id}' não foi encontrado.");
@@ -64,7 +64,7 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Seller,Administrator")]
+        [Authorize(Roles = "Customer,Seller,Administrator")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -73,7 +73,7 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/filter")]
         public IActionResult GetOrderUsingFilter([FromQuery] OrderFilterViewModel model)
         {
-            var filter = model.Status != null
+            var filter = model.Status is not null
                 ? new OrderFilter(
                     customerId: model.CustomerId,
                     status: (OrderStatus)model.Status,
@@ -128,15 +128,20 @@ namespace SalesProject.Api.Controllers
                         $"O usuário '{username}' apenas pode criar pedidos para cliente '{_customerRepository.Get(Guid.Parse(user.CustomerId.ToString())).CompanyName}'.");
             }
 
+            var customer = _customerRepository.GetCompleteCustomer(Guid.Parse(model.CustomerId));
+
+            if(customer is null)
+                return BadRequest($"Ops. Não foi possível criar o Pedido de Venda. Cliente não existe.");
+
             var order =
                     new Order(
                         postingDate: DateTime.Parse(model.PostingDate).Date,
                         deliveryDate: DateTime.Parse(model.DeliveryDate).Date,
                         observation: model.Observation,
-                        customer: _customerRepository.Get(Guid.Parse(model.CustomerId))
+                        customer: customer
                         );
 
-            var customerErros = new List<string>();
+            var customerErrors = new List<string>();
 
             foreach (var line in model.OrderLines)
             {
@@ -161,23 +166,23 @@ namespace SalesProject.Api.Controllers
                 if (isCustomer)
                 {
                     if (product.CombinedQuantity != orderLine.Quantity)
-                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir quantidade igual à '{product.CombinedQuantity}'.");
+                        customerErrors.Add($"O produto '{orderLine.Product.Name}' deve possuir quantidade igual à '{product.CombinedQuantity}'.");
 
                     if (product.CombinedPrice != orderLine.UnitaryPrice)
-                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir preço unitário igual à '{product.CombinedPrice.ToString("C2")}'.");
+                        customerErrors.Add($"O produto '{orderLine.Product.Name}' deve possuir preço unitário igual à '{product.CombinedPrice.ToString("C2")}'.");
 
                     if (product.AdditionalCosts != orderLine.AdditionalCosts)
-                        customerErros.Add($"O produto '{orderLine.Product.Name}' deve possuir custos adicionais igual à '{product.AdditionalCosts.ToString("C2")}'.");
+                        customerErrors.Add($"O produto '{orderLine.Product.Name}' deve possuir custos adicionais igual à '{product.AdditionalCosts.ToString("C2")}'.");
                 }
 
                 order.AddOrderLine(orderLine);
             }
 
-            if (isCustomer && customerErros.Any())
+            if (isCustomer && customerErrors.Any())
             {
                 string errorMessage = string.Empty;
 
-                foreach (var error in customerErros)
+                foreach (var error in customerErrors)
                     errorMessage = $"{errorMessage} " +
                                    $"{error}";
 
@@ -414,7 +419,7 @@ namespace SalesProject.Api.Controllers
 
             var orderDashboard = _orderRepository.GetInformationByPeriod(model.StartDate, model.EndDate);
 
-            if (orderDashboard != null)
+            if (orderDashboard is not null)
                 return orderDashboard.Valid 
                     ? Ok(orderDashboard)
                     : ValidationProblem($"{orderDashboard.GetNotification()}");

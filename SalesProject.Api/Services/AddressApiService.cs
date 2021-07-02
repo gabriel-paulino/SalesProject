@@ -20,7 +20,7 @@ namespace SalesProject.Api.Services
                 ? JsonConvert.DeserializeObject<AddressApi>(json)
                 : null;
 
-            return addressResponse != null
+            return addressResponse is not null
                 ? new AddressApi(
                     cep: addressResponse.Cep,
                     logradouro: addressResponse.Logradouro,
