@@ -19,7 +19,6 @@ namespace SalesProject.Api.Controllers
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICnpjApiService _cnpjApiService;
-        private readonly IAddressApiService _addressApiService;
         private readonly IUnitOfWork _uow;
 
         public CustomerController(
@@ -30,7 +29,6 @@ namespace SalesProject.Api.Controllers
         {
             _customerRepository = customerRepository;
             _cnpjApiService = cnpjApiService;
-            _addressApiService = addressApiService;
             _uow = uow;
         }
 
@@ -39,11 +37,10 @@ namespace SalesProject.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Seller,Administrator")]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("api/[controller]")]
         public IActionResult GetCustomers() =>
             Ok(_customerRepository.GetAll());
@@ -65,7 +62,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -88,7 +85,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.GetFullCustomer(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -111,7 +108,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.GetCompleteCustomer(id);
 
-            if (customer != null)
+            if (customer is not null)
                 return Ok(customer);
 
             return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
@@ -267,8 +264,7 @@ namespace SalesProject.Api.Controllers
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
 
-                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
-                address.SetCodeCity(codeCity: ibgeCode);
+                address.SetCodeCity(codeCity: line.CodeCity);
 
                 customer.AddAddress(address);
             }
@@ -317,7 +313,7 @@ namespace SalesProject.Api.Controllers
         {
             var customer = _customerRepository.Get(id);
 
-            if (customer == null)
+            if (customer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             _customerRepository.Delete(customer);
@@ -348,7 +344,7 @@ namespace SalesProject.Api.Controllers
 
             var oldCustomer = _customerRepository.Get(id);
 
-            if (oldCustomer == null)
+            if (oldCustomer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             var newCustomer = oldCustomer.
@@ -389,7 +385,7 @@ namespace SalesProject.Api.Controllers
 
             var oldCustomer = _customerRepository.GetCompleteCustomer(id);
 
-            if (oldCustomer == null)
+            if (oldCustomer is null)
                 return NotFound($"Ops. Cliente com Id:'{id}' não foi encontrado.");
 
             var newCustomer = oldCustomer.
@@ -449,8 +445,7 @@ namespace SalesProject.Api.Controllers
                     if (!newAddress.Valid)
                         return ValidationProblem($"{newAddress.GetNotification()}");
 
-                    string ibgeCode = _addressApiService.GetIbgeCode(newAddress.ZipCode);
-                    newAddress.SetCodeCity(codeCity: ibgeCode);
+                    newAddress.SetCodeCity(codeCity: addressModel.CodeCity);
 
                     newAdresses.Add(newAddress);
                 }
@@ -480,8 +475,7 @@ namespace SalesProject.Api.Controllers
                 if (!address.Valid)
                     return ValidationProblem($"{address.GetNotification()}");
 
-                string ibgeCode = _addressApiService.GetIbgeCode(address.ZipCode);
-                address.SetCodeCity(codeCity: ibgeCode);
+                address.SetCodeCity(codeCity: addressModel.CodeCity);
             }
 
             #endregion

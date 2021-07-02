@@ -37,10 +37,10 @@ namespace SalesProject.Domain.Entities
         public DateTime? StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
 
-        public bool IsFilledCustomerId() => this.CustomerId != null;
-        public bool IsFilledOrderStatus() => this.Status != null;
-        public bool IsFilledStartDate() => this.StartDate != null;
-        public bool IsFilledEndDate() => this.EndDate != null;
+        public bool IsFilledCustomerId() => this.CustomerId is not null;
+        public bool IsFilledOrderStatus() => this.Status is not null;
+        public bool IsFilledStartDate() => this.StartDate is not null;
+        public bool IsFilledEndDate() => this.EndDate is not null;
 
         public override void DoValidations()
         {

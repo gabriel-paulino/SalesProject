@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SalesProject.Domain.Dtos;
+using SalesProject.Domain.Extensions;
 using SalesProject.Domain.Services;
 using System.IO;
 using System.Net;
@@ -10,59 +11,49 @@ namespace SalesProject.Api.Services
     {
         public AddressApi CompleteAddressApi(string zipCode)
         {
-            zipCode = zipCode
-                .Replace("-", string.Empty);
+            zipCode = zipCode.CleanZipCode();
 
-            if (zipCode.Length == 7)
-                zipCode = $"0{zipCode}";
-
-            var url = $"https://ws.apicep.com/cep/{zipCode}.json";
+            var url = $"https://viacep.com.br/ws/{zipCode}/json/";
             string json = GetJsonResponse(url);
 
-            var addressResponse = JsonConvert.DeserializeObject<AddressApi>(json);
+            var addressResponse = !string.IsNullOrEmpty(json)
+                ? JsonConvert.DeserializeObject<AddressApi>(json)
+                : null;
 
-            return new
-                AddressApi(
-                    status: addressResponse.Status,
-                    code: addressResponse.Code,
-                    city: addressResponse.City,
-                    state: addressResponse.State,
-                    district: addressResponse.District,
-                    address: addressResponse.Address
-                    );
-        }
-
-        public string GetIbgeCode(string zipCode)
-        {
-            zipCode = zipCode
-                .Replace("-", string.Empty);
-
-            if (zipCode.Length == 7)
-                zipCode = $"0{zipCode}";
-
-            var url = $"https://api.postmon.com.br/v1/cep/{zipCode}";
-            string json = GetJsonResponse(url);
-
-            var ibge = JsonConvert.DeserializeObject<IbgeCode>(json);
-
-            return ibge.Cidade_info.Codigo_ibge ?? "Not_found";
+            return addressResponse is not null
+                ? new AddressApi(
+                    cep: addressResponse.Cep,
+                    logradouro: addressResponse.Logradouro,
+                    bairro: addressResponse.Bairro,
+                    localidade: addressResponse.Localidade,
+                    uf: addressResponse.Uf,
+                    ibge: addressResponse.Ibge
+                    )
+                : null;
         }
 
         private static string GetJsonResponse(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip;
-
-            string json = string.Empty;
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-                json = reader.ReadToEnd();
-            }
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.AutomaticDecompression = DecompressionMethods.GZip;
 
-            return json;
+                string json = string.Empty;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    json = reader.ReadToEnd();
+                }
+
+                return json;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 }

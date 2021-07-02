@@ -5,6 +5,5 @@ namespace SalesProject.Domain.Services
     public interface IAddressApiService
     {
         AddressApi CompleteAddressApi(string zipCode);
-        string GetIbgeCode(string zipCode);
     }
 }

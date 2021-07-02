@@ -38,6 +38,10 @@ namespace SalesProject.Api.ViewModels.Address
         [StringLength(maximumLength: 2, MinimumLength = 2)]
         public string State { get; set; }
 
+        [Required(ErrorMessage = "O campo 'Código Ibge cidade' é obrigatório")]
+        [Display(Name = "Código Ibge cidade")]
+        public string CodeCity { get; set; }
+
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }

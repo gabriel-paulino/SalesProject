@@ -75,11 +75,7 @@ namespace SalesProject.Domain.Entities
 
         private void ValidateFillingMandatoryFields()
         {
-            if (PostingDate == null)
-                AddNotification("O preenchimento do campo 'Data de lançamento' é obrigatório.");
-            if (DeliveryDate == null)
-                AddNotification("O preenchimento do campo 'Data de entrega' é obrigatório.");
-            if (Customer == null)
+            if (Customer is null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
         }
 
@@ -115,5 +111,7 @@ namespace SalesProject.Domain.Entities
             }
             AddNotification("Não é possível faturar esse pedido de venda.");
         }
+
+        public bool CanBillThisOrder(OrderStatus status) => status == OrderStatus.Approved;
     }
 }

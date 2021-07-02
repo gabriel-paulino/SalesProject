@@ -3,46 +3,26 @@
     public class AddressApi
     {
         public AddressApi(
-            int status,
-            string code,
-            string state,
-            string city,
-            string district,
-            string address)
+            string cep, 
+            string logradouro, 
+            string bairro, 
+            string localidade, 
+            string uf, 
+            string ibge)
         {
-            Status = status;
-            Code = code;
-            State = state;
-            City = city;
-            District = district;
-            Address = address;
+            Cep = cep;
+            Logradouro = logradouro;
+            Bairro = bairro;
+            Localidade = localidade;
+            Uf = uf;
+            Ibge = ibge;
         }
 
-        public int Status { get; private set; }
-        public string Code { get; private set; }
-        public string State { get; private set; }
-        public string City { get; private set; }
-        public string District { get; private set; }
-        public string Address { get; private set; }
-    }
-
-    public class IbgeCode
-    {
-        public IbgeCode(CidadeInfo cidade_info)
-        {
-            this.Cidade_info = cidade_info;
-        }
-
-        public CidadeInfo Cidade_info { get; private set; }
-    }
-
-    public class CidadeInfo
-    {
-        public CidadeInfo(string codigo_ibge)
-        {
-            Codigo_ibge = codigo_ibge;
-        }
-
-        public string Codigo_ibge { get; private set; }
+        public string Cep { get; private set; }
+        public string Logradouro { get; private set; }
+        public string Bairro { get; private set; }
+        public string Localidade { get; private set; }
+        public string Uf { get; private set; }
+        public string Ibge { get; private set; }
     }
 }

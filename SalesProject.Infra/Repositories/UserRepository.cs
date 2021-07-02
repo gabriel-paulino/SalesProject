@@ -46,7 +46,7 @@ namespace SalesProject.Infra.Repositories
             var userDB = _context.Users
                     .FirstOrDefault(u => u.Username.Equals(user.Username));
 
-            if (userDB == null)
+            if (userDB is null)
             {
                 user.AddNotification($"Ops. Usuário '{user.Username}' não foi encontrado");
                 return user;
@@ -101,7 +101,7 @@ namespace SalesProject.Infra.Repositories
         public bool HasCustomerLink(Guid? customerId) =>
            _context.Users
             .Where(u => u.CustomerId == customerId)
-            .FirstOrDefault() != null;
+            .FirstOrDefault() is not null;
 
         public bool HasAnotherUserSameUsernameOrEmail(User user) =>
             _context.Users

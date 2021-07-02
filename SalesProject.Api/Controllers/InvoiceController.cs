@@ -47,7 +47,7 @@ namespace SalesProject.Api.Controllers
         {
             var invoice = _invoiceService.GetByOrderId(orderId);
 
-            if (invoice != null)
+            if (invoice is not null)
                 return Ok(invoice);
 
             return NotFound($"Ops. Nenhuma Nota fiscal vinculada ao Pedido: '{orderId}' foi encontrada.");
@@ -69,7 +69,7 @@ namespace SalesProject.Api.Controllers
         {
             var id = _invoiceService.GetInvoiceIdByOrderId(orderId);
 
-            if (id != null)
+            if (id is not null)
                 return Ok(id);
 
             return NotFound($"Ops. Nenhum Id de Nota fiscal vinculado ao Pedido: '{orderId}' foi encontrado.");
@@ -91,7 +91,7 @@ namespace SalesProject.Api.Controllers
         {
             var invoiceIdPlugNotas = _invoiceService.GetInvoiceIdOfPlugNotasByOrderId(orderId);
 
-            if (invoiceIdPlugNotas != null)
+            if (invoiceIdPlugNotas is not null)
                 return Ok(invoiceIdPlugNotas);
 
             return NotFound($"Ops. Nenhum Id de Nota fiscal  vinculado ao Pedido: '{orderId}' foi encontrado.");
@@ -117,11 +117,8 @@ namespace SalesProject.Api.Controllers
             if(order is null)
                 return BadRequest($"Ops. Não foi possível criar a Nota Fiscal. Id do Pedido de venda é inválido.");
 
-            if(order.Status != OrderStatus.Approved)
+            if(!order.CanBillThisOrder(order.Status))
                 return BadRequest($"Ops. Apenas pedidos aprovados podem ser faturados.");
-
-            if (!order.Customer.Adresses.Where(a => a.Type == AddressType.Billing).Any())
-                return BadRequest($"Ops. O cliente '{order.Customer.CompanyName}' não possuí um endereço de cobranca cadastrado.");
 
             var invoice = _invoiceService.CreateBasedInOrder(order);
 

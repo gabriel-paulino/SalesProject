@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SalesProject.Domain.Dtos;
+using SalesProject.Domain.Extensions;
 using SalesProject.Domain.Services;
 using System.IO;
 using System.Net;
@@ -10,10 +11,7 @@ namespace SalesProject.Api.Services
     {
         public CnpjApi CompleteCustomerApi(string cnpj)
         {
-            cnpj = cnpj
-                .Replace(".", string.Empty)
-                .Replace("%2F", string.Empty)
-                .Replace("-", string.Empty);
+            cnpj = cnpj.CleanCnpj();
 
             var url = $"https://www.receitaws.com.br/v1/cnpj/{cnpj}";
 
