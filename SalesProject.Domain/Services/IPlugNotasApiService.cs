@@ -5,9 +5,9 @@ namespace SalesProject.Domain.Services
 {
     public interface IPlugNotasApiService
     {
-        object SendInvoice(Invoice invoice);
+        string SendInvoice(Invoice invoice);
         string SendAllInvoices(List<Invoice> invoices);
-        object ConsultSefaz(string invoiceIdPlugNotas);
+        string ConsultSefaz(string invoiceIdPlugNotas, ref bool hasDoneWithSuccess);
         string DownloadInvoicePdf(string invoiceIdPlugNotas);
         string DownloadInvoiceXml(string invoiceIdPlugNotas);
     }

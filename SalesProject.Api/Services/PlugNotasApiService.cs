@@ -27,14 +27,26 @@ namespace SalesProject.Api.Services
             _url = "https://api.sandbox.plugnotas.com.br/";
         }
 
-        public object SendInvoice(Invoice invoice)
+        public string SendInvoice(Invoice invoice)
         {
             var invoicePlugNotas = Initialize(invoice);
             var options = GetOptionsForSerializationJson();
 
             string jsonInvoice = JsonSerializer.Serialize(invoicePlugNotas, options);
 
-            return Send($"[{jsonInvoice}]");
+            var response = Send($"[{jsonInvoice}]");
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var plugNotasResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PlugNotasResponse>(response.Content);
+
+                string invoiceIdPlugNotas = plugNotasResponse.Documents.FirstOrDefault().Id;
+
+                _invoiceService.MarkAsIntegrated(invoice, invoiceIdPlugNotas);
+
+                return string.Empty;
+            }
+            return response.Content;
         }
 
         public string SendAllInvoices(List<Invoice> invoices)
@@ -73,7 +85,7 @@ namespace SalesProject.Api.Services
             return response.Content;
         }
 
-        public object ConsultSefaz(string invoiceIdPlugNotas)
+        public string ConsultSefaz(string invoiceIdPlugNotas, ref bool hasDoneWithSuccess)
         {
             var client = new RestClient(_url);
             client.Timeout = -1;
@@ -81,7 +93,12 @@ namespace SalesProject.Api.Services
             request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
             request.OnBeforeDeserialization = response => { response.ContentType = "application/json"; };
 
-            return client.Execute(request);
+            var response = client.Execute(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+                hasDoneWithSuccess = true;
+
+            return response.Content;
         }
 
         public string DownloadInvoicePdf(string invoiceIdPlugNotas)
