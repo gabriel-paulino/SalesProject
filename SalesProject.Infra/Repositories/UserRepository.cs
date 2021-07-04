@@ -26,7 +26,10 @@ namespace SalesProject.Infra.Repositories
         public User GetByUsername(string username) =>
             _context.Users.FirstOrDefault(u => u.Username == username);
 
-        public List<User> GetUsersByName(string name) =>
+        public User GetByCustomerId(Guid customerId) =>
+            _context.Users.FirstOrDefault(u => u.CustomerId == customerId);
+
+        public IEnumerable<User> GetUsersByName(string name) =>
             _context.Users.Where(x => x.Name.Contains(name)).ToList();
 
         public object GetAll() =>

@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Account;
-using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
-using SalesProject.Domain.Interfaces;
-using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Services;
 using System;
+using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -15,18 +13,15 @@ namespace SalesProject.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _uow;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
         public AccountController(
-            IUserRepository userRepository,
-            ITokenService tokenService,
-            IUnitOfWork uow)
+            IUserService userService,
+            ITokenService tokenService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _tokenService = tokenService;
-            _uow = uow;
         }
 
         /// <summary>
@@ -40,15 +35,15 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/login")]
         public ActionResult<dynamic> Login([FromBody] LoginViewModel model)
         {
-            var userTemp = new User(username: model.Username);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var user = _userRepository.SignIn(userTemp, model.VisiblePassword);
+            var user = _userService.Login(model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetAllNotifications()}");
 
             var token = _tokenService.GenerateToken(user);
-            user.HidePasswordHash();
 
             return new
             {
@@ -77,35 +72,12 @@ namespace SalesProject.Api.Controllers
             if (model.Password != model.ConfirmPassword)
                 return ValidationProblem("Ops. As senhas não coincidem. Tente novamente.");
 
-            var userTemp = (RoleType)model.Role == RoleType.Customer
-                ? new User(
-                    username: model.Username,
-                    name: model.Name,
-                    email: model.Email,
-                    customerId: Guid.Parse(model.CustomerId))
-                : new User(
-                    username: model.Username,
-                    name: model.Name,
-                    email: model.Email,
-                    role: (RoleType)model.Role)
-                ;
+            var user = _userService.Register(model);
 
-            if (!userTemp.Valid)
-                return ValidationProblem($"{userTemp.GetNotification()}");
-
-            if (_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
-                return ValidationProblem(
-                    detail: $"Ops. Já existe um usuário com esse Username ou E-mail. Tente novamente.");
-
-            if (userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
-                return ValidationProblem(
-                    detail: $"Ops. O Cliente com Id: '{userTemp.CustomerId}' já possuí um usuário no sistema");
-
-            var user = _userRepository.Create(userTemp, model.Password);
-            _uow.Commit();
+            if (!user.Valid)
+                return ValidationProblem($"{user.GetAllNotifications()}");
 
             var token = _tokenService.GenerateToken(user);
-            user.HidePasswordHash();
 
             return new
             {
@@ -128,18 +100,18 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/change-password")]
         public IActionResult ChangePassword([FromBody] ChangePasswordViewModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (model.NewPassword != model.ConfirmPassword)
                 return ValidationProblem("Ops. As senhas não coincidem. Tente novamente.");
 
-            var username = User.Identity.Name;
-            var user = _userRepository.ChangePassword(username, model.CurrentPassword, model.NewPassword);
+            string username = User.Identity.Name;
+            var user = _userService.ChangePassword(username, model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetAllNotifications()}");
 
-            _uow.Commit();
-
-            user.HidePasswordHash();
             return Ok(user);
         }
 
@@ -160,23 +132,13 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var username = User.Identity.Name;
-            var user = _userRepository.GetByUsername(username);
+            string username = User.Identity.Name;
 
-            user.Edit(
-                newName: model.NewName,
-                newEmail: model.NewEmail);
+            var user = _userService.Edit(username, model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetAllNotifications()}");
 
-            if (_userRepository.HasAnotherUserWithSameEmail(user.Email))
-                return ValidationProblem($"Ops. Esse E-mail já está em uso.");
-
-            _userRepository.Update(user);
-            _uow.Commit();
-
-            user.HidePasswordHash();
             return Ok(user);
         }
 
@@ -195,15 +157,10 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteUser(Guid id)
         {
-            var user = _userRepository.Get(id);
+            if (_userService.Delete(id))
+                return Ok();
 
-            if (user is null)
-                return NotFound($"Ops. Usuário com Id:'{id}' não foi encontrado.");
-
-            _userRepository.Delete(user);
-            _uow.Commit();
-
-            return Ok();
+            return NotFound($"Ops. Usuário com Id:'{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -225,16 +182,11 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = _userRepository.Get(id);
-
-            user.ChangeRole((RoleType)model.Role);
+            var user = _userService.ChangeRole(id, (RoleType)model.Role);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetNotification()}");
+                return ValidationProblem($"{user.GetAllNotifications()}");
 
-            _uow.Commit();
-
-            user.HidePasswordHash();
             return Ok(user);
         }
 
@@ -251,7 +203,7 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]")]
         public IActionResult GetAll()
         {
-            var users = _userRepository.GetAll();
+            var users = _userService.GetAll();
 
             if (users is not null)
                 return Ok(users);
@@ -272,17 +224,37 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
-        public IActionResult GetUserByCustomerId(Guid id)
+        public IActionResult GetUser(Guid id)
         {
-            var user = _userRepository.Get(id);
+            var user = _userService.Get(id);
 
             if (user is not null)
-            {
-                user.HidePasswordHash();
                 return Ok(user);
-            }
 
             return NotFound($"Ops. Nenhum usuário com Id:'{id}' foi encontrado.");
+        }
+
+        /// <summary>
+        /// Get an User by CustomerId.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "It,Administrator")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("api/[controller]/{customerId:guid}")]
+        public IActionResult GetUserByCustomerId(Guid customerId)
+        {
+            var user = _userService.GetByCustomerId(customerId);
+
+            if (user is not null)
+                return Ok(user);
+
+            return NotFound($"Ops. Nenhum usuário com CustomerId:'{customerId}' foi encontrado.");
         }
 
         /// <summary>
@@ -300,14 +272,11 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetUsersByName(string name)
         {
-            var users = _userRepository.GetUsersByName(name);
+            var users = _userService.GetUsersByName(name);
 
-            if (users.Count > 0) {
-                foreach (var user in users)
-                    user.HidePasswordHash();
-                
+            if (users is not null)
                 return Ok(users);
-            }
+
             return NotFound($"Ops. Nenhum usuário com Nome:'{name}' foi encontrado.");
         }
     }

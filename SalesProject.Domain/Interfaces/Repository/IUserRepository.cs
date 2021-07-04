@@ -8,7 +8,8 @@ namespace SalesProject.Domain.Interfaces.Repository
     {
         User Get(Guid id);
         User GetByUsername(string username);
-        List<User> GetUsersByName(string name);
+        User GetByCustomerId(Guid customerId);
+        IEnumerable<User> GetUsersByName(string name);
         object GetAll();
         User Create(User user, string visiblePassword);
         User SignIn(User user, string visiblePassword);
