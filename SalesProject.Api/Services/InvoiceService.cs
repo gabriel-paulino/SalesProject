@@ -39,11 +39,12 @@ namespace SalesProject.Api.Services
         {
             var invoice = new Invoice(order);
             var invoiceLines = new List<InvoiceLine>();
+            var taxLine = new TaxLine();
 
             foreach (var line in order.OrderLines)
             {
-                var taxLine = new TaxLine().GetDefaultTaxes(line.TotalPrice);
-                var invoiceLine = new InvoiceLine(orderLine: line, taxLine: taxLine);
+                var currentTaxLine = taxLine.GetDefaultTaxes(line.TotalPrice);
+                var invoiceLine = new InvoiceLine(orderLine: line, taxLine: currentTaxLine);
 
                 invoiceLines.Add(invoiceLine);
             }

@@ -196,7 +196,7 @@ namespace SalesProject.Api.Controllers
                         email: model.Email);
 
             if (!customer.Valid)
-                return ValidationProblem($"{customer.GetNotification()}");
+                return ValidationProblem($"{customer.GetAllNotifications()}");
 
             if (_customerRepository.HasAnotherCustomerWithThisCnpj(customer.Cnpj))
                 return Conflict($"Ops. O cliente com Cnpj '{model.Cnpj}' já possuí um cadastro no sistema.");

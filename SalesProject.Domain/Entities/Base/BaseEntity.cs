@@ -26,6 +26,8 @@ namespace SalesProject.Domain.Entities.Base
         }
 
         public string GetNotification() 
-            => Notifications.FirstOrDefault();    
+            => Notifications.FirstOrDefault();
+
+        public IEnumerable<string> GetAllNotifications() => Notifications;        
     }
 }
