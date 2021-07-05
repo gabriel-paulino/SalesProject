@@ -25,9 +25,9 @@ namespace SalesProject.Domain.Entities.Base
             Notifications.Add(errorMessage);
         }
 
-        public string GetNotification() 
+        public string GetNotification()
             => Notifications.FirstOrDefault();
 
-        public IEnumerable<string> GetAllNotifications() => Notifications;        
+        public string GetAllNotifications() => string.Join(string.Empty, Notifications);
     }
 }

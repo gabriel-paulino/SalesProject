@@ -158,7 +158,7 @@ namespace SalesProject.Api.Controllers
             var address = _addressService.Create(model);
 
             if (!address.Valid)
-                return ValidationProblem($"{address.GetAllNotifications()}");
+                return ValidationProblem(address.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{address.Id}",
@@ -211,7 +211,7 @@ namespace SalesProject.Api.Controllers
                 return NotFound($"Ops. Endereço com Id: '{id}' não foi encontrado.");
 
             if (!updatedAddress.Valid)
-                return ValidationProblem($"{updatedAddress.GetAllNotifications()}");
+                return ValidationProblem(updatedAddress.GetAllNotifications());
 
             return Ok(updatedAddress);
         }

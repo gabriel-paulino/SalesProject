@@ -30,8 +30,10 @@ namespace SalesProject.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Produces(MediaTypeNames.Application.Json)]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Produces(MediaTypeNames.Application.Json)]
         [Route("api/[controller]/login")]
         public ActionResult<dynamic> Login([FromBody] LoginViewModel model)
         {
@@ -41,15 +43,15 @@ namespace SalesProject.Api.Controllers
             var user = _userService.Login(model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetAllNotifications()}");
+                return ValidationProblem(user.GetAllNotifications());
 
             var token = _tokenService.GenerateToken(user);
 
-            return new
+            return Ok(new
             {
                 user = user,
                 token = token
-            };
+            });
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace SalesProject.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "It,Administrator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -75,15 +78,15 @@ namespace SalesProject.Api.Controllers
             var user = _userService.Register(model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetAllNotifications()}");
+                return ValidationProblem(user.GetAllNotifications());
 
             var token = _tokenService.GenerateToken(user);
 
-            return new
+            return Ok(new
             {
                 user = user,
                 token = token
-            };
+            });
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace SalesProject.Api.Controllers
             var user = _userService.ChangePassword(username, model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetAllNotifications()}");
+                return ValidationProblem(user.GetAllNotifications());
 
             return Ok(user);
         }
@@ -137,7 +140,7 @@ namespace SalesProject.Api.Controllers
             var user = _userService.Edit(username, model);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetAllNotifications()}");
+                return ValidationProblem(user.GetAllNotifications());
 
             return Ok(user);
         }
@@ -160,7 +163,7 @@ namespace SalesProject.Api.Controllers
             if (_userService.Delete(id))
                 return Ok();
 
-            return NotFound($"Ops. Usuário com Id:'{id}' não foi encontrado.");
+            return NotFound($"Ops. Usuário com Id: '{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -185,7 +188,7 @@ namespace SalesProject.Api.Controllers
             var user = _userService.ChangeRole(id, (RoleType)model.Role);
 
             if (!user.Valid)
-                return ValidationProblem($"{user.GetAllNotifications()}");
+                return ValidationProblem(user.GetAllNotifications());
 
             return Ok(user);
         }
@@ -231,7 +234,7 @@ namespace SalesProject.Api.Controllers
             if (user is not null)
                 return Ok(user);
 
-            return NotFound($"Ops. Nenhum usuário com Id:'{id}' foi encontrado.");
+            return NotFound($"Ops. Nenhum usuário com Id: '{id}' foi encontrado.");
         }
 
         /// <summary>
@@ -254,7 +257,7 @@ namespace SalesProject.Api.Controllers
             if (user is not null)
                 return Ok(user);
 
-            return NotFound($"Ops. Nenhum usuário com CustomerId:'{customerId}' foi encontrado.");
+            return NotFound($"Ops. Nenhum usuário com CustomerId: '{customerId}' foi encontrado.");
         }
 
         /// <summary>
@@ -277,7 +280,7 @@ namespace SalesProject.Api.Controllers
             if (users is not null)
                 return Ok(users);
 
-            return NotFound($"Ops. Nenhum usuário com Nome:'{name}' foi encontrado.");
+            return NotFound($"Ops. Nenhum usuário com Nome: '{name}' foi encontrado.");
         }
     }
 }
