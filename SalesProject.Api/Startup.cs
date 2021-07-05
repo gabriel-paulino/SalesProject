@@ -92,6 +92,7 @@ namespace SalesProject.Api
 
             services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAddressService, AddressService>();
             services.AddTransient<IAddressApiService, AddressApiService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
