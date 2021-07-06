@@ -248,7 +248,7 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("api/[controller]/{customerId:guid}")]
+        [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetUserByCustomerId(Guid customerId)
         {
             var user = _userService.GetByCustomerId(customerId);

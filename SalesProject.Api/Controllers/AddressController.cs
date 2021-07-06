@@ -134,7 +134,7 @@ namespace SalesProject.Api.Controllers
             if (adresses.Any())
                 return Ok(adresses);
 
-            return NotFound($"Ops. Nenhum cliente com Id: '{customerId}' foi encontrado.");
+            return NotFound($"Ops. Nenhum Endereço com ClienteId: '{customerId}' foi encontrado.");
         }
 
         /// <summary>
