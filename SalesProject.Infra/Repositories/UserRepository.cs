@@ -106,9 +106,9 @@ namespace SalesProject.Infra.Repositories
             .Where(u => u.CustomerId == customerId)
             .FirstOrDefault() is not null;
 
-        public bool HasAnotherUserSameUsernameOrEmail(User user) =>
+        public bool HasAnotherUserWithSameUsername(string username) =>
             _context.Users
-            .Where(u => u.Username == user.Username || u.Email == user.Email)
+            .Where(u => u.Username == username)
             .Any();
 
         public bool HasAnotherUserWithSameEmail(string email) =>

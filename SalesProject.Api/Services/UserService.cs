@@ -164,9 +164,14 @@ namespace SalesProject.Api.Services
             if (!userTemp.Valid)
                 return userTemp;
 
-            if (_userRepository.HasAnotherUserSameUsernameOrEmail(userTemp))
+            if (_userRepository.HasAnotherUserWithSameUsername(userTemp.Username))
             {
-                userTemp.AddNotification($"Ops. Já existe um usuário com esse Username ou E-mail. Tente novamente.");
+                userTemp.AddNotification($"Ops. Já existe um usuário com esse Username. Utilize um diferente.");
+                return userTemp;
+            }
+            if (_userRepository.HasAnotherUserWithSameEmail(userTemp.Email))
+            {
+                userTemp.AddNotification($"Ops. Já existe um usuário com esse E-mail. Utilize um diferente.");
                 return userTemp;
             }
             if (userTemp.IsCustomer() && _userRepository.HasCustomerLink(userTemp.CustomerId))
