@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Extensions;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System.IO;
 using System.Net;
 

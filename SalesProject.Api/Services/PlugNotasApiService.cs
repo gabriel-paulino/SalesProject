@@ -3,7 +3,7 @@ using RestSharp;
 using SalesProject.Domain.Dtos;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

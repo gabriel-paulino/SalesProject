@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SalesProject.Domain.Entities;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,7 +15,7 @@ namespace SalesProject.Api.Services
 
         public TokenService(IConfiguration configuration) =>
             _configuration = configuration;
-        
+
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -3,7 +3,7 @@ using SalesProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Services
+namespace SalesProject.Domain.Interfaces.Service
 {
     public interface IUserService
     {

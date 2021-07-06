@@ -1,7 +1,7 @@
 ﻿using SalesProject.Domain.Entities;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Services
+namespace SalesProject.Domain.Interfaces.Service
 {
     public interface IPlugNotasApiService
     {

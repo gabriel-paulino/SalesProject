@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Linq;
 using System.Net.Mime;

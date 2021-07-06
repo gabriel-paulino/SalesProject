@@ -11,7 +11,7 @@ using Microsoft.OpenApi.Models;
 using SalesProject.Api.Services;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Extension;
 using SalesProject.Infra.Repositories;

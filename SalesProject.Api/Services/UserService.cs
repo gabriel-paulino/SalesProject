@@ -3,7 +3,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +82,7 @@ namespace SalesProject.Api.Services
                 user.AddNotification($"Ops. Esse E-mail já está em uso.");
                 return user;
             }
-                
+
             _userRepository.Update(user);
             _uow.Commit();
 

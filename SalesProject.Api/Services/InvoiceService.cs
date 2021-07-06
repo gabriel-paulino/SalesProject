@@ -1,7 +1,7 @@
 ﻿using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Collections.Generic;
 

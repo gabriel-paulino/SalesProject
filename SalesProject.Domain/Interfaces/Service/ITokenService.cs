@@ -1,6 +1,6 @@
 ﻿using SalesProject.Domain.Entities;
 
-namespace SalesProject.Domain.Services
+namespace SalesProject.Domain.Interfaces.Service
 {
     public interface ITokenService
     {

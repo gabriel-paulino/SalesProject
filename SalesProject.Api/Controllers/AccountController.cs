@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Account;
 using SalesProject.Domain.Enums;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
-using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
