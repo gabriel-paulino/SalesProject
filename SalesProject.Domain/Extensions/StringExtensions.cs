@@ -11,9 +11,14 @@
                 : zipCode;
         }
 
-        public static string CleanCnpj(this string cnpj) =>
+        public static string CleanCnpjToUseOnUrl(this string cnpj) =>
             cnpj.Replace(".", string.Empty)
                 .Replace("%2F", string.Empty)
+                .Replace("-", string.Empty);
+
+        public static string CleanCnpjToSaveDataBase(this string cnpj) =>
+            cnpj.Replace(".", string.Empty)
+                .Replace("/", string.Empty)
                 .Replace("-", string.Empty);
     }
 }

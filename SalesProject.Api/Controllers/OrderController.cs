@@ -128,7 +128,7 @@ namespace SalesProject.Api.Controllers
                         $"O usuário '{username}' apenas pode criar pedidos para cliente '{_customerRepository.Get(Guid.Parse(user.CustomerId.ToString())).CompanyName}'.");
             }
 
-            var customer = _customerRepository.GetCompleteCustomer(Guid.Parse(model.CustomerId));
+            var customer = _customerRepository.GetCustomerWithAdressesAndContacts(Guid.Parse(model.CustomerId));
 
             if(customer is null)
                 return BadRequest($"Ops. Não foi possível criar o Pedido de Venda. Cliente não existe.");

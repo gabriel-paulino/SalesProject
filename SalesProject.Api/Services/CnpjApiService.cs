@@ -11,7 +11,7 @@ namespace SalesProject.Api.Services
     {
         public CnpjApi CompleteCustomerApi(string cnpj)
         {
-            cnpj = cnpj.CleanCnpj();
+            cnpj = cnpj.CleanCnpjToUseOnUrl();
 
             var url = $"https://www.receitaws.com.br/v1/cnpj/{cnpj}";
 
