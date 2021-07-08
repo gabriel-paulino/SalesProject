@@ -47,10 +47,17 @@ namespace SalesProject.Domain.Entities
             return this;
         }
 
-        public override void DoValidations()
+        public override void DoValidations() =>
+            ValidateNumericFields();
+        
+        private void ValidateNumericFields()
         {
             if (Quantity <= 0)
-                AddNotification("A 'Quantidade' informada é inválida.");
+                AddNotification($"A Quantidade informada para '{Product.Name}' é inválida.");
+            if (UnitaryPrice <= 0)
+                AddNotification($"O Valor unitário informado para '{Product.Name}' é inválido.");
+            if (AdditionalCosts < 0)
+                AddNotification($"Os Custos adicionais informado para '{Product.Name}' é inválido.");
         }
 
         private void CalculateTotalLinePrice()

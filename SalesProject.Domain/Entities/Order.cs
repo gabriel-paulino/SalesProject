@@ -71,12 +71,19 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateRangeDate();
         }
 
         private void ValidateFillingMandatoryFields()
         {
             if (Customer is null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
+        }
+
+        private void ValidateRangeDate()
+        {
+            if(PostingDate > DeliveryDate)
+                AddNotification("A Data de Postagem não pode ser maior que a Data de Entrega.");
         }
 
         public void UpdateTotalOrder() =>
@@ -112,6 +119,7 @@ namespace SalesProject.Domain.Entities
             AddNotification("Não é possível faturar esse pedido de venda.");
         }
 
-        public bool CanBillThisOrder() => Status == OrderStatus.Approved;
+        public bool CanBillThisOrder() => 
+            Status == OrderStatus.Approved;
     }
 }

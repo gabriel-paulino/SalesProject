@@ -38,7 +38,7 @@ namespace SalesProject.Infra.Repositories
                 .ThenInclude(ol => ol.Product)
                 .FirstOrDefault(o => o.Id == id);
 
-        public List<Order> GetOrdersUsingFilter(OrderFilter filter)
+        public ICollection<Order> GetOrdersUsingFilter(OrderFilter filter)
         {
             IQueryable<Order> query = _context.Orders;
 

@@ -102,6 +102,7 @@ namespace SalesProject.Api
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddTransient<ICnpjApiService, CnpjApiService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddTransient<IPlugNotasApiService, PlugNotasApiService>();
