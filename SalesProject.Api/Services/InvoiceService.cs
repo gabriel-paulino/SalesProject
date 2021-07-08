@@ -74,5 +74,18 @@ namespace SalesProject.Api.Services
 
         public List<Invoice> GetAllInvoicesAbleToSend() =>
             _invoiceRepository.GetAllInvoicesAbleToSend();
+
+        public Order GetOrderToCreateInvoice(Guid orderId)
+        {
+            var order = _orderRepository.GetToCreateInvoice(orderId);
+
+            if (order is null)
+                return null;
+
+            if (!order.CanBillThisOrder())
+                order.AddNotification("Ops.Apenas pedidos aprovados podem ser faturados.");
+
+            return order;
+        }
     }
 }

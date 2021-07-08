@@ -6,6 +6,7 @@ namespace SalesProject.Domain.Interfaces.Service
 {
     public interface IInvoiceService
     {
+        Order GetOrderToCreateInvoice(Guid orderId);
         Invoice CreateBasedInOrder(Order order);
         void MarkAsIntegrated(Invoice invoice, string invoiceIdPlugNotas);
         Invoice Get(Guid id);

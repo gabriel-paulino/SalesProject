@@ -112,6 +112,6 @@ namespace SalesProject.Domain.Entities
             AddNotification("Não é possível faturar esse pedido de venda.");
         }
 
-        public bool CanBillThisOrder(OrderStatus status) => status == OrderStatus.Approved;
+        public bool CanBillThisOrder() => Status == OrderStatus.Approved;
     }
 }

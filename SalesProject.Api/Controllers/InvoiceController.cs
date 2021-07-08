@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Linq;
@@ -14,16 +13,13 @@ namespace SalesProject.Api.Controllers
     {
         private readonly IPlugNotasApiService _plugNotasApiService;
         private readonly IInvoiceService _invoiceService;
-        private readonly IOrderRepository _orderRepository;
 
         public InvoiceController(
             IPlugNotasApiService plugNotasApiService,
-            IInvoiceService invoiceService,
-            IOrderRepository orderRepository)
+            IInvoiceService invoiceService)
         {
             _plugNotasApiService = plugNotasApiService;
             _invoiceService = invoiceService;
-            _orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -107,18 +103,18 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{orderId:guid}")]
         public IActionResult CreateInvoice(Guid orderId)
         {
-            var order = _orderRepository.GetToCreateInvoice(orderId);
+            var order = _invoiceService.GetOrderToCreateInvoice(orderId);
 
             if (order is null)
                 return BadRequest($"Ops. Não foi possível criar a Nota Fiscal. Id do Pedido de venda é inválido.");
 
-            if (!order.CanBillThisOrder(order.Status))
-                return BadRequest($"Ops. Apenas pedidos aprovados podem ser faturados.");
+            if (!order.Valid)
+                return BadRequest(order.GetNotification());
 
             var invoice = _invoiceService.CreateBasedInOrder(order);
 
             if (!invoice.Valid)
-                return ValidationProblem($"{invoice.GetNotification()}");
+                return ValidationProblem(invoice.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{invoice.Id}",
