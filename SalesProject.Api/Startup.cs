@@ -107,6 +107,7 @@ namespace SalesProject.Api
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddTransient<IPlugNotasApiService, PlugNotasApiService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSwaggerGen(c =>

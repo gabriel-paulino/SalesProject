@@ -28,10 +28,10 @@ namespace SalesProject.Infra.Repositories
         public Product Get(Guid id) =>
             _context.Products.Find(id);
 
-        public List<Product> GetByName(string name) =>
+        public ICollection<Product> GetByName(string name) =>
             _context.Products.Where(x => x.Name.Contains(name)).ToList();
 
-        public List<Product> GetByCustomerId(Guid customerId) =>
+        public ICollection<Product> GetByCustomerId(Guid customerId) =>
             _context.Products.Where(x => x.CustomerId.Equals(customerId)).ToList();
 
         public void Update(Product product) =>
