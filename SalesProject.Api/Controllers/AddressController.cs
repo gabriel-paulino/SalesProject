@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Address;
-using SalesProject.Domain.Entities;
-using SalesProject.Domain.Enums;
-using SalesProject.Domain.Interfaces;
-using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
+using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -15,21 +12,15 @@ namespace SalesProject.Api.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private readonly IAddressRepository _addressRepository;
+        private readonly IAddressService _addressService;
         private readonly IAddressApiService _addressApiService;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IUnitOfWork _uow;
 
         public AddressController(
-            IAddressRepository addressRepository,
-            IAddressApiService addressApiService,
-            ICustomerRepository customerRepository,
-            IUnitOfWork uow)
+            IAddressService addressService,
+            IAddressApiService addressApiService)
         {
-            _addressRepository = addressRepository;
+            _addressService = addressService;
             _addressApiService = addressApiService;
-            _customerRepository = customerRepository;
-            _uow = uow;
         }
 
         /// <summary>
@@ -47,12 +38,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetAddress(Guid id)
         {
-            var address = _addressRepository.Get(id);
+            var address = _addressService.Get(id);
 
             if (address is not null)
                 return Ok(address);
 
-            return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
+            return NotFound($"Ops. Endereço com Id: '{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -70,12 +61,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/description/{description}")]
         public IActionResult GetAddresesByDescription(string description)
         {
-            var adresses = _addressRepository.GetByDescription(description);
+            var adresses = _addressService.GetByDescription(description);
 
-            if (adresses.Count > 0)
+            if (adresses.Any())
                 return Ok(adresses);
 
-            return NotFound($"Ops. Nenhum endereço com descrição:'{description}' foi encontrado.");
+            return NotFound($"Ops. Nenhum endereço com descrição: '{description}' foi encontrado.");
         }
 
         /// <summary>
@@ -93,12 +84,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/city/{city}")]
         public IActionResult GetAddresesByCity(string city)
         {
-            var adresses = _addressRepository.GetByCity(city);
+            var adresses = _addressService.GetByCity(city);
 
-            if (adresses.Count > 0)
+            if (adresses.Any())
                 return Ok(adresses);
 
-            return NotFound($"Ops. Nenhum endereço da cidade:'{city}' foi encontrado.");
+            return NotFound($"Ops. Nenhum endereço da cidade: '{city}' foi encontrado.");
         }
 
         /// <summary>
@@ -138,18 +129,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetAddresesByCustomerId(Guid customerId)
         {
-            var customer = _customerRepository.Get(customerId);
+            var adresses = _addressService.GetByCustomerId(customerId);
 
-            if (customer is not null)
-            {
-                var adresses = _addressRepository.GetByCustomerId(customerId);
+            if (adresses.Any())
+                return Ok(adresses);
 
-                if (adresses.Count > 0)
-                    return Ok(adresses);
-
-                return NotFound($"Ops. Nenhum endereço do cliente:'{customer.CompanyName}' foi encontrado.");
-            }
-            return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
+            return NotFound($"Ops. Nenhum Endereço com ClienteId: '{customerId}' foi encontrado.");
         }
 
         /// <summary>
@@ -170,25 +155,10 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var address =
-                    new Address(
-                        description: model.Description,
-                        zipCode: model.ZipCode,
-                        type: (AddressType)model.Type,
-                        street: model.Street,
-                        neighborhood: model.Neighborhood,
-                        number: model.Number,
-                        city: model.City,
-                        state: model.State,
-                        customerId: Guid.Parse(model.CustomerId));
+            var address = _addressService.Create(model);
 
             if (!address.Valid)
-                return ValidationProblem($"{address.GetNotification()}");
-
-            address.SetCodeCity(codeCity: model.CodeCity);
-
-            _addressRepository.Create(address);
-            _uow.Commit();
+                return ValidationProblem(address.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{address.Id}",
@@ -209,15 +179,10 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteAddress(Guid id)
         {
-            var address = _addressRepository.Get(id);
+            if (_addressService.Delete(id))
+                return Ok();
 
-            if (address is null)
-                return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
-
-            _addressRepository.Delete(address);
-            _uow.Commit();
-
-            return Ok();
+            return NotFound($"Ops. Endereço com Id: '{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -240,31 +205,15 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var oldAddress = _addressRepository.Get(id);
+            var updatedAddress = _addressService.Edit(id, model);
 
-            if (oldAddress is null)
-                return NotFound($"Ops. Endereço com Id:'{id}' não foi encontrado.");
+            if (updatedAddress is null)
+                return NotFound($"Ops. Endereço com Id: '{id}' não foi encontrado.");
 
-            var newAddress = oldAddress.
-                        Edit(
-                        description: model.Description,
-                        zipCode: model.ZipCode,
-                        type: (AddressType)model.Type,
-                        street: model.Street,
-                        neighborhood: model.Neighborhood,
-                        number: model.Number,
-                        city: model.City,
-                        state: model.State);
+            if (!updatedAddress.Valid)
+                return ValidationProblem(updatedAddress.GetAllNotifications());
 
-            if (!newAddress.Valid)
-                return ValidationProblem($"{newAddress.GetNotification()}");
-
-            newAddress.SetCodeCity(codeCity: model.CodeCity);
-
-            _addressRepository.Update(newAddress);
-            _uow.Commit();
-
-            return Ok(newAddress);
+            return Ok(updatedAddress);
         }
     }
 }

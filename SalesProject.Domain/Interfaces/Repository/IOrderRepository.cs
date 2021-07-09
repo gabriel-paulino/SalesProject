@@ -8,7 +8,7 @@ namespace SalesProject.Domain.Interfaces.Repository
     {
         Order Get(Guid id);
         Order GetToCreateInvoice(Guid id);
-        List<Order> GetOrdersUsingFilter(OrderFilter filter);
+        ICollection<Order> GetOrdersUsingFilter(OrderFilter filter);
         void Create(Order order);
         void Update(Order order);
         OrderDashboard GetInformationByPeriod(DateTime start, DateTime end);

@@ -1,6 +1,6 @@
 ﻿using SalesProject.Domain.Dtos;
 
-namespace SalesProject.Domain.Services
+namespace SalesProject.Domain.Interfaces.Service
 {
     public interface IAddressApiService
     {

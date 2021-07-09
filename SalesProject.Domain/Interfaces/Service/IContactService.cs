@@ -2,15 +2,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Interfaces.Repository
+namespace SalesProject.Domain.Interfaces.Service
 {
-    public interface IContactRepository : IDisposable
+    public interface IContactService
     {
         Contact Get(Guid id);
         ICollection<Contact> GetByName(string name);
         ICollection<Contact> GetByCustomerId(Guid customerId);
-        void Create(Contact contact);
-        void Update(Contact contact);
-        void Delete(Contact contact);
+        Contact Create(object createContactViewModel);
+        bool Delete(Guid id);
+        Contact Edit(Guid id, object editContactViewModel);
     }
 }

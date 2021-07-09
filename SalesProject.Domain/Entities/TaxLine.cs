@@ -38,16 +38,16 @@
 
         public string OriginIcms { get; private set; }
         public string CstIcms { get; private set; }
-        public int DeterminationMode { get; private set; } //BaseCalc
-        public decimal ValueBaseCalcIcms { get; private set; } //BaseCalc
+        public int DeterminationMode { get; private set; }
+        public decimal ValueBaseCalcIcms { get; private set; }
         public int AliquotIcms { get; private set; }
         public decimal ValueIcms { get; private set; }
         public string CstPis { get; private set; }
-        public decimal ValueBaseCalcPis { get; private set; } //BaseCalc
+        public decimal ValueBaseCalcPis { get; private set; }
         public double AliquotPis { get; private set; }
         public decimal ValuePis { get; private set; }
         public string CstCofins { get; private set; }
-        public decimal ValueBaseCalcCofins { get; private set; } //BaseCalc
+        public decimal ValueBaseCalcCofins { get; private set; }
         public double AliquotCofins { get; private set; }
         public decimal ValueCofins { get; private set; }
 

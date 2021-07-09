@@ -2,16 +2,16 @@
 using System;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Interfaces.Repository
+namespace SalesProject.Domain.Interfaces.Service
 {
-    public interface IAddressRepository : IDisposable
+    public interface IAddressService
     {
         Address Get(Guid id);
         ICollection<Address> GetByDescription(string description);
         ICollection<Address> GetByCity(string city);
         ICollection<Address> GetByCustomerId(Guid customerId);
-        void Create(Address address);
-        void Update(Address address);
-        void Delete(Address address);
+        Address Create(object createAddressViewModel);
+        bool Delete(Guid id);
+        Address Edit(Guid id, object editAddressViewModel);
     }
 }

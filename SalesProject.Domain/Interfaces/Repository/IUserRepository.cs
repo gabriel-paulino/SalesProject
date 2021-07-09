@@ -8,7 +8,8 @@ namespace SalesProject.Domain.Interfaces.Repository
     {
         User Get(Guid id);
         User GetByUsername(string username);
-        List<User> GetUsersByName(string name);
+        User GetByCustomerId(Guid customerId);
+        ICollection<User> GetUsersByName(string name);
         object GetAll();
         User Create(User user, string visiblePassword);
         User SignIn(User user, string visiblePassword);
@@ -16,7 +17,7 @@ namespace SalesProject.Domain.Interfaces.Repository
         void Delete(User user);
         void Update(User user);
         bool HasCustomerLink(Guid? customerId);
-        bool HasAnotherUserSameUsernameOrEmail(User user);
+        bool HasAnotherUserWithSameUsername(string username);
         bool HasAnotherUserWithSameEmail(string email);
     }
 }

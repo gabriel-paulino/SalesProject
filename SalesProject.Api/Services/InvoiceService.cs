@@ -1,7 +1,7 @@
 ﻿using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Collections.Generic;
 
@@ -39,11 +39,12 @@ namespace SalesProject.Api.Services
         {
             var invoice = new Invoice(order);
             var invoiceLines = new List<InvoiceLine>();
+            var taxLine = new TaxLine();
 
             foreach (var line in order.OrderLines)
             {
-                var taxLine = new TaxLine().GetDefaultTaxes(line.TotalPrice);
-                var invoiceLine = new InvoiceLine(orderLine: line, taxLine: taxLine);
+                var currentTaxLine = taxLine.GetDefaultTaxes(line.TotalPrice);
+                var invoiceLine = new InvoiceLine(orderLine: line, taxLine: currentTaxLine);
 
                 invoiceLines.Add(invoiceLine);
             }
@@ -71,7 +72,20 @@ namespace SalesProject.Api.Services
             _uow.Commit();
         }
 
-        public List<Invoice> GetAllInvoicesAbleToSend() =>
+        public ICollection<Invoice> GetAllInvoicesAbleToSend() =>
             _invoiceRepository.GetAllInvoicesAbleToSend();
+
+        public Order GetOrderToCreateInvoice(Guid orderId)
+        {
+            var order = _orderRepository.GetToCreateInvoice(orderId);
+
+            if (order is null)
+                return null;
+
+            if (!order.CanBillThisOrder())
+                order.AddNotification("Ops.Apenas pedidos aprovados podem ser faturados.");
+
+            return order;
+        }
     }
 }

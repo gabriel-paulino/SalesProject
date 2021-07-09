@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Contact;
-using SalesProject.Domain.Entities;
-using SalesProject.Domain.Interfaces;
-using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Interfaces.Service;
 using System;
+using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -13,18 +12,12 @@ namespace SalesProject.Api.Controllers
     [ApiController]
     public class ContactController : ControllerBase
     {
-        private readonly IContactRepository _contactRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IUnitOfWork _uow;
+        private readonly IContactService _contactService;
 
         public ContactController(
-            IContactRepository contactRepository,
-            ICustomerRepository customerRepository,
-            IUnitOfWork uow)
+            IContactService contactService)
         {
-            _contactRepository = contactRepository;
-            _customerRepository = customerRepository;
-            _uow = uow;
+            _contactService = contactService;
         }
 
         /// <summary>
@@ -42,12 +35,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetContact(Guid id)
         {
-            var contact = _contactRepository.Get(id);
+            var contact = _contactService.Get(id);
 
             if (contact is not null)
                 return Ok(contact);
 
-            return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
+            return NotFound($"Ops. Contato com Id: '{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -65,12 +58,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetContactsByName(string name)
         {
-            var contacts = _contactRepository.GetByName(name);
+            var contacts = _contactService.GetByName(name);
 
-            if (contacts.Count > 0)
+            if (contacts.Any())
                 return Ok(contacts);
 
-            return NotFound($"Ops. Nenhum contato com nome:'{name}' foi encontrado.");
+            return NotFound($"Ops. Nenhum contato com nome: '{name}' foi encontrado.");
         }
 
         /// <summary>
@@ -88,18 +81,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetContactsByCustomerId(Guid customerId)
         {
-            var customer = _customerRepository.Get(customerId);
+            var contacts = _contactService.GetByCustomerId(customerId);
 
-            if (customer is not null)
-            {
-                var contacts = _contactRepository.GetByCustomerId(customerId);
+            if (contacts.Any())
+                return Ok(contacts);
 
-                if (contacts.Count > 0)
-                    return Ok(contacts);
-
-                return NotFound($"Ops. Nenhum contato do cliente:'{customer.CompanyName}' foi encontrado.");
-            }
-            return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
+            return NotFound($"Ops. Nenhum Contato com ClienteId: '{customerId}' foi encontrado.");
         }
 
         /// <summary>
@@ -120,20 +107,10 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var contact =
-                    new Contact(
-                        firstName: model.FirstName,
-                        lastName: model.LastName,
-                        email: model.Email,
-                        whatsApp: model.WhatsApp,
-                        phone: model.Phone,
-                        customerId: Guid.Parse(model.CustomerId));
+            var contact = _contactService.Create(model);
 
             if (!contact.Valid)
-                return ValidationProblem($"{contact.GetNotification()}");
-
-            _contactRepository.Create(contact);
-            _uow.Commit();
+                return ValidationProblem(contact.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{contact.Id}",
@@ -154,15 +131,10 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteContact(Guid id)
         {
-            var contact = _contactRepository.Get(id);
+            if (_contactService.Delete(id))
+                return Ok();
 
-            if (contact is null)
-                return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
-
-            _contactRepository.Delete(contact);
-            _uow.Commit();
-
-            return Ok();
+            return NotFound($"Ops. Contato com Id: '{id}' não foi encontrado.");
         }
 
         /// <summary>
@@ -185,26 +157,15 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var oldContact = _contactRepository.Get(id);
+            var updatedContact = _contactService.Edit(id, model);
 
-            if (oldContact is null)
-                return NotFound($"Ops. Contato com Id:'{id}' não foi encontrado.");
+            if (updatedContact is null)
+                return NotFound($"Ops. Contato com Id: '{id}' não foi encontrado.");
 
-            var newContact = oldContact.
-                        Edit(
-                        firstName: model.FirstName,
-                        lastName: model.LastName,
-                        email: model.Email,
-                        whatsApp: model.WhatsApp,
-                        phone: model.Phone);
+            if (!updatedContact.Valid)
+                return ValidationProblem(updatedContact.GetAllNotifications());
 
-            if (!newContact.Valid)
-                return ValidationProblem($"{newContact.GetNotification()}");
-
-            _contactRepository.Update(newContact);
-            _uow.Commit();
-
-            return Ok(newContact);
+            return Ok(updatedContact);
         }
     }
 }

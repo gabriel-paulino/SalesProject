@@ -1,13 +1,13 @@
 ﻿using SalesProject.Domain.Entities;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Services
+namespace SalesProject.Domain.Interfaces.Service
 {
     public interface IPlugNotasApiService
     {
-        object SendInvoice(Invoice invoice);
-        string SendAllInvoices(List<Invoice> invoices);
-        object ConsultSefaz(string invoiceIdPlugNotas);
+        string SendInvoice(Invoice invoice);
+        string SendAllInvoices(ICollection<Invoice> invoices);
+        string ConsultSefaz(string invoiceIdPlugNotas, ref bool hasDoneWithSuccess);
         string DownloadInvoicePdf(string invoiceIdPlugNotas);
         string DownloadInvoiceXml(string invoiceIdPlugNotas);
     }

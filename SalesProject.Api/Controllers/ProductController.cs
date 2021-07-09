@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesProject.Api.ViewModels.Product;
-using SalesProject.Domain.Entities;
-using SalesProject.Domain.Interfaces;
-using SalesProject.Domain.Interfaces.Repository;
+using SalesProject.Domain.Interfaces.Service;
 using System;
+using System.Linq;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -13,18 +12,12 @@ namespace SalesProject.Api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IUnitOfWork _uow;
+        private readonly IProductService _productService;
 
         public ProductController(
-            IProductRepository productRepository,
-            ICustomerRepository customerRepository,
-            IUnitOfWork uow)
+            IProductService productService)
         {
-            _productRepository = productRepository;
-            _customerRepository = customerRepository;
-            _uow = uow;
+            _productService = productService;
         }
 
         /// <summary>
@@ -42,12 +35,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult GetProduct(Guid id)
         {
-            var product = _productRepository.Get(id);
+            var product = _productService.Get(id);
 
             if (product is not null)
                 return Ok(product);
 
-            return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
+            return NotFound($"Ops. Produto com Id: '{id}' não existe");
         }
 
         /// <summary>
@@ -65,12 +58,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/name/{name}")]
         public IActionResult GetProductsByName(string name)
         {
-            var products = _productRepository.GetByName(name);
+            var products = _productService.GetByName(name);
 
-            if (products.Count > 0)
+            if (products.Any())
                 return Ok(products);
 
-            return NotFound($"Ops. Nenhum produto com nome:'{name}' foi encontrado.");
+            return NotFound($"Ops. Nenhum produto com nome: '{name}' foi encontrado.");
         }
 
         /// <summary>
@@ -88,18 +81,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/customer/{customerId:guid}")]
         public IActionResult GetProductsByCustomerId(Guid customerId)
         {
-            var customer = _customerRepository.Get(customerId);
+            var products = _productService.GetByCustomerId(customerId);
 
-            if (customer is not null)
-            {
-                var products = _productRepository.GetByCustomerId(customerId);
+            if (products.Any())
+                return Ok(products);
 
-                if (products.Count > 0)
-                    return Ok(products);
-
-                return NotFound($"Ops. Nenhum produto do cliente:'{customer.CompanyName}' foi encontrado.");
-            }
-            return NotFound($"Ops. Nenhum cliente com Id:'{customerId}' foi encontrado.");
+            return NotFound($"Ops. Nenhum produto com ClienteId: '{customerId}' foi encontrado.");
         }
 
         /// <summary>
@@ -120,21 +107,10 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product =
-                    new Product(
-                        name: model.Name,
-                        ncmCode: model.NcmCode,
-                        combinedPrice: model.CombinedPrice,
-                        additionalCosts: model.AdditionalCosts,
-                        combinedQuantity: model.CombinedQuantity,
-                        details: model.Details,
-                        customerId: Guid.Parse(model.CustomerId));
+            var product = _productService.Create(model);
 
             if (!product.Valid)
-                return ValidationProblem($"{product.GetNotification()}");
-
-            _productRepository.Create(product);
-            _uow.Commit();
+                return ValidationProblem(product.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{product.Id}",
@@ -155,15 +131,10 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{id:guid}")]
         public IActionResult DeleteProduct(Guid id)
         {
-            var product = _productRepository.Get(id);
+            if (_productService.Delete(id))
+                return Ok();
 
-            if (product is null)
-                return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
-
-            _productRepository.Delete(product);
-            _uow.Commit();
-
-            return Ok();
+            return NotFound($"Ops. Produto com Id: '{id}' não existe.");
         }
 
         /// <summary>
@@ -186,27 +157,15 @@ namespace SalesProject.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var oldProduct = _productRepository.Get(id);
+            var updatedProduct = _productService.Edit(id, model);
 
-            if (oldProduct is null)
-                return NotFound($"Ops. Produto com Id:'{id}' não foi encontrado.");
+            if (updatedProduct is null)
+                return NotFound($"Ops. Produto com Id: '{id}' não existe.");
 
-            var newProduct = oldProduct.
-                        Edit(
-                        name: model.Name,
-                        ncmCode: model.NcmCode,
-                        combinedPrice: model.CombinedPrice,
-                        additionalCosts: model.AdditionalCosts,
-                        combinedQuantity: model.CombinedQuantity,
-                        details: model.Details);
+            if (!updatedProduct.Valid)
+                return ValidationProblem(updatedProduct.GetAllNotifications());
 
-            if (!newProduct.Valid)
-                return ValidationProblem($"{newProduct.GetNotification()}");
-
-            _productRepository.Update(newProduct);
-            _uow.Commit();
-
-            return Ok(newProduct);
+            return Ok(updatedProduct);
         }
     }
 }

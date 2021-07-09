@@ -2,15 +2,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace SalesProject.Domain.Interfaces.Repository
+namespace SalesProject.Domain.Interfaces.Service
 {
-    public interface IProductRepository : IDisposable
+    public interface IProductService
     {
         Product Get(Guid id);
         ICollection<Product> GetByName(string name);
         ICollection<Product> GetByCustomerId(Guid customerId);
-        void Create(Product product);
-        void Update(Product product);
-        void Delete(Product product);
+        Product Create(object createProductViewModel);
+        bool Delete(Guid id);
+        Product Edit(Guid id, object editProductViewModel);
     }
 }
