@@ -84,10 +84,10 @@ namespace SalesProject.Api.Services
         public Contact Get(Guid id) =>
             _contactRepository.Get(id);
 
-        public List<Contact> GetByCustomerId(Guid customerId) =>
+        public ICollection<Contact> GetByCustomerId(Guid customerId) =>
             _contactRepository.GetByCustomerId(customerId);
 
-        public List<Contact> GetByName(string name) =>
+        public ICollection<Contact> GetByName(string name) =>
             _contactRepository.GetByName(name);
     }
 }

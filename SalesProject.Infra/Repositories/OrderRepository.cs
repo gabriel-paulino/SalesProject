@@ -59,13 +59,6 @@ namespace SalesProject.Infra.Repositories
         public void Update(Order order) =>
             _context.Entry<Order>(order).State = EntityState.Modified;
 
-        public void Dispose()
-        {
-            if (!_disposed)
-                _context.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
         public OrderDashboard GetInformationByPeriod(DateTime start, DateTime end)
         {
             IQueryable<Order> query =
@@ -87,6 +80,13 @@ namespace SalesProject.Infra.Repositories
                     totalSales: query.Where(o => o.Status == OrderStatus.Billed).Sum(o => o.TotalOrder)
                     )
                 : null;
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+                _context.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

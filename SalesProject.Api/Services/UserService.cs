@@ -116,7 +116,7 @@ namespace SalesProject.Api.Services
             return null;
         }
 
-        public IEnumerable<User> GetUsersByName(string name)
+        public ICollection<User> GetUsersByName(string name)
         {
             var users = _userRepository.GetUsersByName(name);
 

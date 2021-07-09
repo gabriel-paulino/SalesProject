@@ -10,7 +10,7 @@ namespace SalesProject.Domain.Interfaces.Service
         User Get(Guid id);
         object GetAll();
         User GetByCustomerId(Guid customerId);
-        IEnumerable<User> GetUsersByName(string name);
+        ICollection<User> GetUsersByName(string name);
         User Register(object registerViewModel);
         bool Delete(Guid id);
         User Edit(string username, object editUserViewModel);

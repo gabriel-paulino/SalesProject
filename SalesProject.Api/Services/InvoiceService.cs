@@ -72,7 +72,7 @@ namespace SalesProject.Api.Services
             _uow.Commit();
         }
 
-        public List<Invoice> GetAllInvoicesAbleToSend() =>
+        public ICollection<Invoice> GetAllInvoicesAbleToSend() =>
             _invoiceRepository.GetAllInvoicesAbleToSend();
 
         public Order GetOrderToCreateInvoice(Guid orderId)

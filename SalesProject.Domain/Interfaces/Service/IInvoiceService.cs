@@ -11,7 +11,7 @@ namespace SalesProject.Domain.Interfaces.Service
         void MarkAsIntegrated(Invoice invoice, string invoiceIdPlugNotas);
         Invoice Get(Guid id);
         Invoice GetByOrderId(Guid orderId);
-        List<Invoice> GetAllInvoicesAbleToSend();
+        ICollection<Invoice> GetAllInvoicesAbleToSend();
         object GetInvoiceIdByOrderId(Guid orderId);
         object GetInvoiceIdOfPlugNotasByOrderId(Guid orderId);
     }

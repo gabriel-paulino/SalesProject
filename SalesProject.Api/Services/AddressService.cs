@@ -95,13 +95,13 @@ namespace SalesProject.Api.Services
         public Address Get(Guid id) =>
             _addressRepository.Get(id);
 
-        public List<Address> GetByCity(string city) =>
+        public ICollection<Address> GetByCity(string city) =>
             _addressRepository.GetByCity(city);
 
-        public List<Address> GetByCustomerId(Guid customerId) =>
+        public ICollection<Address> GetByCustomerId(Guid customerId) =>
             _addressRepository.GetByCustomerId(customerId);
 
-        public List<Address> GetByDescription(string description) =>
+        public ICollection<Address> GetByDescription(string description) =>
             _addressRepository.GetByDescription(description);
     }
 }

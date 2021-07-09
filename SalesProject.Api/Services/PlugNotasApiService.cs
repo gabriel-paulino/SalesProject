@@ -49,7 +49,7 @@ namespace SalesProject.Api.Services
             return response.Content;
         }
 
-        public string SendAllInvoices(List<Invoice> invoices)
+        public string SendAllInvoices(ICollection<Invoice> invoices)
         {
             var invoicesPlugNotas = new List<PlugNotasApi>();
 

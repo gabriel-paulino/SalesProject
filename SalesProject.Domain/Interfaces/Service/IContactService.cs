@@ -7,8 +7,8 @@ namespace SalesProject.Domain.Interfaces.Service
     public interface IContactService
     {
         Contact Get(Guid id);
-        List<Contact> GetByName(string name);
-        List<Contact> GetByCustomerId(Guid customerId);
+        ICollection<Contact> GetByName(string name);
+        ICollection<Contact> GetByCustomerId(Guid customerId);
         Contact Create(object createContactViewModel);
         bool Delete(Guid id);
         Contact Edit(Guid id, object editContactViewModel);
