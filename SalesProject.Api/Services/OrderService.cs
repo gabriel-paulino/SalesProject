@@ -32,6 +32,42 @@ namespace SalesProject.Api.Services
             _uow = uow;
         }
 
+        public Order Approve(Guid id)
+        {
+            var order = _orderRepository.Get(id);
+
+            if (order is null)
+                return null;
+
+            order.Approve();
+
+            if (!order.Valid)
+                return order;
+
+            _orderRepository.Update(order);
+            _uow.Commit();
+
+            return order;
+        }
+
+        public Order Cancel(Guid id)
+        {
+            var order = _orderRepository.Get(id);
+
+            if (order is null)
+                return null;
+
+            order.Cancel();
+
+            if (!order.Valid)
+                return order;
+
+            _orderRepository.Update(order);
+            _uow.Commit();
+
+            return order;
+        }
+
         public Order Create(object createOrderViewModel, bool isCustomer, string username)
         {
             var model = (CreateOrderViewModel)createOrderViewModel;
@@ -101,7 +137,7 @@ namespace SalesProject.Api.Services
                                    product: product
                                    );
 
-                if(!orderLine.Valid)
+                if (!orderLine.Valid)
                 {
                     order.AddNotification(orderLine.GetAllNotifications());
                     return order;
@@ -146,6 +182,134 @@ namespace SalesProject.Api.Services
             return order;
         }
 
+        public Order Edit(Guid id, object editOrderViewModel)
+        {
+            var model = (EditOrderViewModel)editOrderViewModel;
+            var currentOrder = _orderRepository.Get(id);
+
+            if (currentOrder is null)
+                return null;
+
+            if (currentOrder.Status != OrderStatus.Open)
+            {
+                currentOrder.AddNotification($"Ops. Não é possível alterar esse Pedido, pois o Status não é 'Aberto'.");
+                return currentOrder;
+            }
+
+            var updatedOrder = currentOrder.
+                        Edit(
+                        postingDate: DateTime.Parse(model.PostingDate).Date,
+                        deliveryDate: DateTime.Parse(model.DeliveryDate).Date,
+                        observation: model.Observation);
+
+            if (!updatedOrder.Valid)
+                return updatedOrder;
+
+            List<OrderLine> newOrderLines = new List<OrderLine>();
+            List<OrderLine> removedOrderLines = new List<OrderLine>();
+
+            foreach (var orderLine in updatedOrder.OrderLines)
+            {
+                bool remove = false;
+
+                for (int i = 0; i < model.OrderLines.Count; i++)
+                {
+                    Guid currentIdOrderLines = string.IsNullOrEmpty(model.OrderLines[i].Id)
+                    ? new Guid()
+                    : Guid.Parse(model.OrderLines[i].Id);
+
+                    if (orderLine.Id == currentIdOrderLines)
+                        break;
+
+                    if (i == model.OrderLines.Count - 1)
+                    {
+                        remove = true;
+                        break;
+                    }
+                }
+                if (remove)
+                    removedOrderLines.Add(orderLine);
+            }
+
+            foreach (var lines in model.OrderLines)
+            {
+                if (string.IsNullOrEmpty(lines.Id))
+                {
+                    var product = _productRepository.Get(Guid.Parse(lines.ProductId));
+
+                    if (product is null)
+                    {
+                        updatedOrder.AddNotification($"Ops. Produto com Id:'{lines.ProductId}' não existe");
+                        return updatedOrder;
+                    }
+
+                    var newOrderLine =
+                            new OrderLine(
+                                   quantity: lines.Quantity,
+                                   unitaryPrice: lines.UnitaryPrice,
+                                   additionalCosts: lines.AdditionalCosts,
+                                   product: product
+                                   );
+
+                    if (!newOrderLine.Valid)
+                    {
+                        updatedOrder.AddNotification(newOrderLine.GetAllNotifications());
+                        return updatedOrder;
+                    }
+
+                    newOrderLines.Add(newOrderLine);
+                }
+            }
+
+            foreach (var line in model.OrderLines)
+            {
+                if (string.IsNullOrEmpty(line.Id))
+                    continue;
+
+                var orderLine =
+                    updatedOrder
+                    .OrderLines
+                    .Where(ol => ol.Id == Guid.Parse(line.Id))
+                    .FirstOrDefault();
+
+                var product = _productRepository.Get(Guid.Parse(line.ProductId));
+
+                if (product is null)
+                {
+                    updatedOrder.AddNotification($"Ops. Produto com Id:'{line.ProductId}' não foi encontrado.");
+                    return updatedOrder;
+                }
+
+                orderLine.Edit(
+                                quantity: line.Quantity,
+                                unitaryPrice: line.UnitaryPrice,
+                                additionalCosts: line.AdditionalCosts,
+                                product: product
+                                );
+
+                if (!orderLine.Valid)
+                {
+                    updatedOrder.AddNotification(orderLine.GetAllNotifications());
+                    return updatedOrder;
+                }
+            }
+
+            if (newOrderLines.Any())
+                foreach (var newOrderLine in newOrderLines)
+                    updatedOrder.AddOrderLine(newOrderLine);
+
+            if (removedOrderLines.Any())
+                foreach (var orderLine in removedOrderLines)
+                    updatedOrder.RemoveOrderLine(orderLine);
+
+            updatedOrder.UpdateTotalOrder();
+
+            _orderRepository.Update(updatedOrder);
+            _uow.Commit();
+
+            return updatedOrder;
+        }
+
         public Order Get(Guid id) =>
             _orderRepository.Get(id);
 
@@ -166,6 +330,9 @@ namespace SalesProject.Api.Services
                     endDate: model.EndDate
                     );
         }
+
+        public OrderDashboard GetInformationByPeriod(DateTime start, DateTime end) =>
+            _orderRepository.GetInformationByPeriod(start, end);
 
         public ICollection<Order> GetOrdersUsingFilter(OrderFilter filter) =>
             _orderRepository.GetOrdersUsingFilter(filter);
