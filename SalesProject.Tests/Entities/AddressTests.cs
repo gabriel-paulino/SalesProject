@@ -45,7 +45,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenDescriptionIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("description");
+            var invalidAddress = GetAddressWithInvalid("description");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -54,7 +54,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenZipCodeIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("zipCode");
+            var invalidAddress = GetAddressWithInvalid("zipCode");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -63,7 +63,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenTypeIsNull()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("type");
+            var invalidAddress = GetAddressWithInvalid("type");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -72,7 +72,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenStreetIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("street");
+            var invalidAddress = GetAddressWithInvalid("street");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -81,7 +81,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenNeighborhoodIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("neighborhood");
+            var invalidAddress = GetAddressWithInvalid("neighborhood");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -90,7 +90,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenNumberIsZero()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("number");
+            var invalidAddress = GetAddressWithInvalid("number");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -99,7 +99,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenCityIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("city");
+            var invalidAddress = GetAddressWithInvalid("city");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -108,7 +108,7 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenStateIsEmpty()
         {
-            var invalidAddress = GetAddressWithAnInvalidAttribute("state");
+            var invalidAddress = GetAddressWithInvalid("state");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -161,7 +161,7 @@ namespace SalesProject.Tests.Entities
             Assert.IsTrue(address.Valid);
         }
 
-        private Address GetAddressWithAnInvalidAttribute(string invalidAttribute) =>
+        private Address GetAddressWithInvalid(string invalidAttribute) =>
              new Address(
                 description: invalidAttribute == "description" ? string.Empty : _description,
                 zipCode: invalidAttribute == "zipCode" ? string.Empty : _zipCode,
