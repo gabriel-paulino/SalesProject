@@ -8,7 +8,7 @@ using SalesProject.Domain.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 
-namespace SalesProject.Tests.Services
+namespace SalesProject.Application.Tests.Services
 {
     [TestClass]
     public class AddressServiceTests

@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesProject.Infra", "..\Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesProject.Api", "..\SalesProject.Api\SalesProject.Api.csproj", "{27812BD7-70F6-4A9B-ABAD-DF4488E8AF45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesProject.Application", "..\SalesProject.Application\SalesProject.Application.csproj", "{C5242529-BC4F-475E-9A78-583F24ED1BCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesProject.Application", "..\SalesProject.Application\SalesProject.Application.csproj", "{C5242529-BC4F-475E-9A78-583F24ED1BCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesProject.Tests", "..\SalesProject.Tests\SalesProject.Tests.csproj", "{170F15C2-0752-486E-AF10-A8F1743E9C9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesProject.Domain.Tests", "..\SalesProject.Domain.Tests\SalesProject.Domain.Tests.csproj", "{170F15C2-0752-486E-AF10-A8F1743E9C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesProject.Application.Tests", "..\SalesProject.Application.Tests\SalesProject.Application.Tests.csproj", "{C2BABABE-5BAE-4FC9-99AC-CFB2EBBBB286}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{170F15C2-0752-486E-AF10-A8F1743E9C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{170F15C2-0752-486E-AF10-A8F1743E9C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{170F15C2-0752-486E-AF10-A8F1743E9C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2BABABE-5BAE-4FC9-99AC-CFB2EBBBB286}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2BABABE-5BAE-4FC9-99AC-CFB2EBBBB286}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2BABABE-5BAE-4FC9-99AC-CFB2EBBBB286}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2BABABE-5BAE-4FC9-99AC-CFB2EBBBB286}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

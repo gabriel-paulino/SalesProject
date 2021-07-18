@@ -3,7 +3,7 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using System;
 
-namespace SalesProject.Tests.Entities
+namespace SalesProject.Domain.Tests.Entities
 {
     [TestClass]
     public class AddressTests
@@ -61,6 +61,15 @@ namespace SalesProject.Tests.Entities
         }
 
         [TestMethod]
+        public void ShouldReturnErrorWhenZipCodeIsInvalid()
+        {
+            var invalidAddress = GetAddressWithInvalid("zipCode", "invalidValue");
+
+            Assert.IsNotNull(invalidAddress);
+            Assert.IsFalse(invalidAddress.Valid);
+        }
+
+        [TestMethod]
         public void ShouldReturnErrorWhenTypeIsNull()
         {
             var invalidAddress = GetAddressWithInvalid("type");
@@ -90,7 +99,16 @@ namespace SalesProject.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenNumberIsZero()
         {
-            var invalidAddress = GetAddressWithInvalid("number");
+            var invalidAddress = GetAddressWithInvalid("number" , 0);
+
+            Assert.IsNotNull(invalidAddress);
+            Assert.IsFalse(invalidAddress.Valid);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenNumberLessThanZero()
+        {
+            var invalidAddress = GetAddressWithInvalid("number", -50);
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -109,6 +127,15 @@ namespace SalesProject.Tests.Entities
         public void ShouldReturnErrorWhenStateIsEmpty()
         {
             var invalidAddress = GetAddressWithInvalid("state");
+
+            Assert.IsNotNull(invalidAddress);
+            Assert.IsFalse(invalidAddress.Valid);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenCustomerIdIsEmpty()
+        {
+            var invalidAddress = GetAddressWithInvalid("customerId");
 
             Assert.IsNotNull(invalidAddress);
             Assert.IsFalse(invalidAddress.Valid);
@@ -141,15 +168,15 @@ namespace SalesProject.Tests.Entities
             string updatedState = "SP";
 
             address.Edit(
-                updatedDescription, 
-                updatedZipCode, 
-                updatedType, 
-                updatedStreet, 
-                updatedNeighborhood, 
-                updatedNumber, 
-                updatedCity, 
+                updatedDescription,
+                updatedZipCode,
+                updatedType,
+                updatedStreet,
+                updatedNeighborhood,
+                updatedNumber,
+                updatedCity,
                 updatedState);
-            
+
             Assert.AreEqual(address.Description, updatedDescription);
             Assert.AreEqual(address.ZipCode, updatedZipCode);
             Assert.AreEqual(address.Type, updatedType);
@@ -161,17 +188,17 @@ namespace SalesProject.Tests.Entities
             Assert.IsTrue(address.Valid);
         }
 
-        private Address GetAddressWithInvalid(string invalidAttribute) =>
+        private Address GetAddressWithInvalid(string invalidAttribute, object invalidValue = null) =>
              new Address(
-                description: invalidAttribute == "description" ? string.Empty : _description,
-                zipCode: invalidAttribute == "zipCode" ? string.Empty : _zipCode,
+                description: invalidAttribute == "description" ? (string)invalidValue ?? string.Empty : _description,
+                zipCode: invalidAttribute == "zipCode" ? (string)invalidValue ?? string.Empty : _zipCode,
                 type: invalidAttribute == "type" ? null : _type,
-                street: invalidAttribute == "street" ? string.Empty : _street,
-                neighborhood: invalidAttribute == "neighborhood" ? string.Empty : _neighborhood,
-                number: invalidAttribute == "number" ? 0 : _number,
-                city: invalidAttribute == "city" ? string.Empty : _city,
-                state: invalidAttribute == "state" ? string.Empty : _state,
-                customerId: _customerId);
+                street: invalidAttribute == "street" ? (string)invalidValue ?? string.Empty : _street,
+                neighborhood: invalidAttribute == "neighborhood" ? (string)invalidValue ?? string.Empty : _neighborhood,
+                number: invalidAttribute == "number" ? (int)invalidValue : _number,
+                city: invalidAttribute == "city" ? (string)invalidValue ?? string.Empty : _city,
+                state: invalidAttribute == "state" ? (string)invalidValue ?? string.Empty : _state,
+                customerId: invalidAttribute == "customerId" ? Guid.Empty : _customerId);
 
         private Address GetValidAddress() =>
              new Address(
