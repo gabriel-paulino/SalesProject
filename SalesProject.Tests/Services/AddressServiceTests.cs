@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using SalesProject.Api.Services;
+using SalesProject.Application.Services;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Domain.Interfaces;
@@ -42,8 +42,7 @@ namespace SalesProject.Tests.Services
         [TestMethod]
         public void ShouldReturnSuccessWhenGetAddresesByCustomerId()
         {
-            var addreses = new List<Address>();
-            addreses.Add(_address);
+            var addreses = new List<Address> { _address };
 
             _addressRepository.GetByCustomerId(_customerId)
                 .Returns(addreses);
