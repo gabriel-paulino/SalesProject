@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SalesProject.Api.ViewModels.Product;
+using SalesProject.Application.ViewModels.Product;
 using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Linq;
