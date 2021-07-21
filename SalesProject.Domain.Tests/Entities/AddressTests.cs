@@ -133,15 +133,6 @@ namespace SalesProject.Domain.Tests.Entities
         }
 
         [TestMethod]
-        public void ShouldReturnErrorWhenCustomerIdIsEmpty()
-        {
-            var invalidAddress = GetAddressWithInvalid("customerId");
-
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
-        }
-
-        [TestMethod]
         public void ShouldReturnSucessWhenSetAddressWithAnValidCodeCity()
         {
             var address = GetValidAddress();
@@ -198,7 +189,7 @@ namespace SalesProject.Domain.Tests.Entities
                 number: invalidAttribute == "number" ? (int)invalidValue : _number,
                 city: invalidAttribute == "city" ? (string)invalidValue ?? string.Empty : _city,
                 state: invalidAttribute == "state" ? (string)invalidValue ?? string.Empty : _state,
-                customerId: invalidAttribute == "customerId" ? Guid.Empty : _customerId);
+                customerId: _customerId);
 
         private Address GetValidAddress() =>
              new Address(
