@@ -8,35 +8,20 @@ namespace SalesProject.Domain.Tests.Entities
     [TestClass]
     public class AddressTests
     {
-        private readonly string _description;
-        private readonly string _zipCode;
-        private readonly AddressType _type;
-        private readonly string _street;
-        private readonly string _neighborhood;
-        private readonly int _number;
-        private readonly string _city;
-        private readonly string _state;
-        private readonly Guid _customerId;
-        private readonly string _codeCity;
-
-        public AddressTests()
-        {
-            _description = "Balcão 1";
-            _zipCode = "02248-050";
-            _type = AddressType.Other;
-            _street = "Rua Francisca Maria de Souza";
-            _neighborhood = "Parada Inglesa";
-            _number = 131;
-            _city = "São Paulo";
-            _state = "SP";
-            _customerId = Guid.NewGuid();
-            _codeCity = "3550308";
-        }
+        const string validDescription = "Balcão 1";
+        const string validZipCode = "02248-050";
+        const AddressType validType = AddressType.Other;
+        const string validStreet = "Rua Francisca Maria de Souza";
+        const string validNeighborhood = "Parada Inglesa";
+        const int validNumber = 131;
+        const string validCity = "São Paulo";
+        const string validState = "SP";
+        const string validCodeCity = "3550308";
 
         [TestMethod]
         public void ShouldReturnSuccessWhenAddressIsValid()
         {
-            var address = GetValidAddress();
+            var address = GetAddress();
 
             Assert.IsNotNull(address);
             Assert.IsTrue(address.Valid);
@@ -45,111 +30,123 @@ namespace SalesProject.Domain.Tests.Entities
         [TestMethod]
         public void ShouldReturnErrorWhenDescriptionIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("description");
+            var addressWithInvalidDescription = GetAddress(description: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidDescription);
+            Assert.IsFalse(addressWithInvalidDescription.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidDescription.Description);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenZipCodeIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("zipCode");
+            var addressWithInvalidZipCode = GetAddress(zipCode: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidZipCode);
+            Assert.IsFalse(addressWithInvalidZipCode.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidZipCode.ZipCode);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenZipCodeIsInvalid()
         {
-            var invalidAddress = GetAddressWithInvalid("zipCode", "invalidValue");
+            string invalidZipCode = "invalidValue";
+            var addressWithInvalidZipCode = GetAddress(zipCode: invalidZipCode);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidZipCode);
+            Assert.IsFalse(addressWithInvalidZipCode.Valid);
+            Assert.AreEqual(invalidZipCode, addressWithInvalidZipCode.ZipCode);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenTypeIsNull()
         {
-            var invalidAddress = GetAddressWithInvalid("type");
+            var addressWithInvalidType = GetAddress(type: null);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidType);
+            Assert.IsFalse(addressWithInvalidType.Valid);
+            Assert.AreEqual(null, addressWithInvalidType.Type);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenStreetIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("street");
+            var addressWithInvalidStreet = GetAddress(street: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidStreet);
+            Assert.IsFalse(addressWithInvalidStreet.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidStreet.Street);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenNeighborhoodIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("neighborhood");
+            var addressWithInvalidNeighborhood = GetAddress(neighborhood: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidNeighborhood);
+            Assert.IsFalse(addressWithInvalidNeighborhood.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidNeighborhood.Neighborhood);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenNumberIsZero()
         {
-            var invalidAddress = GetAddressWithInvalid("number" , 0);
+            var addressWithNumberZero = GetAddress(number: 0);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithNumberZero);
+            Assert.IsFalse(addressWithNumberZero.Valid);
+            Assert.AreEqual(0, addressWithNumberZero.Number);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenNumberLessThanZero()
         {
-            var invalidAddress = GetAddressWithInvalid("number", -50);
+            int invalidNumber = -50;
+            var addressWithInvalidNumber = GetAddress(number: invalidNumber);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidNumber);
+            Assert.IsFalse(addressWithInvalidNumber.Valid);
+            Assert.AreEqual(invalidNumber, addressWithInvalidNumber.Number);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenCityIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("city");
+            var addressWithInvalidCity = GetAddress(city: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidCity);
+            Assert.IsFalse(addressWithInvalidCity.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidCity.City);
         }
 
         [TestMethod]
         public void ShouldReturnErrorWhenStateIsEmpty()
         {
-            var invalidAddress = GetAddressWithInvalid("state");
+            var addressWithInvalidState = GetAddress(state: string.Empty);
 
-            Assert.IsNotNull(invalidAddress);
-            Assert.IsFalse(invalidAddress.Valid);
+            Assert.IsNotNull(addressWithInvalidState);
+            Assert.IsFalse(addressWithInvalidState.Valid);
+            Assert.AreEqual(string.Empty, addressWithInvalidState.State);
         }
 
         [TestMethod]
         public void ShouldReturnSucessWhenSetAddressWithAnValidCodeCity()
         {
-            var address = GetValidAddress();
+            var address = GetAddress();
 
-            address.SetCodeCity(_codeCity);
+            address.SetCodeCity(validCodeCity);
 
             Assert.IsNotNull(address.CodeCity);
             Assert.IsTrue(address.Valid);
-            Assert.AreEqual(address.CodeCity, _codeCity);
+            Assert.AreEqual(validCodeCity, address.CodeCity);
         }
 
         [TestMethod]
         public void ShouldReturnSucessWhenEditAddress()
         {
-            var address = GetValidAddress();
+            var address = GetAddress();
 
-            string updatedDescription = $"Edited Address";
+            string updatedDescription = "Edited Address";
             string updatedZipCode = "12237-900";
             AddressType? updatedType = AddressType.Billing;
             string updatedStreet = $"Rodovia Presidente Dutra km 156";
@@ -179,28 +176,24 @@ namespace SalesProject.Domain.Tests.Entities
             Assert.IsTrue(address.Valid);
         }
 
-        private Address GetAddressWithInvalid(string invalidAttribute, object invalidValue = null) =>
-             new Address(
-                description: invalidAttribute == "description" ? (string)invalidValue ?? string.Empty : _description,
-                zipCode: invalidAttribute == "zipCode" ? (string)invalidValue ?? string.Empty : _zipCode,
-                type: invalidAttribute == "type" ? null : _type,
-                street: invalidAttribute == "street" ? (string)invalidValue ?? string.Empty : _street,
-                neighborhood: invalidAttribute == "neighborhood" ? (string)invalidValue ?? string.Empty : _neighborhood,
-                number: invalidAttribute == "number" ? (int)invalidValue : _number,
-                city: invalidAttribute == "city" ? (string)invalidValue ?? string.Empty : _city,
-                state: invalidAttribute == "state" ? (string)invalidValue ?? string.Empty : _state,
-                customerId: _customerId);
-
-        private Address GetValidAddress() =>
-             new Address(
-                description: _description,
-                zipCode: _zipCode,
-                type: _type,
-                street: _street,
-                neighborhood: _neighborhood,
-                number: _number,
-                city: _city,
-                state: _state,
-                customerId: _customerId);
+        private Address GetAddress(
+            string description = validDescription,
+            string zipCode = validZipCode,
+            AddressType? type = validType,
+            string street = validStreet,
+            string neighborhood = validNeighborhood,
+            int number = validNumber,
+            string city = validCity,
+            string state = validState)
+            => new Address(
+                description: description,
+                zipCode: zipCode,
+                type: type,
+                street: street,
+                neighborhood: neighborhood,
+                number: number,
+                city: city,
+                state: state,
+                customerId: Guid.NewGuid());
     }
 }
