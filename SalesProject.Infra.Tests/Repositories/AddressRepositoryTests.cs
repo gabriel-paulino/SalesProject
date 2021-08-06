@@ -4,6 +4,7 @@ using SalesProject.Domain.Enums;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
+using System;
 using System.Linq;
 
 namespace SalesProject.Infra.Tests.Repositories
@@ -14,14 +15,14 @@ namespace SalesProject.Infra.Tests.Repositories
         private readonly DataContext _fakeContext;
         private readonly UnitOfWork _uow;
         private readonly AddressRepository _addressRepository;
-        
+
         public AddressRepositoryTests()
         {
-            var dbInMemory = new DBInMemory();
+            DBInMemory dbInMemory = new();
             _fakeContext = dbInMemory.GetContext();
 
             _uow = new UnitOfWork(_fakeContext);
-            _addressRepository = new AddressRepository(_fakeContext);            
+            _addressRepository = new AddressRepository(_fakeContext);
         }
 
         [TestMethod]
@@ -54,6 +55,7 @@ namespace SalesProject.Infra.Tests.Repositories
             Assert.AreEqual("Jardim Japão", address.Neighborhood);
             Assert.AreEqual("São Paulo", address.City);
             Assert.AreEqual("SP", address.State);
+            Assert.IsTrue(address.CustomerId != Guid.Empty);
         }
 
         [TestMethod]
@@ -68,12 +70,13 @@ namespace SalesProject.Infra.Tests.Repositories
             Assert.AreEqual("Jardim Japão", address.Neighborhood);
             Assert.AreEqual("São Paulo", address.City);
             Assert.AreEqual("SP", address.State);
+            Assert.IsTrue(address.CustomerId != Guid.Empty);
         }
 
         [TestMethod]
         public void ShouldAddOneAddressOnFakeDataBaseWhenCreate()
         {
-            var address = new Address(
+            Address address = new(
                 description: "Balcão Americana",
                 zipCode: "18046-430",
                 type: AddressType.Other,
@@ -144,6 +147,7 @@ namespace SalesProject.Infra.Tests.Repositories
             Assert.AreEqual(148, updatedAddress.Number);
             Assert.AreEqual("Franca", updatedAddress.City);
             Assert.AreEqual("SP", updatedAddress.State);
+            Assert.IsTrue(addressId == updatedAddress.Id);
         }
 
         [TestMethod]
