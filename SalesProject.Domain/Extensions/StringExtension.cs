@@ -1,6 +1,6 @@
 ﻿namespace SalesProject.Domain.Extensions
 {
-    public static class StringExtensions
+    public static class StringExtension
     {
         public static string CleanZipCode(this string zipCode)
         {
