@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
+using SalesProject.Domain.Tests.Constants;
 using System;
 
 namespace SalesProject.Domain.Tests.Entities
@@ -8,16 +9,6 @@ namespace SalesProject.Domain.Tests.Entities
     [TestClass]
     public class AddressTests
     {
-        const string validDescription = "Balcão 1";
-        const string validZipCode = "02248-050";
-        const AddressType validType = AddressType.Other;
-        const string validStreet = "Rua Francisca Maria de Souza";
-        const string validNeighborhood = "Parada Inglesa";
-        const int validNumber = 131;
-        const string validCity = "São Paulo";
-        const string validState = "SP";
-        const string validCodeCity = "3550308";
-
         [TestMethod]
         public void ShouldReturnSuccessWhenAddressIsValid()
         {
@@ -133,12 +124,13 @@ namespace SalesProject.Domain.Tests.Entities
         public void ShouldReturnSucessWhenSetAddressWithAnValidCodeCity()
         {
             var address = GetAddress();
+            string codeIbgeSaoPaulo = "3550308";
 
-            address.SetCodeCity(validCodeCity);
+            address.SetCodeCity(codeIbgeSaoPaulo);
 
             Assert.IsNotNull(address.CodeCity);
             Assert.IsTrue(address.Valid);
-            Assert.AreEqual(validCodeCity, address.CodeCity);
+            Assert.AreEqual(codeIbgeSaoPaulo, address.CodeCity);
         }
 
         [TestMethod]
@@ -176,15 +168,15 @@ namespace SalesProject.Domain.Tests.Entities
             Assert.IsTrue(address.Valid);
         }
 
-        private Address GetAddress(
-            string description = validDescription,
-            string zipCode = validZipCode,
-            AddressType? type = validType,
-            string street = validStreet,
-            string neighborhood = validNeighborhood,
-            int number = validNumber,
-            string city = validCity,
-            string state = validState)
+        public static Address GetAddress(
+            string description = AddressTestsConstants.ValidDescription,
+            string zipCode = AddressTestsConstants.ValidZipCode,
+            AddressType? type = AddressTestsConstants.ValidType,
+            string street = AddressTestsConstants.ValidStreet,
+            string neighborhood = AddressTestsConstants.ValidNeighborhood,
+            int number = AddressTestsConstants.ValidNumber,
+            string city = AddressTestsConstants.ValidCity,
+            string state = AddressTestsConstants.ValidState)
             => new Address(
                 description: description,
                 zipCode: zipCode,

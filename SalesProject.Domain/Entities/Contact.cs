@@ -17,7 +17,7 @@ namespace SalesProject.Domain.Entities
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = $"{firstName} {lastName}";
+            this.FullName = $"{ (string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;
@@ -43,7 +43,7 @@ namespace SalesProject.Domain.Entities
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = $"{firstName} {lastName}";
+            this.FullName = $"{ (string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;
