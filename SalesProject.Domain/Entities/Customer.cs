@@ -66,7 +66,7 @@ namespace SalesProject.Domain.Entities
             this.Phone = phone;
             this.MunicipalRegistration = municipalRegistration;
             this.Email = email;
-            
+
             DoValidations();
 
             return this;
@@ -87,6 +87,7 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateOpening();
             ValidateCnpj();
         }
 
@@ -100,6 +101,12 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Inscrição estadual' é obrigatório.");
             if (string.IsNullOrEmpty(Email))
                 AddNotification("O preenchimento do campo 'Email' é obrigatório.");
+        }
+
+        private void ValidateOpening()
+        {
+            if (Opening is not null && Opening > DateTime.Today)
+                AddNotification("O preenchimento do campo 'Data de abertura' é inválido.");
         }
 
         private void ValidateCnpj()

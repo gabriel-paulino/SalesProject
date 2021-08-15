@@ -115,6 +115,16 @@ namespace SalesProject.Domain.Tests.Entities
         }
 
         [TestMethod]
+        public void ShouldReturnErrorWhenOpeningDateIsBiggerThanToday()
+        {
+            var tomorrow = DateTime.Now.AddDays(1);
+            var customerWithInvalidOpening = GetCustomer(opening: tomorrow);
+
+            Assert.IsFalse(customerWithInvalidOpening.Valid);
+            Assert.AreEqual(tomorrow, customerWithInvalidOpening.Opening);
+        }
+
+        [TestMethod]
         public void ShouldReturnSucessWhenEditCustomer()
         {
             var customer = GetCustomer();
@@ -140,7 +150,7 @@ namespace SalesProject.Domain.Tests.Entities
         public static Customer GetCustomer(
             string cnpj = CustomerTestsConstants.ValidCnpj,
             string companyName = CustomerTestsConstants.ValidCompanyName,
-            DateTime? opening = null,
+            DateTime? opening = default(DateTime?),
             string phone = CustomerTestsConstants.ValidPhone,
             string municipalRegistration = CustomerTestsConstants.ValidMunicipalRegistration,
             string stateRegistration = CustomerTestsConstants.ValidStateRegistration,
@@ -148,7 +158,7 @@ namespace SalesProject.Domain.Tests.Entities
             => new Customer(
                 cnpj: cnpj,
                 companyName: companyName,
-                opening: opening ?? DateTime.Today.AddYears(-10).Date,
+                opening: opening ?? new(year: 1900, month: 9, day: 3),
                 phone: phone,
                 municipalRegistration: municipalRegistration,
                 stateRegistration: stateRegistration,
