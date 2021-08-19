@@ -12,7 +12,7 @@ namespace SalesProject.Domain.Entities
             string ncmCode,
             decimal combinedPrice,
             decimal additionalCosts,
-            double combinedQuantity,
+            int combinedQuantity,
             string details,
             Guid? customerId)
         {
@@ -31,7 +31,7 @@ namespace SalesProject.Domain.Entities
         public string NcmCode { get; private set; }
         public decimal CombinedPrice { get; private set; }
         public decimal AdditionalCosts { get; private set; }
-        public double CombinedQuantity { get; private set; }
+        public int CombinedQuantity { get; private set; }
         public string Details { get; private set; }
         public Guid? CustomerId { get; private set; }
 
@@ -40,7 +40,7 @@ namespace SalesProject.Domain.Entities
             string ncmCode,
             decimal combinedPrice,
             decimal additionalCosts,
-            double combinedQuantity,
+            int combinedQuantity,
             string details)
         {
             this.Name = name;
