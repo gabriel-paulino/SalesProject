@@ -397,7 +397,7 @@ namespace SalesProject.Domain.Tests.Entities
         }
 
         [TestMethod]
-        public void ShouldNotBeAbleToBillWhenOrderHasAnLineAndWasNotApproved2()
+        public void ShouldReturnSucessWhenRemoveAllOrderLines()
         {
             var nextMonth = DateTime.Today.AddMonths(1);
 
@@ -421,6 +421,111 @@ namespace SalesProject.Domain.Tests.Entities
 
             Assert.IsTrue(order.Valid);
             Assert.AreEqual(0, order.OrderLines.Count);
+        }
+
+        [TestMethod]
+        [DataRow(-1)]
+        [DataRow(0)]
+        public void ShouldReturnErrorWhenOrderLineHasInvalidQuantity(int invalidQuantity)
+        {
+            var product = ProductTests.GetProduct();
+
+            OrderLine orderLine = new (
+                quantity: invalidQuantity,
+                unitaryPrice: product.CombinedPrice,
+                additionalCosts: product.AdditionalCosts,
+                product: product);
+
+            Assert.IsFalse(orderLine.Valid);
+            Assert.AreEqual(1, orderLine.Notifications.Count);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenOrderLineHasUnitaryPriceWithZero()
+        {
+            var product = ProductTests.GetProduct();
+
+            decimal invalidUnitaryPrice = 0;
+
+            OrderLine orderLine = new(
+                quantity: product.CombinedQuantity,
+                unitaryPrice: invalidUnitaryPrice,
+                additionalCosts: product.AdditionalCosts,
+                product: product);
+
+            Assert.IsFalse(orderLine.Valid);
+            Assert.AreEqual(1, orderLine.Notifications.Count);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenOrderLineHasNegativeUnitaryPrice()
+        {
+            var product = ProductTests.GetProduct();
+
+            decimal invalidUnitaryPrice = -0.750m;
+
+            OrderLine orderLine = new(
+                quantity: product.CombinedQuantity,
+                unitaryPrice: invalidUnitaryPrice,
+                additionalCosts: product.AdditionalCosts,
+                product: product);
+
+            Assert.IsFalse(orderLine.Valid);
+            Assert.AreEqual(1, orderLine.Notifications.Count);
+        }
+
+        [TestMethod]
+        public void ShouldReturnErrorWhenOrderLineHasInvalidUnitaryPrice()
+        {
+            var product = ProductTests.GetProduct();
+
+            decimal invalidAdditionalCosts = -0.75m;
+
+            OrderLine orderLine = new(
+                quantity: product.CombinedQuantity,
+                unitaryPrice: product.CombinedPrice,
+                additionalCosts: invalidAdditionalCosts,
+                product: product);
+
+            Assert.IsFalse(orderLine.Valid);
+            Assert.AreEqual(1, orderLine.Notifications.Count);
+        }
+
+        [TestMethod]
+        public void ShouldReturnSucessWhenEditOrderLineWithCorrectInputsData()
+        {
+            var product = ProductTests.GetProduct();
+
+            OrderLine orderLine = new(
+                quantity: product.CombinedQuantity,
+                unitaryPrice: product.CombinedPrice,
+                additionalCosts: product.AdditionalCosts,
+                product: product);
+
+            int updatedQuantity = 30000;
+            decimal updatedUnitaryPrice = 0.85m;
+            decimal updatedAdditionalCosts = 0;
+
+            Product updatedProduct = new(
+                name: "COQUILHA OVAL 2",
+                ncmCode: "84804910",
+                combinedPrice: updatedUnitaryPrice,
+                additionalCosts: updatedAdditionalCosts,
+                combinedQuantity: updatedQuantity,
+                details: "BANHO DE ZINCO",
+                customerId: product.CustomerId);
+
+            orderLine.Edit(
+                quantity: updatedQuantity,
+                unitaryPrice: updatedUnitaryPrice,
+                additionalCosts: updatedAdditionalCosts,
+                product: updatedProduct);
+
+            Assert.IsTrue(orderLine.Valid);
+            Assert.AreEqual(updatedQuantity, orderLine.Quantity);
+            Assert.AreEqual(updatedUnitaryPrice, orderLine.UnitaryPrice);
+            Assert.AreEqual(updatedAdditionalCosts, orderLine.AdditionalCosts);
+            Assert.AreEqual(updatedProduct, orderLine.Product);
         }
     }
 }
