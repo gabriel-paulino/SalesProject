@@ -85,7 +85,7 @@ namespace SalesProject.Domain.Entities
         {
             if(!(NcmCode.Length == 2 || NcmCode.Length == 8))
                 AddNotification("O 'Código Ncm' deve possuir 2 ou 8 caractéres.");
-            if(!(int.TryParse(NcmCode, out int result)))
+            if (!(int.TryParse(NcmCode, out _)))
                 AddNotification("O 'Código Ncm' informado é inválido.");
         }
     }
