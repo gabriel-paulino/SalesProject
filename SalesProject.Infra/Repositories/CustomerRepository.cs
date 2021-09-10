@@ -34,18 +34,19 @@ namespace SalesProject.Infra.Repositories
                 .Include(c => c.Adresses)
                 .Include(c => c.Contacts)
                 .Include(c => c.Products)
+                .Include(c => c.User)
                 .FirstOrDefault(c => c.Id == id);
 
-        public Customer GetCompleteCustomer(Guid id) =>
+        public Customer GetCustomerWithAdressesAndContacts(Guid id) =>
             _context.Customers
                 .Include(c => c.Adresses)
                 .Include(c => c.Contacts)
                 .FirstOrDefault(c => c.Id == id);
 
-        public List<Customer> GetAll() =>
+        public ICollection<Customer> GetAll() =>
             _context.Customers.ToList();
 
-        public List<Customer> GetByName(string name) =>
+        public ICollection<Customer> GetByName(string name) =>
             _context.Customers.Where(x => x.CompanyName.Contains(name)).ToList();
 
         public bool HasAnotherCustomerWithThisCnpj(string cnpj) =>

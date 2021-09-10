@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using RestSharp;
-using SalesProject.Domain.Dtos;
-using SalesProject.Domain.Enums;
-using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Linq;
-using System.Net;
 using System.Net.Mime;
 
 namespace SalesProject.Api.Controllers
@@ -19,16 +13,13 @@ namespace SalesProject.Api.Controllers
     {
         private readonly IPlugNotasApiService _plugNotasApiService;
         private readonly IInvoiceService _invoiceService;
-        private readonly IOrderRepository _orderRepository;
 
         public InvoiceController(
-            IPlugNotasApiService plugNotasApiService, 
-            IInvoiceService invoiceService, 
-            IOrderRepository orderRepository)
+            IPlugNotasApiService plugNotasApiService,
+            IInvoiceService invoiceService)
         {
             _plugNotasApiService = plugNotasApiService;
             _invoiceService = invoiceService;
-            _orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -112,18 +103,18 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/{orderId:guid}")]
         public IActionResult CreateInvoice(Guid orderId)
         {
-            var order = _orderRepository.GetToCreateInvoice(orderId);
+            var order = _invoiceService.GetOrderToCreateInvoice(orderId);
 
-            if(order is null)
+            if (order is null)
                 return BadRequest($"Ops. Não foi possível criar a Nota Fiscal. Id do Pedido de venda é inválido.");
 
-            if(!order.CanBillThisOrder(order.Status))
-                return BadRequest($"Ops. Apenas pedidos aprovados podem ser faturados.");
+            if (!order.Valid)
+                return BadRequest(order.GetNotification());
 
             var invoice = _invoiceService.CreateBasedInOrder(order);
 
             if (!invoice.Valid)
-                return ValidationProblem($"{invoice.GetNotification()}");
+                return ValidationProblem(invoice.GetAllNotifications());
 
             return Created(
             $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}/{invoice.Id}",
@@ -150,27 +141,15 @@ namespace SalesProject.Api.Controllers
             if (invoice is null)
                 return BadRequest($"Ops. Não foi possível recuperar Nota Fiscal com Id: '{id}'.");
 
-            if (invoice.IntegratedPlugNotasApi == 'Y')
-                return BadRequest($"Ops. Essa Nota fiscal já foi enviada.");
+            if (invoice.IsIntegrated())
+                return BadRequest($"Ops. Essa Nota Fiscal já foi enviada.");
 
-            var response = (IRestResponse)_plugNotasApiService.SendInvoice(invoice);
+            string errorMessage = _plugNotasApiService.SendInvoice(invoice);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var plugNotasResponse = JsonConvert.DeserializeObject<PlugNotasResponse>(response.Content);
+            if (string.IsNullOrEmpty(errorMessage))
+                return Ok(@$"Nota Fiscal com Id '{invoice.Id}' enviada com sucesso.");
 
-                string invoiceIdPlugNotas = string.Empty;
-
-                foreach (var document in plugNotasResponse.Documents)
-                {
-                    invoiceIdPlugNotas = document.Id;
-                    break;
-                }
-
-                _invoiceService.MarkAsIntegrated(invoice, invoiceIdPlugNotas);
-                return Ok(response.Content);
-            }             
-            return BadRequest(response.Content);
+            return BadRequest(errorMessage);
         }
 
         /// <summary>
@@ -192,12 +171,12 @@ namespace SalesProject.Api.Controllers
             if (!invoices.Any())
                 return BadRequest($"Ops. Não existem Notas fiscais a serem enviadas.");
 
-            string response = _plugNotasApiService.SendAllInvoices(invoices);
+            string errorMessage = _plugNotasApiService.SendAllInvoices(invoices);
 
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(errorMessage))
                 return Ok(@$"Todas as {invoices.Count} Notas Fiscais foram enviadas com sucesso.");
-            
-            return BadRequest(response);
+
+            return BadRequest(errorMessage);
         }
 
         /// <summary>
@@ -215,12 +194,13 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/consult/{invoiceIdPlugNotas}")]
         public IActionResult Consult(string invoiceIdPlugNotas)
         {
-            var response = (IRestResponse)_plugNotasApiService.ConsultSefaz(invoiceIdPlugNotas);
+            bool hasDoneWithSuccess = false;
+            string content = _plugNotasApiService.ConsultSefaz(invoiceIdPlugNotas, ref hasDoneWithSuccess);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                return Ok(response.Content);
-            
-            return BadRequest(response.Content);
+            if (hasDoneWithSuccess)
+                return Ok(content);
+
+            return BadRequest(content);
         }
 
         /// <summary>
@@ -238,12 +218,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/download-pdf/{invoiceIdPlugNotas}")]
         public IActionResult DownloadPdf(string invoiceIdPlugNotas)
         {
-            string response = _plugNotasApiService.DownloadInvoicePdf(invoiceIdPlugNotas);
+            string errorMessage = _plugNotasApiService.DownloadInvoicePdf(invoiceIdPlugNotas);
 
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(errorMessage))
                 return Ok($"Download do Pdf da Nota fiscal realizado com sucesso. Pdf disponível em 'C:/nota-fiscal/pdf/{invoiceIdPlugNotas}.pdf'");
 
-            return BadRequest(response);
+            return BadRequest(errorMessage);
         }
 
         /// <summary>
@@ -261,12 +241,12 @@ namespace SalesProject.Api.Controllers
         [Route("api/[controller]/download-xml/{invoiceIdPlugNotas}")]
         public IActionResult DownloadXml(string invoiceIdPlugNotas)
         {
-            string response = _plugNotasApiService.DownloadInvoiceXml(invoiceIdPlugNotas);
+            string errorMessage = _plugNotasApiService.DownloadInvoiceXml(invoiceIdPlugNotas);
 
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(errorMessage))
                 return Ok($"Download do Xml da Nota fiscal realizado com sucesso. Xml disponível em 'C:/nota-fiscal/xml/{invoiceIdPlugNotas}.xml'");
 
-            return BadRequest(response);
+            return BadRequest(errorMessage);
         }
     }
 }

@@ -71,12 +71,19 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
+            ValidateRangeDate();
         }
 
         private void ValidateFillingMandatoryFields()
         {
             if (Customer is null)
                 AddNotification("O preenchimento do campo 'Cliente' é obrigatório.");
+        }
+
+        private void ValidateRangeDate()
+        {
+            if(PostingDate > DeliveryDate)
+                AddNotification("A Data de Postagem não pode ser maior que a Data de Entrega.");
         }
 
         public void UpdateTotalOrder() =>
@@ -94,6 +101,12 @@ namespace SalesProject.Domain.Entities
 
         public void Approve()
         {
+            if (!HasOrderLines())
+            {
+                AddNotification("Não é possível aprovar esse pedido de venda. Adicione pelo menos um item ao pedido.");
+                return;
+            }
+
             if (Status == OrderStatus.Open)
             {
                 Status = OrderStatus.Approved;
@@ -101,6 +114,8 @@ namespace SalesProject.Domain.Entities
             }
             AddNotification("Não é possível aprovar esse pedido de venda.");
         }
+
+        public bool HasOrderLines() => OrderLines.Any();
 
         public void Bill()
         {
@@ -112,6 +127,7 @@ namespace SalesProject.Domain.Entities
             AddNotification("Não é possível faturar esse pedido de venda.");
         }
 
-        public bool CanBillThisOrder(OrderStatus status) => status == OrderStatus.Approved;
+        public bool CanBillThisOrder() => 
+            Status == OrderStatus.Approved;
     }
 }

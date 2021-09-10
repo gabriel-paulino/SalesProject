@@ -28,13 +28,13 @@ namespace SalesProject.Infra.Repositories
         public Address Get(Guid id) =>
             _context.Addreses.Find(id);
 
-        public List<Address> GetByDescription(string description) =>
+        public ICollection<Address> GetByDescription(string description) =>
             _context.Addreses.Where(x => x.Description.Contains(description)).ToList();
 
-        public List<Address> GetByCity(string city) =>
+        public ICollection<Address> GetByCity(string city) =>
             _context.Addreses.Where(x => x.City.Contains(city)).ToList();
 
-        public List<Address> GetByCustomerId(Guid customerId) =>
+        public ICollection<Address> GetByCustomerId(Guid customerId) =>
             _context.Addreses.Where(x => x.CustomerId.Equals(customerId)).ToList();
 
         public void Update(Address address) =>

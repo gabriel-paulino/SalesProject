@@ -8,10 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SalesProject.Api.Services;
+using SalesProject.Application.Services;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Services;
+using SalesProject.Domain.Interfaces.Service;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Extension;
 using SalesProject.Infra.Repositories;
@@ -92,16 +92,22 @@ namespace SalesProject.Api
 
             services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAddressService, AddressService>();
             services.AddTransient<IAddressApiService, AddressApiService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IContactService, ContactService>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
             services.AddTransient<ICnpjApiService, CnpjApiService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddTransient<IPlugNotasApiService, PlugNotasApiService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSwaggerGen(c =>

@@ -56,7 +56,9 @@ namespace SalesProject.Domain.Entities
         {
             IntegratedPlugNotasApi = 'Y';
             IdPlugNotasIntegration = invoiceIdPlugNotas;
-        } 
+        }
+
+        public bool IsIntegrated() => IntegratedPlugNotasApi == 'Y';
 
         public override void DoValidations() { }
     }

@@ -57,7 +57,7 @@ namespace SalesProject.Infra.Repositories
                 .ThenInclude(c => c.Adresses)
                 .FirstOrDefault(i => i.OrderId == orderId);
 
-        public List<Invoice> GetAllInvoicesAbleToSend() =>
+        public ICollection<Invoice> GetAllInvoicesAbleToSend() =>
             _context.Invoices
                 .Include(i => i.InvoiceLines)
                 .Include(i => i.Order)
