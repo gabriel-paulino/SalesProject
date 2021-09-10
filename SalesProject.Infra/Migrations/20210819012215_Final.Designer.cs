@@ -10,7 +10,7 @@ using SalesProject.Infra.Context;
 namespace SalesProject.Infra.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210604025300_Final")]
+    [Migration("20210819012215_Final")]
     partial class Final
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace SalesProject.Infra.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("SalesProject.Domain.Entities.Address", b =>
@@ -527,8 +527,8 @@ namespace SalesProject.Infra.Migrations
                         .HasColumnName("PrecoCombinado")
                         .HasComment("Preço combinado do Produto.");
 
-                    b.Property<double>("CombinedQuantity")
-                        .HasColumnType("float")
+                    b.Property<int>("CombinedQuantity")
+                        .HasColumnType("int")
                         .HasColumnName("PrevisaoMensal")
                         .HasComment("Previsão mensal mínima combinada para o Produto.");
 

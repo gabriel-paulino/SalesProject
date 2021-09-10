@@ -21,7 +21,7 @@ namespace SalesProject.Application.ViewModels.Product
 
         [Required(ErrorMessage = "O campo 'Quantidade combinada' é obrigatório")]
         [Display(Name = "Quantidade combinada")]
-        public double CombinedQuantity { get; set; }
+        public int CombinedQuantity { get; set; }
 
         [Display(Name = "Detalhes")]
         public string Details { get; set; }

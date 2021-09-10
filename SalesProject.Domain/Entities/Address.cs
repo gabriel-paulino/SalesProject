@@ -70,7 +70,6 @@ namespace SalesProject.Domain.Entities
         public override void DoValidations()
         {
             ValidateFillingMandatoryFields();
-            ValidateAddressType();
             ValidateZipCode();
         }
 
@@ -88,16 +87,10 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Cidade' é obrigatório.");
             if (string.IsNullOrEmpty(State))
                 AddNotification("O preenchimento do campo 'UF' é obrigatório.");
+            if(Type is null)
+                AddNotification("O preenchimento do campo 'Tipo de endereço' é obrigatório.");
             if (Number <= 0)
                 AddNotification("O 'Número' informado é inválido.");
-        }
-
-        private void ValidateAddressType()
-        {
-            if (Type != AddressType.Billing &&
-                Type != AddressType.Delivery &&
-                Type != AddressType.Other)
-                AddNotification("O 'Tipo de endereço' informado é inválido.");
         }
 
         private void ValidateZipCode()

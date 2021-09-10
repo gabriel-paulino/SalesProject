@@ -101,6 +101,12 @@ namespace SalesProject.Domain.Entities
 
         public void Approve()
         {
+            if (!HasOrderLines())
+            {
+                AddNotification("Não é possível aprovar esse pedido de venda. Adicione pelo menos um item ao pedido.");
+                return;
+            }
+
             if (Status == OrderStatus.Open)
             {
                 Status = OrderStatus.Approved;
@@ -108,6 +114,8 @@ namespace SalesProject.Domain.Entities
             }
             AddNotification("Não é possível aprovar esse pedido de venda.");
         }
+
+        public bool HasOrderLines() => OrderLines.Any();
 
         public void Bill()
         {

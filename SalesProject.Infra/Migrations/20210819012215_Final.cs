@@ -109,7 +109,7 @@ namespace SalesProject.Infra.Migrations
                     CodigoNcm = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, comment: "Código NCM do Produto."),
                     PrecoCombinado = table.Column<decimal>(type: "money", nullable: false, comment: "Preço combinado do Produto."),
                     CustosAdicionais = table.Column<decimal>(type: "money", nullable: false, comment: "Custos adicionais combinado para o Produto."),
-                    PrevisaoMensal = table.Column<double>(type: "float", nullable: false, comment: "Previsão mensal mínima combinada para o Produto."),
+                    PrevisaoMensal = table.Column<int>(type: "int", nullable: false, comment: "Previsão mensal mínima combinada para o Produto."),
                     Detalhes = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true, comment: "Detalhes do Produto."),
                     ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true, comment: "Vínculo com a tabela de Cliente (Fk).")
                 },
