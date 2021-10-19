@@ -25,18 +25,7 @@ namespace SalesProject.Application.Services
         public Address Create(object createAddressViewModel)
         {
             var model = (CreateAddressViewModel)createAddressViewModel;
-
-            var address =
-                    new Address(
-                        description: model.Description,
-                        zipCode: model.ZipCode,
-                        type: (AddressType)model.Type,
-                        street: model.Street,
-                        neighborhood: model.Neighborhood,
-                        number: model.Number,
-                        city: model.City,
-                        state: model.State,
-                        customerId: Guid.Parse(model.CustomerId));
+            var address = (Address)model;
 
             if (!address.Valid)
                 return address;

@@ -17,15 +17,15 @@ namespace SalesProject.Domain.Entities
             string state,
             Guid customerId)
         {
-            this.Description = description;
-            this.ZipCode = zipCode;
-            this.Type = type;
-            this.Street = street;
-            this.Neighborhood = neighborhood;
-            this.Number = number;
-            this.City = city;
-            this.State = state;
-            this.CustomerId = customerId;
+            Description = description;
+            ZipCode = zipCode;
+            Type = type;
+            Street = street;
+            Neighborhood = neighborhood;
+            Number = number;
+            City = city;
+            State = state;
+            CustomerId = customerId;
 
             DoValidations();
         }
@@ -51,21 +51,21 @@ namespace SalesProject.Domain.Entities
             string city,
             string state)
         {
-            this.Description = description;
-            this.ZipCode = zipCode;
-            this.Type = type;
-            this.Street = street;
-            this.Neighborhood = neighborhood;
-            this.Number = number;
-            this.City = city;
-            this.State = state;
+            Description = description;
+            ZipCode = zipCode;
+            Type = type;
+            Street = street;
+            Neighborhood = neighborhood;
+            Number = number;
+            City = city;
+            State = state;
 
             DoValidations();
 
             return this;
         }
 
-        public void SetCodeCity(string codeCity) => this.CodeCity = codeCity;
+        public void SetCodeCity(string codeCity) => CodeCity = codeCity;
 
         public override void DoValidations()
         {
