@@ -8,14 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SalesProject.Application.Services;
-using SalesProject.Domain.Interfaces;
-using SalesProject.Domain.Interfaces.Repository;
-using SalesProject.Domain.Interfaces.Service;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Extension;
-using SalesProject.Infra.Repositories;
-using SalesProject.Infra.UoW;
+using SalesProject.Infra.IoC;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,25 +85,7 @@ namespace SalesProject.Api
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SalesProjectConnectionString")));
 
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddScoped<IAddressRepository, AddressRepository>();
-            services.AddScoped<IAddressService, AddressService>();
-            services.AddTransient<IAddressApiService, AddressApiService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IContactRepository, ContactRepository>();
-            services.AddScoped<IContactService, ContactService>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddTransient<ICnpjApiService, CnpjApiService>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-            services.AddScoped<IInvoiceService, InvoiceService>();
-            services.AddTransient<IPlugNotasApiService, PlugNotasApiService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Injector.RegisterServices(services);
 
             services.AddSwaggerGen(c =>
             {

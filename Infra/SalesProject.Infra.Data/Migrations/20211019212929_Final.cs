@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SalesProject.Infra.Migrations
+namespace SalesProject.Infra.Data.Migrations
 {
     public partial class Final : Migration
     {
