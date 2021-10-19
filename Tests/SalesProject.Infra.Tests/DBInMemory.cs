@@ -4,7 +4,6 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Enums;
 using SalesProject.Infra.Context;
 using System;
-using System.Linq;
 
 namespace SalesProject.Infra.Tests
 {
