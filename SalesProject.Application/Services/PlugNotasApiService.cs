@@ -88,8 +88,7 @@ namespace SalesProject.Application.Services
         public string ConsultSefaz(string invoiceIdPlugNotas, ref bool hasDoneWithSuccess)
         {
             var client = new RestClient(_url);
-            client.Timeout = -1;
-            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/resumo", Method.GET);
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/resumo", Method.Get);
             request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
             request.OnBeforeDeserialization = response => { response.ContentType = "application/json"; };
 
@@ -104,12 +103,11 @@ namespace SalesProject.Application.Services
         public string DownloadInvoicePdf(string invoiceIdPlugNotas)
         {
             var client = new RestClient(_url);
-            client.Timeout = -1;
-            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/pdf", Method.GET);
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/pdf", Method.Get);
             request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
             request.OnBeforeDeserialization = response => { response.ContentType = "application/pdf"; };
 
-            IRestResponse response = client.Execute(request);
+            var response = client.Execute(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -129,12 +127,11 @@ namespace SalesProject.Application.Services
         public string DownloadInvoiceXml(string invoiceIdPlugNotas)
         {
             var client = new RestClient(_url);
-            client.Timeout = -1;
-            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/cce/xml", Method.GET);
+            var request = new RestRequest($"nfe/{invoiceIdPlugNotas}/cce/xml", Method.Get);
             request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
             request.OnBeforeDeserialization = response => { response.ContentType = "application/xml"; };
 
-            IRestResponse response = client.Execute(request);
+            var response = client.Execute(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -265,11 +262,10 @@ namespace SalesProject.Application.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-        private IRestResponse Send(string json)
+        private RestResponse Send(string json)
         {
             var client = new RestClient($"{_url}nfe");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
+            var request = new RestRequest(string.Empty, Method.Post);
             request.AddHeader("accept", "application/json");
             request.AddHeader("x-api-key", _configuration["PlugNotasApiKey"]);
             request.AddHeader("Content-Type", "application/json");
