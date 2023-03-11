@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SalesProject.Domain.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SalesProject.Application.ViewModels.Address
 {
@@ -45,5 +47,18 @@ namespace SalesProject.Application.ViewModels.Address
         [Required(ErrorMessage = "O campo 'Cliente' é obrigatório")]
         [Display(Name = "Cliente")]
         public string CustomerId { get; set; }
+        
+        public static implicit operator Domain.Entities.Address(CreateAddressViewModel model) =>
+            new(
+                description: model.Description,
+                zipCode: model.ZipCode,
+                type: (AddressType)model.Type,
+                street: model.Street,
+                neighborhood: model.Neighborhood,
+                number: model.Number,
+                city: model.City,
+                state: model.State,
+                customerId: Guid.Parse(model.CustomerId)
+                );
     }
 }
