@@ -15,7 +15,8 @@ namespace SalesProject.Domain.Entities
             int number,
             string city,
             string state,
-            Guid customerId)
+            Guid customerId,
+            Guid id = default)
         {
             Description = description;
             ZipCode = zipCode;
@@ -26,6 +27,9 @@ namespace SalesProject.Domain.Entities
             City = city;
             State = state;
             CustomerId = customerId;
+
+            if (id != default)
+                base.Id = id;
 
             DoValidations();
         }
@@ -87,7 +91,7 @@ namespace SalesProject.Domain.Entities
                 AddNotification("O preenchimento do campo 'Cidade' é obrigatório.");
             if (string.IsNullOrEmpty(State))
                 AddNotification("O preenchimento do campo 'UF' é obrigatório.");
-            if(Type is null)
+            if (Type is null)
                 AddNotification("O preenchimento do campo 'Tipo de endereço' é obrigatório.");
             if (Number <= 0)
                 AddNotification("O 'Número' informado é inválido.");
@@ -97,6 +101,6 @@ namespace SalesProject.Domain.Entities
         {
             if (!Validation.Validation.IsValidZipCode(ZipCode))
                 AddNotification("O 'Cep' informado é inválido.");
-        }  
+        }
     }
 }

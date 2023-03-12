@@ -7,14 +7,17 @@ namespace SalesProject.Domain.Entities
     {
         public Product() { }
 
-        public Product(
+        public Product
+        (
             string name,
             string ncmCode,
             decimal combinedPrice,
             decimal additionalCosts,
             int combinedQuantity,
             string details,
-            Guid? customerId)
+            Guid? customerId,
+            Guid id = default
+        )
         {
             this.Name = name;
             this.NcmCode = ncmCode;
@@ -23,6 +26,9 @@ namespace SalesProject.Domain.Entities
             this.CombinedQuantity = combinedQuantity;
             this.Details = details;
             this.CustomerId = customerId;
+
+            if ( id != default )
+                base.Id = id;
 
             DoValidations();
         }

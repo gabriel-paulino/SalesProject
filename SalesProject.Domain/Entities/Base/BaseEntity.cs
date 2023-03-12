@@ -15,7 +15,7 @@ namespace SalesProject.Domain.Entities.Base
 
         public bool Valid { get; private set; }
         public List<string> Notifications { get; private set; }
-        public Guid Id { get; private set; }
+        public Guid Id { get; protected set; }
 
         public abstract void DoValidations();
 

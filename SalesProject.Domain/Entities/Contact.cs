@@ -7,21 +7,27 @@ namespace SalesProject.Domain.Entities
     {
         public Contact() { }
 
-        public Contact(
+        public Contact
+        (
             string firstName,
             string lastName,
             string email,
             string whatsApp,
             string phone,
-            Guid customerId)
+            Guid customerId,
+            Guid id = default
+        )
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = $"{ (string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
+            this.FullName = $"{(string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;
             this.CustomerId = customerId;
+
+            if (id != default)
+                base.Id = id;
 
             DoValidations();
         }
@@ -43,7 +49,7 @@ namespace SalesProject.Domain.Entities
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.FullName = $"{ (string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
+            this.FullName = $"{(string.IsNullOrEmpty(lastName) ? firstName : $"{lastName}, {firstName}")}";
             this.Email = email;
             this.WhatsApp = whatsApp;
             this.Phone = phone;

@@ -3,8 +3,10 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SalesProject.Infra.Repositories
 {
@@ -43,8 +45,16 @@ namespace SalesProject.Infra.Repositories
                 .Include(c => c.Contacts)
                 .FirstOrDefault(c => c.Id == id);
 
-        public ICollection<Customer> GetAll() =>
-            _context.Customers.ToList();
+        public async Task<IEnumerable<Customer>> GetAllAsync()
+        {
+            var customers = await _context.Customers?.ToListAsync();
+
+            if (customers is null)
+                return Enumerable.Empty<Customer>();
+
+            return customers;
+        }
+
 
         public ICollection<Customer> GetByName(string name) =>
             _context.Customers.Where(x => x.CompanyName.Contains(name)).ToList();

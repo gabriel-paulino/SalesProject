@@ -1,12 +1,13 @@
 ﻿using SalesProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SalesProject.Domain.Interfaces.Repository
 {
     public interface ICustomerRepository : IDisposable
     {
-        ICollection<Customer> GetAll();
+        Task<IEnumerable<Customer>> GetAllAsync();
         Customer Get(Guid id);
         Customer GetFullCustomer(Guid id);
         Customer GetCustomerWithAdressesAndContacts(Guid id);

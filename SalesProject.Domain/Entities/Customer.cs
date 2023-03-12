@@ -22,19 +22,23 @@ namespace SalesProject.Domain.Entities
             string phone,
             string municipalRegistration,
             string stateRegistration,
-            string email)
+            string email,
+            Guid id = default)
         {
-            this.Cnpj = cnpj;
-            this.CompanyName = companyName;
-            this.Email = email;
-            this.StateRegistration = stateRegistration;
-            this.Opening = opening;
-            this.Phone = phone;
-            this.ClientSince = DateTime.Today.Date;
-            this.MunicipalRegistration = municipalRegistration;
+            Cnpj = cnpj;
+            CompanyName = companyName;
+            Email = email;
+            StateRegistration = stateRegistration;
+            Opening = opening;
+            Phone = phone;
+            ClientSince = DateTime.Today.Date;
+            MunicipalRegistration = municipalRegistration;
             _adresses = new List<Address>();
             _contacts = new List<Contact>();
             _products = new List<Product>();
+
+            if (id != default)
+                base.Id = id;
 
             DoValidations();
         }
@@ -72,11 +76,17 @@ namespace SalesProject.Domain.Entities
             return this;
         }
 
+        public void SetUser(User user) =>
+            User = user;
+
         public void AddAddress(Address address) =>
             _adresses.Add(address);
 
         public void AddContact(Contact contact) =>
             _contacts.Add(contact);
+
+        public void AddProduct(Product product) =>
+            _products.Add(product);
 
         public void RemoveAddress(Address address) =>
             _adresses.Remove(address);

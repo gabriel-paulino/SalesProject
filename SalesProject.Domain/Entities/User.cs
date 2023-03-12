@@ -9,31 +9,43 @@ namespace SalesProject.Domain.Entities
         public User(string username) =>
             this.Username = username;
 
-        public User(
+        public User
+        (
             string username,
             string name,
             string email,
-            Guid? customerId)
+            Guid? customerId
+        )
         {
-            this.Username = string.IsNullOrEmpty(username) ? email : username;
-            this.Name = name;
-            this.Email = email;
-            this.Role = RoleType.Customer;
-            this.CustomerId = customerId;
+            Username = string.IsNullOrEmpty(username) ? email : username;
+            Name = name;
+            Email = email;
+            Role = RoleType.Customer;
+            CustomerId = customerId;
 
             DoValidations();
         }
 
-        public User(
+        public User
+        (
             string username,
             string name,
             string email,
-            RoleType role)
+            RoleType role,
+            Guid? customerId = default,
+            Guid id = default
+        )
         {
             this.Username = string.IsNullOrEmpty(username) ? email : username;
             this.Name = name;
             this.Email = email;
             this.Role = role;
+
+            if (customerId != default)
+                CustomerId = customerId;
+
+            if (id != default)
+                Id = id;
 
             DoValidations();
         }
@@ -46,7 +58,7 @@ namespace SalesProject.Domain.Entities
         public Guid? CustomerId { get; private set; }
 
         public User Edit(
-            string newName, 
+            string newName,
             string newEmail)
         {
             Name = newName;
@@ -74,7 +86,7 @@ namespace SalesProject.Domain.Entities
                 AddNotification($"Ops. Não é possível atribur a função de 'Cliente' para um funcionário.");
                 return;
             }
-            
+
             this.Role = newRole;
             DoValidations();
         }

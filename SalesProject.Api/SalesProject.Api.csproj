@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infra\SalesProject.Infra.Cache\SalesProject.Infra.Caching.csproj" />
     <ProjectReference Include="..\Infra\SalesProject.Infra.Data\SalesProject.Infra.Data.csproj" />
     <ProjectReference Include="..\Infra\SalesProject.Infra.IoC\SalesProject.Infra.IoC.csproj" />
     <ProjectReference Include="..\SalesProject.Domain\SalesProject.Domain.csproj" />

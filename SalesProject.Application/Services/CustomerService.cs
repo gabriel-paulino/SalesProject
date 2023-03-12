@@ -5,22 +5,29 @@ using SalesProject.Domain.Extensions;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Interfaces.Service;
+using SalesProject.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SalesProject.Application.Services
 {
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly ICachingService _cachingService;
         private readonly IUnitOfWork _uow;
 
-        public CustomerService(
+        public CustomerService
+        (
             ICustomerRepository customerRepository,
-            IUnitOfWork uow)
+            ICachingService cachingService,
+            IUnitOfWork uow
+        )
         {
             _customerRepository = customerRepository;
+            _cachingService = cachingService;
             _uow = uow;
         }
 
@@ -383,8 +390,28 @@ namespace SalesProject.Application.Services
         public Customer Get(Guid id) =>
             _customerRepository.Get(id);
 
-        public ICollection<Customer> GetAll() =>
-            _customerRepository.GetAll();
+        public async Task<IEnumerable<Customer>> GetAllAsync()
+        {
+            const string CacheKey = "CustomerList";
+
+            var customersCache = await _cachingService
+                .GetListAsync<CustomerModel>(CacheKey);
+
+            if (customersCache.Any())
+                return customersCache.Select(cache => (Customer)cache);
+
+            var customers = await _customerRepository.GetAllAsync();
+
+            if (customers.Any())
+            {
+                var model = customers.Select(customer => (CustomerModel)customer);
+                await _cachingService.SetListAsync(CacheKey, model, 3600, 1200);
+                return customers;
+            }
+
+            return Enumerable.Empty<Customer>();
+        }
+
 
         public ICollection<Customer> GetByName(string name) =>
             _customerRepository.GetByName(name);

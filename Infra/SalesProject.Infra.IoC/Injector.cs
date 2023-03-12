@@ -3,6 +3,7 @@ using SalesProject.Application.Services;
 using SalesProject.Domain.Interfaces;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Domain.Interfaces.Service;
+using SalesProject.Infra.Caching;
 using SalesProject.Infra.Repositories;
 using SalesProject.Infra.UoW;
 
@@ -31,6 +32,7 @@ namespace SalesProject.Infra.IoC
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICachingService, CachingService>();
         }
     }
 }

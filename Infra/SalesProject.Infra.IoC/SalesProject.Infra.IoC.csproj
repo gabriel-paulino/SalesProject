@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SalesProject.Application\SalesProject.Application.csproj" />
     <ProjectReference Include="..\..\SalesProject.Domain\SalesProject.Domain.csproj" />
+    <ProjectReference Include="..\SalesProject.Infra.Cache\SalesProject.Infra.Caching.csproj" />
     <ProjectReference Include="..\SalesProject.Infra.Data\SalesProject.Infra.Data.csproj" />
   </ItemGroup>
 

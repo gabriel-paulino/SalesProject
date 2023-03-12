@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using SalesProject.Infra.Context;
 using SalesProject.Infra.Extension;
 using SalesProject.Infra.IoC;
@@ -86,6 +87,12 @@ namespace SalesProject.Api
 
             Injector.RegisterServices(services);
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.InstanceName = "Cashing";
+                options.Configuration = "localhost:6379";
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sales API", Version = "v1", });
@@ -149,13 +156,11 @@ namespace SalesProject.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            if (!scope.ServiceProvider.GetService<DataContext>().MigrationsApplied())
             {
-                if (!scope.ServiceProvider.GetService<DataContext>().MigrationsApplied())
-                {
-                    scope.ServiceProvider.GetService<DataContext>().Database.Migrate();
-                    scope.ServiceProvider.GetService<DataContext>().Seed();
-                }
+                scope.ServiceProvider.GetService<DataContext>().Database.Migrate();
+                scope.ServiceProvider.GetService<DataContext>().Seed();
             }
         }
     }

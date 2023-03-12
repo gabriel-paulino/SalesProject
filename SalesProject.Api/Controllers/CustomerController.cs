@@ -6,6 +6,7 @@ using SalesProject.Domain.Interfaces.Service;
 using System;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace SalesProject.Api.Controllers
 {
@@ -28,14 +29,14 @@ namespace SalesProject.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize()]
+        //[Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("api/[controller]")]
-        public IActionResult GetCustomers()
+        public async Task<IActionResult> GetCustomers()
         {
-            var customers = _customerService.GetAll();
+            var customers = await _customerService.GetAllAsync();
 
             if (customers.Any())
                 return Ok(customers);
