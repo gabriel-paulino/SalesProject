@@ -3,7 +3,6 @@ using SalesProject.Domain.Entities;
 using SalesProject.Domain.Interfaces.Repository;
 using SalesProject.Infra.Context;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

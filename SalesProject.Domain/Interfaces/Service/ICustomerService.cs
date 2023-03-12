@@ -8,7 +8,7 @@ namespace SalesProject.Domain.Interfaces.Service
     public interface ICustomerService
     {
         Task<IEnumerable<Customer>> GetAllAsync();
-        Customer Get(Guid id);
+        Task<Customer> GetAsync(Guid id);
         Customer GetFullCustomer(Guid id);
         Customer GetCustomerWithAdressesAndContacts(Guid id);
         ICollection<Customer> GetByName(string name);

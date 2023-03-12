@@ -29,7 +29,7 @@ namespace SalesProject.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize()]
+        [Authorize()]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,9 +58,9 @@ namespace SalesProject.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("api/[controller]/{id:guid}")]
-        public IActionResult GetCustomer(Guid id)
+        public async Task<IActionResult> GetCustomer(Guid id)
         {
-            var customer = _customerService.Get(id);
+            var customer = await _customerService.GetAsync(id);
 
             if (customer is not null)
                 return Ok(customer);

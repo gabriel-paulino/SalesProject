@@ -387,15 +387,29 @@ namespace SalesProject.Application.Services
             return updatedCustomer;
         }
 
-        public Customer Get(Guid id) =>
-            _customerRepository.Get(id);
+        public async Task<Customer> GetAsync(Guid id)
+        {
+            string cacheKey = $"Customer_{id}";
+
+            var customerCache = await _cachingService.GetAsync<CustomerModel>(cacheKey);
+
+            if (customerCache is not null)
+                return customerCache;
+
+            var customer = _customerRepository.Get(id);
+
+            if (customer is not null)
+                await _cachingService.SetAsync(cacheKey, (CustomerModel)customer, 3600, 1200);
+
+            return customer;
+        }
+
 
         public async Task<IEnumerable<Customer>> GetAllAsync()
         {
-            const string CacheKey = "CustomerList";
+            const string CacheKey = "Customers";
 
-            var customersCache = await _cachingService
-                .GetListAsync<CustomerModel>(CacheKey);
+            var customersCache = await _cachingService.GetListAsync<CustomerModel>(CacheKey);
 
             if (customersCache.Any())
                 return customersCache.Select(cache => (Customer)cache);
